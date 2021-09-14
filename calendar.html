@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- font - Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <title>Log Trade</title>
+</head>
+<body>
+  <style>
+    html {
+      font-size: 16px;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: lightblue;
+      width: 100%;
+      height: 100%;
+    }
+    * {
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+    main {
+      max-width: 960px;
+      background-color: lightgray;
+      margin: 0 auto;
+    }
+    .calendar {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-template-rows: repeat(5, 100px);
+    }
+    .day {
+      border: 1px solid gray;
+      font-size: 10px;
+    }
+  </style>
+  <main>
+    <h1 class="title text-center">Calendar</h1>
+    <h2 class="month">September</h2>
+    <section class="calendar" id="calendar">
+      <div class="day">1</div>
+      <div class="day">2</div>
+      <div class="day">3</div>
+      <div class="day">4</div>
+      <div class="day">5</div>
+      <div class="day">6</div>
+      <div class="day">7</div>
+      <div class="day">8</div>
+      <div class="day">9</div>
+      <div class="day">10</div>
+      <div class="day">11</div>
+      <div class="day">12</div>
+      <div class="day">13</div>
+      <div class="day">14</div>
+      <div class="day">15</div>
+      <div class="day">16</div>
+      <div class="day">17</div>
+      <div class="day">18</div>
+      <div class="day">19</div>
+      <div class="day">20</div>
+      <div class="day">21</div>
+      <div class="day">22</div>
+      <div class="day">23</div>
+      <div class="day">24</div>
+      <div class="day">25</div>
+      <div class="day">26</div>
+      <div class="day">27</div>
+      <div class="day">28</div>
+      <div class="day">29</div>
+      <div class="day">30</div>
+      <div class="day">31</div>
+    </section>
+  </main>
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+  <script type="module">
+    // get random number between a min and max number
+    function randomIntFromInterval(min, max) { // min and max included 
+      return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+    // add id to each calendar day block
+    (function() {
+      document
+        .querySelectorAll('.calendar .day')
+        .forEach((elem, i) => elem.setAttribute('id', `${i+1}`));      
+    })();
+    // add fake data to each calendar day block
+    (function() {
+      document
+        .querySelectorAll('.calendar .day')
+        .forEach((elem, i) => {
+          const totalProfit = randomIntFromInterval(1, 1000);
+          const numberOfTrades = randomIntFromInterval(1, 5);
+          const tickers = ['AAPL', 'GOOGL', 'TSLA'];
+          const isNegativeProfits = (i + 1) % 5 === 0;
+          elem.innerHTML = `
+            <p class="total-profits">
+              <strong>Total Profit:</strong> ${isNegativeProfits ? `${totalProfit * -1}` : `${totalProfit}`}
+            </p>
+            <p class="number-trades"><strong># Trades:</strong> ${numberOfTrades}</p>
+            <p class="number-tickers"><strong>Tickers:</strong> ${tickers}</p>
+          `;
+          // elem.setAttribute('class', isNegativeProfits ? 'negative' : '')
+        });  
+          
+    })();
+  </script>
+</body>
+</html>
