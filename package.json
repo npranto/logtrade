@@ -1,0 +1,20 @@
+{
+  "name": "logtrade",
+  "version": "1.0.0",
+  "description": "A personal journal for keeping track of all your trades quickly",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/npranto/logtrade.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/npranto/logtrade/issues"
+  },
+  "homepage": "https://github.com/npranto/logtrade#readme"
+}
