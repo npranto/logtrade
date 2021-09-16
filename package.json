@@ -4,8 +4,8 @@
   "description": "A personal journal for keeping track of all your trades quickly",
   "private": true,
   "scripts": {
-    "build:dev": "webpack --config webpack.config.js --mode development --watch",
-    "build:prod": "webpack --config webpack.config.js --mode production",
+    "build:dev": "npx webpack --config webpack.config.js --mode development --watch",
+    "build:prod": "npx webpack --config webpack.config.js --mode production",
     "open:dev": "concurrently \"npm run build:dev\" \"npx live-server --port=1234 --open=dist/ --watch=dist/\"",
     "open:prod": "concurrently \"npm run build:prod\" \"npx live-server --port=1234 --open=dist/\""
   },
