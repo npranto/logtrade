@@ -16,5 +16,6 @@
   "bugs": {
     "url": "https://github.com/npranto/logtrade/issues"
   },
-  "homepage": "https://github.com/npranto/logtrade#readme"
+  "homepage": "https://github.com/npranto/logtrade#readme",
+  "dependencies": {}
 }
