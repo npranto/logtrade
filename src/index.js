@@ -1,26 +1,11 @@
-import Router from "./utils/Router.js";
-// import render from "./utils/render.js";
+import './vendors/vendor';
 
-import Example from "./Example.js";
+import Router from "./utils/Router.js";
 import render from "./utils/render.js";
 
-const App = () => {
-  return Router(
-    [
-      { 
-        page: Example, matchingQuery: 'example', 
-        props: { 
-          name: 'Shakiba', 
-          color: 'red',
-        } 
-      },
-    ], 
-    'page', 
-    { 
-      page: (props) => `Example default page - ${props.name}`, 
-      props: { name: 'ssdff' },
-    });
-};
+import Home from "./components/Home";
+import Login from './components/Login';
+import Signup from './components/Signup';
 
 const styles = () => `
   html {
@@ -34,15 +19,36 @@ const styles = () => `
   body {
     width: 100%;
     height: 100%;
-    background-image: url("assets/img/add.png");
   }
   main {
     max-width: 1200px;
     width: 100%;
-    background: whitesmoke;
     margin: 0 auto;
+    background: whitesmoke
   }
 `;
+
+const App = () => {
+  return Router(
+    [
+      { 
+        page: Login, 
+        matchingQuery: 'login',
+      },
+      { 
+        page: Signup, 
+        matchingQuery: 'signup',
+      }
+    ], 
+    'page', 
+    { 
+      page: Home, 
+      props: { app: 'LogTrade' },
+    }
+  );
+};
+
+
 
 
 render({}, App, styles, document.getElementById('root'));
