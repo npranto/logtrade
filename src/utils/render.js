@@ -13,10 +13,9 @@ const render = (
 
   if (css) {
     const styleElement = document.createElement('style');
-    styleElement.type = 'text/css';
     if (styleElement.styleSheet) styleElement.styleSheet.cssText = css;
     else styleElement.appendChild(document.createTextNode(css));
-    document.getElementById('root').before(styleElement);
+    document.head.appendChild(styleElement);
   }
 
   if (parentElement) {

@@ -6,7 +6,8 @@
   "scripts": {
     "build:dev": "npx webpack --config webpack.config.js --mode development --watch",
     "build:prod": "npx webpack --config webpack.config.js --mode production",
-    "serve:dev": "concurrently \"npm run build:dev\" \"npx live-server --port=1234 --open=dist/ --watch=dist/\""
+    "open:dev": "concurrently \"npm run build:dev\" \"npx live-server --port=1234 --open=dist/ --watch=dist/\"",
+    "open:prod": "concurrently \"npm run build:prod\" \"npx live-server --port=1234 --open=dist/\""
   },
   "repository": {
     "type": "git",
@@ -20,11 +21,15 @@
   },
   "homepage": "https://github.com/npranto/logtrade#readme",
   "dependencies": {
+    "@popperjs/core": "^2.10.1",
+    "bootstrap": "^5.1.1",
     "query-string": "^7.0.1"
   },
   "devDependencies": {
     "concurrently": "^6.2.1",
     "copy-webpack-plugin": "^9.0.1",
+    "css-loader": "^6.2.0",
+    "style-loader": "^3.2.1",
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0"
   }
