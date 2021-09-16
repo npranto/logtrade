@@ -5,12 +5,21 @@ import Example from "./Example.js";
 import render from "./utils/render.js";
 
 const App = () => {
-  return Router([
-    { page: Example, matchingQuery: 'example', props: { name: 'Shakiba', color: 'red' } },
-  ], 'page', { 
+  return Router(
+    [
+      { 
+        page: Example, matchingQuery: 'example', 
+        props: { 
+          name: 'Shakiba', 
+          color: 'red',
+        } 
+      },
+    ], 
+    'page', 
+    { 
       page: (props) => `Example default page - ${props.name}`, 
       props: { name: 'ssdff' },
-  });
+    });
 };
 
 const styles = () => `
@@ -25,7 +34,7 @@ const styles = () => `
   body {
     width: 100%;
     height: 100%;
-    background-image: url("/assets/img/add.png");
+    background-image: url("assets/img/add.png");
   }
   main {
     max-width: 1200px;
