@@ -1,4 +1,5 @@
 import parseQueryString from "./parseQueryString.js";
+import queryString from 'query-string';
 
 const Router = (
   routes = [], 
@@ -13,8 +14,9 @@ const Router = (
   if (!fallbackRoute) {
     console.log('Please provide a `fallbackRoute` property to router')
   }
-
-  const parsedQuery = parseQueryString(window?.location?.search);
+  // const parsedQuery = parseQueryString(window?.location?.search);
+  const parsedQuery = queryString.parse(window?.location?.search);
+  console.log({ parsedQuery });
 
   if (!parsedQuery[query]) {
     console.info(`No [${query}] query detected, rendering default fallback page`);
