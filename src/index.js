@@ -1,4 +1,4 @@
-import './vendors/vendor';
+import './vendors/index';
 
 import Router from "./utils/Router.js";
 import render from "./utils/render.js";
@@ -19,6 +19,7 @@ const styles = () => `
   body {
     width: 100%;
     height: 100%;
+    font-family: 'Poppins', sans-serif;
   }
   main {
     max-width: 1200px;
