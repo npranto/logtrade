@@ -1,4 +1,24 @@
 import render from "../utils/render";
+import { signup } from "../vendors/firebase/firebase.authentication";
+
+const onDOMContentLoaded = () => {
+  const signupComponent = document.querySelector('.Signup');
+  if (signupComponent) {
+    const signupForm = document.getElementById('signup-form');
+
+    signupForm.addEventListener('submit', function(e) {
+      console.log('running...');
+      e.preventDefault();
+      const fullName = signupForm['signup-fullname'].value;
+      const email = signupForm['signup-email'].value;
+      const password = signupForm['signup-password'].value;
+      const confirmPassword = signupForm['signup-confirm-password'].value;
+      console.log({ fullName, email, password, confirmPassword });
+
+      signup({ email, password });
+    });
+  }
+}
 
 const Signup = () => {
   return `
@@ -86,4 +106,8 @@ const styles = () => `
   }
 `;
 
-export default (props) => render(props, Signup, styles);
+// onDOMContentLoaded();
+
+export default (props) => render(
+  props, Signup, styles, null, onDOMContentLoaded
+);
