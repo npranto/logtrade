@@ -6,6 +6,11 @@ import render from "./utils/render.js";
 import Home from "./components/Home";
 import Login from './components/Login';
 import Signup from './components/Signup';
+import getUniqueId from './utils/getUniqueId';
+
+const appId = getUniqueId();
+
+const onLoad = () => {};
 
 const styles = () => `
   html {
@@ -25,7 +30,7 @@ const styles = () => `
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
-    background: whitesmoke
+    background: whitesmoke;
   }
 `;
 
@@ -52,4 +57,11 @@ const App = () => {
 
 
 
-render({}, App, styles, document.getElementById('root'));
+render(
+  {}, 
+  appId,
+  App, 
+  styles,
+  onLoad,
+  document.getElementById('root')
+);

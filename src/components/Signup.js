@@ -1,31 +1,94 @@
+import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
-import { signup } from "../vendors/firebase/firebase.authentication";
+import { signUpWithEmailAndPassword } from "../vendors/firebase/firebase.authentication";
 
-const onDOMContentLoaded = () => {
-  const signupComponent = document.querySelector('.Signup');
-  if (signupComponent) {
-    const signupForm = document.getElementById('signup-form');
+const componentId = getUniqueId();
 
-    signupForm.addEventListener('submit', function(e) {
-      console.log('running...');
-      e.preventDefault();
-      const fullName = signupForm['signup-fullname'].value;
-      const email = signupForm['signup-email'].value;
-      const password = signupForm['signup-password'].value;
-      const confirmPassword = signupForm['signup-confirm-password'].value;
-      console.log({ fullName, email, password, confirmPassword });
+const state = {
+  signUpFormError: '',
+};
 
-      signup({ email, password });
-    });
-  }
+// const { getState, setState } = state({ 
+//   signUpFormError: '',
+// }, Signup, styles, onLoad);
+
+const listenForSignUpSubmit = (props, state, setState) => {
+  const signupForm = document.getElementById('signup-form');
+
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // const fullName = signupForm['signup-fullname'].value;
+    const email = signupForm['signup-email'].value;
+    const password = signupForm['signup-password'].value;
+    const confirmPassword = signupForm['signup-confirm-password'].value;
+
+    if (password !== confirmPassword) {
+      return setState({ signUpFormError: 'Password and confirmation password do not match.' });
+    }
+
+    const result = await signUpWithEmailAndPassword({ email, password });
+    console.log({ result });
+  });
 }
 
-const Signup = () => {
+// console.log(getState());
+
+function onLoad(props, state, setState) {
+  listenForSignUpSubmit(props, state, setState);
+}
+
+function styles() { 
   return `
-    <section class="Signup">
+    .Signup {
+      padding-top: 80px;
+      padding-bottom: 80px;
+      box-sizing: border-box;
+      height: 100vh;
+    }
+    .form-signup {
+      max-width: 380px;
+      padding: 15px 35px 45px;
+      margin: 0 auto;
+      background-color: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .form-signup .form-signup-heading,
+    .form-signup .checkbox {
+      margin-bottom: 30px;
+    }
+    .form-signup .checkbox {
+      font-weight: normal;
+    }
+    .form-signup .form-control {
+      position: relative;
+      font-size: 16px;
+      height: auto;
+      padding: 10px;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+    .form-signup .form-control:focus {
+      z-index: 2;
+    }
+  `;
+}
+
+function Signup (props, state) {
+  console.log('rendering Signup()...', state);
+  console.log(`${!!state.signUpFormError ? 'Show Error' : ''}`);
+  if (state.signUpFormError) return `<h1>What!</h1>`;
+  return `
+    <section class="Signup ${componentId}">
       <h1 class="text-center mt-5 mb-5 text-muted"> Log Trade </h1>
       <form class="form-signup" id="signup-form" action="#">       
         <h2 class="form-signup-heading">Sign Up</h2>
+        ${!!state.signUpFormError ? `
+          <div class="alert alert-danger" role="alert">
+            A simple danger alert—check it out!
+          </div>
+        ` : ''}
         <input 
           type="text" 
           class="form-control" 
@@ -71,43 +134,12 @@ const Signup = () => {
   `
 };
 
-const styles = () => `
-  .Signup {
-    padding-top: 80px;
-    padding-bottom: 80px;
-    box-sizing: border-box;
-    height: 100vh;
-  }
-  .form-signup {
-    max-width: 380px;
-    padding: 15px 35px 45px;
-    margin: 0 auto;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-  }
-  .form-signup .form-signup-heading,
-  .form-signup .checkbox {
-    margin-bottom: 30px;
-  }
-  .form-signup .checkbox {
-    font-weight: normal;
-  }
-  .form-signup .form-control {
-    position: relative;
-    font-size: 16px;
-    height: auto;
-    padding: 10px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  .form-signup .form-control:focus {
-    z-index: 2;
-  }
-`;
-
-// onDOMContentLoaded();
-
 export default (props) => render(
-  props, Signup, styles, null, onDOMContentLoaded
+  props, 
+  componentId,
+  Signup, 
+  styles, 
+  onLoad,
+  null,
+  state,
 );

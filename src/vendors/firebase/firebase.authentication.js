@@ -6,34 +6,40 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-    console.log('User is signed in', user);
-    // window.location.replace('/calendar.html');
-    // ...
+    const { uid,  email } = user;
+    console.info(`User is signed in - [${uid}] [${email}]`);
   } else {
     // User is signed out
-    // ...
-    console.log('User is signed out');
-    // window.location.replace('/login.html');
-    // document.querySelector("body").style.opacity = "1";
+    console.info('User is signed out');
   }
 });
 
-export const signup = (user) => {
-  createUserWithEmailAndPassword(auth, email, password)
+export const signUpWithEmailAndPassword = ({ email, password }) => {
+  return createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      return { user };
+    })
+    .catch((error) => {
+      const { code, message } = error;
+      return { 
+        error: { code, message } 
+      };
+    });
+}
+
+export const signInWithEmailAndPassword = ({ email, password }) => {
+  return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in 
       const user = userCredential.user;
-      console.log('signup()...', user);
       // ...
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log('signup() error...', user);
-      // ..
     });
-}
 
+}
 
 
