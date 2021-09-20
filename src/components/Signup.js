@@ -4,63 +4,266 @@ import { signUpWithEmailAndPassword } from "../vendors/firebase/firebase.authent
 
 const componentId = getUniqueId();
 
-const state = {
-  signUpFormError: '',
-};
+const listenForSignUpSubmit = (props) => {
+  // elements
+  const signUpForm = document.querySelector(
+    `.${componentId} #signup-form`
+  );
+  const signUpFormError = document.querySelector(
+    `.${componentId} #signup-form-error`
+  );
 
-// const { getState, setState } = state({ 
-//   signUpFormError: '',
-// }, Signup, styles, onLoad);
 
-const listenForSignUpSubmit = (props, state, setState) => {
-  const signupForm = document.getElementById('signup-form');
+  // takes in an error message and displays it on top of signup form
+  const showSignUpFormError = (message) => {
+    signUpFormError.innerHTML = `
+      <div class="alert alert-danger text-center" role="alert">
+        ${message}
+      </div>
+    `;
+  };
 
-  signupForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  // resets signup form error message
+  const resetSignUpFormError = () => signUpFormError.innerHTML = '';
 
-    // const fullName = signupForm['signup-fullname'].value;
-    const email = signupForm['signup-email'].value;
-    const password = signupForm['signup-password'].value;
-    const confirmPassword = signupForm['signup-confirm-password'].value;
+  // checks signup form and extracts out each field names and value pairs
+  const extractFormFields = () => {
+    const fullName = signUpForm['signup-fullname']?.value;
+    const email = signUpForm['signup-email']?.value;
+    const password = signUpForm['signup-password']?.value;
+    const confirmPassword = signUpForm['signup-confirm-password']?.value;
+    return {
+      fullName,
+      email,
+      password,
+      confirmPassword,
+    }
+  }
 
-    if (password !== confirmPassword) {
-      return setState({ signUpFormError: 'Password and confirmation password do not match.' });
+  // takes in full name field and returns data regarding its validity
+  const validateFullName = (fullName) => {
+    if (!fullName || fullName.length < 3) {
+      return {
+        error: 'Invalid full name! Must be longer than 3 characters',
+        isValid: false, 
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  };
+
+  // takes in email field and returns data regarding its validity
+  const validateEmail = (email) => {
+    if (!email) {
+      return {
+        error: 'Please provide an email address',
+        isValid: false, 
+      }
     }
 
-    const result = await signUpWithEmailAndPassword({ email, password });
-    console.log({ result });
+    // ref: https://stackoverflow.com/a/46181
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const isEmailValid = emailRegex.test(String(email).toLowerCase());
+
+    if (!isEmailValid) {
+      return {
+        error: 'Invalid email address!',
+        isValid: false, 
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  };
+
+  // takes in password field and returns data regarding its validity
+  const validatePassword = (password) => {
+    /* whether or not a character is valid or not
+      - char can be a letter from a-z, either upper / lower case
+      - char can be a number, 0-9
+      - char can be a whitespace
+      - char can be any of these special characters only:
+        (!"#$%&'()*+,-.\/:;<=>?@[\]^_`{|}~) */
+    const isInvalidCharacter = (char) => {
+      if (!char || char.length !== 1 || typeof char !== 'string') {
+        throw new Error(
+          'Invalid character passed as argument. Please pass in a single character, i.e., `a`, `B` or `7`'
+        );
+      }
+      return /[a-zA-Z0-9\s!"#$%&'()*+,-.\/:;<=>?@[\]^_`{|}~]/.test(char);
+    }
+    // whether or not the entire string has valid characters or not
+    const hasInvalidCharacters = (str) => str
+      .split('')
+      .some((char) => isInvalidCharacter(char));
+
+    
+    if (!password) {
+      return {
+        error: 'Please provide a password',
+        isValid: false, 
+      }
+    }
+    if (!password.length || password.length < 6) {
+      return {
+        error: 'Invalid password, must be longer than 6 characters',
+        isValid: false, 
+      }
+    }
+
+    if (!hasInvalidCharacters(password)) {
+      return {
+        error: 'Invalid password! Password can only contain letters (a-z, A-Z), numbers (0-9), whitespace(s) or special characters (!"#$%&\'()*+,-.\/:;<=>?@[\]^_`{|}~)',
+        isValid: false, 
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  };
+
+  const validatePasswordAndConfirmPassword = (password, confirmPassword) => {
+    if (!password || !confirmPassword || password !== confirmPassword) {
+      return {
+        error: 'Password and confirm password mismatch!',
+        isValid: false,
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  }
+
+  const validateSignUpForm = (fields) => {
+    // validate full name
+    const { 
+      error: fullNameError, isValid: isFullNameValid,
+    } = validateFullName(fields.fullName);
+    if (!isFullNameValid) {
+      return {
+        error: fullNameError,
+        isValid: isFullNameValid,
+      }
+    }
+
+    // validate email
+    const { 
+      error: emailError, isValid: isEmailValid,
+    } = validateEmail(fields.email);
+    if (!isEmailValid) {
+      return {
+        error: emailError,
+        isValid: isEmailValid,
+      }
+    }
+
+    // validate password
+    const { 
+      error: passwordError, isValid: isPasswordValid,
+    } = validatePassword(fields.password);
+    if (!isPasswordValid) {
+      return {
+        error: passwordError,
+        isValid: isPasswordValid,
+      }
+    }
+
+    // validate password and confirm password
+    const { 
+      error: passwordAndConfirmPasswordError, 
+      isValid: isPasswordAndConfirmPasswordValid,
+    } = validatePasswordAndConfirmPassword(
+      fields.password, 
+      fields.confirmPassword
+    );
+    if (!isPasswordAndConfirmPasswordValid) {
+      return {
+        error: passwordAndConfirmPasswordError,
+        isValid: isPasswordAndConfirmPasswordValid,
+      }
+    }
+
+    return {
+      error: null,
+      isValid: true,
+    }
+  }
+
+  signUpForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fields = extractFormFields();
+    console.log({ fields });
+
+    const { error: formError, isValid: isFormValid } = validateSignUpForm(fields);
+    console.log({ formError, isFormValid });
+
+    if (!isFormValid) {
+      return showSignUpFormError(formError);
+    }
+    resetSignUpFormError();
+
+
+    // const fullName = signUpForm['signup-fullname'].value;
+    // const email = signUpForm['signup-email'].value;
+    // const password = signUpForm['signup-password'].value;
+    // const confirmPassword = signUpForm['signup-confirm-password'].value;
+
+    // if (password !== confirmPassword) {
+    //   return showSignUpFormError(
+    //     'Password and confirmation password do not match.',
+    //   );
+    //   // return setState({ signUpFormError: 'Password and confirmation password do not match.' });
+    // }
+
+    // const result = await signUpWithEmailAndPassword({ email, password });
+    // console.log({ result });
   });
 }
 
 // console.log(getState());
 
-function onLoad(props, state, setState) {
-  listenForSignUpSubmit(props, state, setState);
+function onLoad(
+  props, 
+  // state, 
+  // setState
+) {
+  listenForSignUpSubmit(
+    props, 
+    // state, 
+    // setState
+  );
 }
 
 function styles() { 
   return `
-    .Signup {
-      padding-top: 80px;
-      padding-bottom: 80px;
+    .${componentId} {
+      padding-top: 2em;
+      padding-bottom: 2em;
       box-sizing: border-box;
       height: 100vh;
+      overflow: auto;
     }
-    .form-signup {
+    .${componentId} .form-signup {
       max-width: 380px;
       padding: 15px 35px 45px;
       margin: 0 auto;
       background-color: #fff;
       border: 1px solid rgba(0, 0, 0, 0.1);
     }
-    .form-signup .form-signup-heading,
-    .form-signup .checkbox {
+    .${componentId} .form-signup .form-signup-heading,
+    .${componentId} .form-signup .checkbox {
       margin-bottom: 30px;
     }
-    .form-signup .checkbox {
+    .${componentId} .form-signup .checkbox {
       font-weight: normal;
     }
-    .form-signup .form-control {
+    .${componentId} .form-signup .form-control {
       position: relative;
       font-size: 16px;
       height: auto;
@@ -69,26 +272,22 @@ function styles() {
       -moz-box-sizing: border-box;
       box-sizing: border-box;
     }
-    .form-signup .form-control:focus {
+    .${componentId} .form-signup .form-control:focus {
       z-index: 2;
+    }
+    .${componentId} .form-signup .signup-form-error {
+      font-size: 1rem;
     }
   `;
 }
 
-function Signup (props, state) {
-  console.log('rendering Signup()...', state);
-  console.log(`${!!state.signUpFormError ? 'Show Error' : ''}`);
-  if (state.signUpFormError) return `<h1>What!</h1>`;
+function Signup (props) {
   return `
     <section class="Signup ${componentId}">
       <h1 class="text-center mt-5 mb-5 text-muted"> Log Trade </h1>
       <form class="form-signup" id="signup-form" action="#">       
         <h2 class="form-signup-heading">Sign Up</h2>
-        ${!!state.signUpFormError ? `
-          <div class="alert alert-danger" role="alert">
-            A simple danger alert—check it out!
-          </div>
-        ` : ''}
+        <div class="signup-form-error" id="signup-form-error"></div>
         <input 
           type="text" 
           class="form-control" 
@@ -140,6 +339,4 @@ export default (props) => render(
   Signup, 
   styles, 
   onLoad,
-  null,
-  state,
 );

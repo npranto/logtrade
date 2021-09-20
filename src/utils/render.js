@@ -5,7 +5,7 @@ const render = (
   styles = '',
   onLoad = () => {}, 
   parentElement = document.getElementById('root'), 
-  state = {},
+  // state = {},
 ) => {
   if (!componentId || typeof componentId !== 'string') {
     throw new Error('Please provide a component ID to render');
@@ -14,28 +14,28 @@ const render = (
     throw new Error('Please pass in a component to render');
   }
 
-  let currentState = state;
+  // let currentState = state;
 
   // utility to set state with a new state
-  const setState = (newState) => {
-    console.log({ newState });
-    const hasStateChanged = JSON.stringify(newState) !== JSON.stringify(currentState);
-    // only update state and re-render if the state changed
-    if (hasStateChanged) {
-      console.log('about to re-render....');
+  // const setState = (newState) => {
+  //   console.log({ newState });
+  //   const hasStateChanged = JSON.stringify(newState) !== JSON.stringify(currentState);
+  //   // only update state and re-render if the state changed
+  //   if (hasStateChanged) {
+  //     console.log('about to re-render....');
 
-      currentState = {...currentState, ...newState};
-      return render(
-        props, 
-        componentId,
-        component, 
-        styles, 
-        onLoad,
-        null, 
-        newState,
-      )
-    }
-  };
+  //     currentState = {...currentState, ...newState};
+  //     return render(
+  //       props, 
+  //       componentId,
+  //       component, 
+  //       styles, 
+  //       onLoad,
+  //       null, 
+  //       newState,
+  //     )
+  //   }
+  // };
 
   // const state = (initialState = {}, Component, props, parent, state) => {
   //   let currentState = initialState;
@@ -61,10 +61,16 @@ const render = (
   // }
 
   // generate dynamic component markup with custom props
-  const html = component(props, currentState);
+  const html = component(
+    props, 
+    // currentState
+  );
   console.log({ html });
   // generate dynamic component styles with custom props
-  const css = styles(props, currentState);
+  const css = styles(
+    props, 
+    // currentState
+  );
 
   // loads up component functionalities on component mount
   // ref: https://stackoverflow.com/a/64530834
@@ -72,7 +78,11 @@ const render = (
     const el = document.querySelector(`.${componentId}`);
     if (el) {
       observer.disconnect();
-      onLoad(props, currentState, setState);
+      onLoad(
+        props, 
+        // currentState, 
+        // setState
+      );
     }
   };
   const observer = new MutationObserver(callback);
