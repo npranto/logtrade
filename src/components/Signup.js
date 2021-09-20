@@ -6,12 +6,10 @@ const componentId = getUniqueId();
 
 const listenForSignUpSubmit = (props) => {
   // elements
-  const signUpForm = document.querySelector(
-    `.${componentId} #signup-form`
-  );
-  const signUpFormError = document.querySelector(
-    `.${componentId} #signup-form-error`
-  );
+  const signUpForm = document
+    .querySelector(`.${componentId} #signup-form`);
+  const signUpFormError = document
+    .querySelector(`.${componentId} #signup-form-error`);
 
 
   // takes in an error message and displays it on top of signup form
@@ -22,7 +20,7 @@ const listenForSignUpSubmit = (props) => {
       </div>
     `;
   };
-
+  
   // resets signup form error message
   const resetSignUpFormError = () => signUpFormError.innerHTML = '';
 
@@ -126,6 +124,7 @@ const listenForSignUpSubmit = (props) => {
     }
   };
 
+  // takes in password and confirm password and returns data regarding mismatch
   const validatePasswordAndConfirmPassword = (password, confirmPassword) => {
     if (!password || !confirmPassword || password !== confirmPassword) {
       return {
@@ -139,6 +138,7 @@ const listenForSignUpSubmit = (props) => {
     }
   }
 
+  // takes in form fields and validates each field one-by-one
   const validateSignUpForm = (fields) => {
     // validate full name
     const { 
@@ -194,50 +194,45 @@ const listenForSignUpSubmit = (props) => {
     }
   }
 
-  signUpForm.addEventListener('submit', async (e) => {
+  async function onSignUpSubmit(e) {
+    // restricts browser from auto page refresh on form submit
     e.preventDefault();
 
+    // extracts out each form field in name / value pairs
+    // i.e., { fullName: '...', email: '...' ... }
     const fields = extractFormFields();
     console.log({ fields });
 
-    const { error: formError, isValid: isFormValid } = validateSignUpForm(fields);
+    // takes in all form fields, validates each one-by-one and returns 
+    // data regarding form validity
+    const { 
+      error: formError, isValid: isFormValid 
+    } = validateSignUpForm(fields);
     console.log({ formError, isFormValid });
 
     if (!isFormValid) {
+      // displays form field error in DOM
       return showSignUpFormError(formError);
     }
+    // hides or removes any form field from DOM
     resetSignUpFormError();
 
+    // creates new account for user by taking in email and password
+    const result = await signUpWithEmailAndPassword({ 
+      email: fields.email, 
+      password: fields.password 
+    });
+    console.log({ result });
 
-    // const fullName = signUpForm['signup-fullname'].value;
-    // const email = signUpForm['signup-email'].value;
-    // const password = signUpForm['signup-password'].value;
-    // const confirmPassword = signUpForm['signup-confirm-password'].value;
+    // clears the sign up form fields in DOM
+    signUpForm.reset();
+  }
 
-    // if (password !== confirmPassword) {
-    //   return showSignUpFormError(
-    //     'Password and confirmation password do not match.',
-    //   );
-    //   // return setState({ signUpFormError: 'Password and confirmation password do not match.' });
-    // }
-
-    // const result = await signUpWithEmailAndPassword({ email, password });
-    // console.log({ result });
-  });
+  signUpForm.addEventListener('submit', onSignUpSubmit);
 }
 
-// console.log(getState());
-
-function onLoad(
-  props, 
-  // state, 
-  // setState
-) {
-  listenForSignUpSubmit(
-    props, 
-    // state, 
-    // setState
-  );
+function onLoad(props) {
+  listenForSignUpSubmit(props);
 }
 
 function styles() { 
