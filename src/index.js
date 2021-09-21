@@ -7,6 +7,7 @@ import Home from "./components/Home";
 import Login from './components/Login';
 import Signup from './components/Signup';
 import getUniqueId from './utils/getUniqueId';
+import Dashboard from './components/Dashboard';
 
 const appId = getUniqueId();
 
@@ -44,6 +45,10 @@ const App = () => {
       { 
         page: Signup, 
         matchingQuery: 'signup',
+      },
+      { 
+        page: Dashboard, 
+        matchingQuery: 'dashboard',
       }
     ], 
     'page', 

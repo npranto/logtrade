@@ -218,14 +218,21 @@ const listenForSignUpSubmit = (props) => {
     resetSignUpFormError();
 
     // creates new account for user by taking in email and password
-    const result = await signUpWithEmailAndPassword({ 
+    const { user, error } = await signUpWithEmailAndPassword({ 
       email: fields.email, 
       password: fields.password 
     });
-    console.log({ result });
+    console.log({ user, error });
+
+    // display potential signup error from firebase auth
+    if (error) {
+      return showSignUpFormError(error.message || 'Unable to create account now. Try again later');
+    } 
 
     // clears the sign up form fields in DOM
     signUpForm.reset();
+    // navigate user to dashboard
+    window.location.replace('?page=dashboard');
   }
 
   signUpForm.addEventListener('submit', onSignUpSubmit);
