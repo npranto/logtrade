@@ -14,24 +14,25 @@ const appId = getUniqueId();
 const onLoad = () => {};
 
 const styles = () => `
-  html {
-    font-size: 16px;
-  }
   * {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
   }
+  html {
+    font-size: 16px;
+  }
   body {
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     font-family: 'Poppins', sans-serif;
   }
   main {
     max-width: 1200px;
     width: 100%;
+    height: 100%;
     margin: 0 auto;
-    background: whitesmoke;
+    overflow: auto;
   }
 `;
 

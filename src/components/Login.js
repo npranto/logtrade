@@ -185,13 +185,17 @@ const onLoad = () => {
 
 const styles = () => `
   .${componentId} {
-    padding-top: 80px;
-    padding-bottom: 80px;
-    height: 100vh;
+    padding: 1.5em 0 0 0;
     box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: auto;
   }
   .${componentId} .form-signin {
     max-width: 380px;
+    width: 100%;
     padding: 15px 35px 45px;
     margin: 0 auto;
     background-color: #fff;
@@ -224,7 +228,7 @@ const styles = () => `
 const Login = () => {
   return `
     <section class="Login ${componentId}">
-      <h1 class="text-center mt-5 mb-5 text-muted"> Log Trade </h1>
+      <h1 class="text-center mb-4 text-muted"> Log Trade </h1>
       <form class="form-signin" id="signin-form" action="#">       
         <h2 class="form-signin-heading">Login</h2>
         <div class="signin-form-error" id="signin-form-error"></div>
@@ -242,17 +246,8 @@ const Login = () => {
           name="signin-password" 
           placeholder="Password" 
           required 
-        />      
-        <label class="checkbox mt-3">
-          <input 
-            type="checkbox" 
-            value="remember-me" 
-            class="remember-me" 
-            id="rememberMe" 
-            name="rememberMe"
-          /> Remember me
-        </label>
-        <div class="d-grid gap-2">
+        />  
+        <div class="d-grid gap-2 mt-4">
           <button 
             class="btn btn-lg btn-primary btn-block" 
             type="submit"
