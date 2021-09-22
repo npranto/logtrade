@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "prepare": "husky install",
-    "build:clean": "npx rimraf dist/",
+    "build:clean": "npx rimraf dist",
     "build:dev": "npx webpack --config webpack.config.js --mode development --watch",
     "build:prod": "npm run build:clean && npx webpack --config webpack.config.js --mode production",
     "open:dev": "concurrently \"npm run build:dev\" \"npx live-server --port=1234 --open=dist/ --watch=dist/\"",
