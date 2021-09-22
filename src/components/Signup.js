@@ -244,14 +244,17 @@ function onLoad(props) {
 function styles() { 
   return `
     .${componentId} {
-      padding-top: 2em;
-      padding-bottom: 2em;
+      padding: 1.5em 0 0 0;
       box-sizing: border-box;
-      height: 100vh;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       overflow: auto;
     }
     .${componentId} .form-signup {
       max-width: 380px;
+      width: 100%;
       padding: 15px 35px 45px;
       margin: 0 auto;
       background-color: #fff;
@@ -285,7 +288,7 @@ function styles() {
 function Signup (props) {
   return `
     <section class="Signup ${componentId}">
-      <h1 class="text-center mt-5 mb-5 text-muted"> Log Trade </h1>
+      <h1 class="text-center mb-4 text-muted"> Log Trade </h1>
       <form class="form-signup" id="signup-form" action="#">       
         <h2 class="form-signup-heading">Sign Up</h2>
         <div class="signup-form-error" id="signup-form-error"></div>
