@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import getUniqueId from './utils/getUniqueId';
 import Dashboard from './components/Dashboard';
+import getUserFromLocalStorage from './utils/getUserFromLocalStorage';
 
 const appId = getUniqueId();
 
@@ -40,15 +41,33 @@ const App = () => {
   return Router(
     [
       { 
-        page: Login, 
+        page: Login,
+        redirectRules: [
+          { 
+            rule: () => getUserFromLocalStorage() !== null,
+            redirectTo: '?page=dashboard',
+          },
+        ],
         matchingQuery: 'login',
       },
       { 
         page: Signup, 
+        redirectRules: [
+          { 
+            rule: () => getUserFromLocalStorage() !== null,
+            redirectTo: '?page=dashboard',
+          },
+        ],
         matchingQuery: 'signup',
       },
       { 
-        page: Dashboard, 
+        page: Dashboard,
+        redirectRules: [
+          { 
+            rule: () => getUserFromLocalStorage() === null,
+            redirectTo: '?page=home',
+          },
+        ],
         matchingQuery: 'dashboard',
       }
     ], 
