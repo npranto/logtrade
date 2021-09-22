@@ -1,6 +1,6 @@
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
-import { signUpWithEmailAndPassword } from "../vendors/firebase/firebase.authentication";
+import { onSignUpWithEmailAndPassword } from "../vendors/firebase/firebase.authentication";
 
 const componentId = getUniqueId();
 
@@ -10,7 +10,6 @@ const listenForSignUpSubmit = (props) => {
     .querySelector(`.${componentId} #signup-form`);
   const signUpFormError = document
     .querySelector(`.${componentId} #signup-form-error`);
-
 
   // takes in an error message and displays it on top of signup form
   const showSignUpFormError = (message) => {
@@ -218,7 +217,7 @@ const listenForSignUpSubmit = (props) => {
     resetSignUpFormError();
 
     // creates new account for user by taking in email and password
-    const { user, error } = await signUpWithEmailAndPassword({ 
+    const { user, error } = await onSignUpWithEmailAndPassword({ 
       email: fields.email, 
       password: fields.password 
     });

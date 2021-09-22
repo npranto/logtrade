@@ -54,13 +54,10 @@ const App = () => {
     'page', 
     { 
       page: Home, 
-      props: { app: 'LogTrade!' },
+      props: { app: 'LogTrade' },
     }
   );
 };
-
-
-
 
 render(
   {}, 

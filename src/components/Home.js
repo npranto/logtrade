@@ -6,7 +6,7 @@ const componentId = getUniqueId();
 const onLoad = () => {};
 
 const styles = () => `
-  .Home {
+  .${componentId} {
     padding: 3em 0;
     height: 100vh;
     display: flex;

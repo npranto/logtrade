@@ -16,7 +16,6 @@ const Router = (
   }
   // const parsedQuery = parseQueryString(window?.location?.search);
   const parsedQuery = queryString.parse(window?.location?.search);
-  console.log({ parsedQuery });
 
   if (!parsedQuery[query]) {
     console.info(`No [${query}] query detected, rendering default fallback page`);

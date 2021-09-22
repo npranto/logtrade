@@ -1,5 +1,12 @@
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
 import saveUserOnLocalStorage from "../../utils/saveUserOnLocalStorage";
+import removeUserFromLocalStorage from '../../utils/removeUserFromLocalStorage';
 
 const auth = getAuth();
 
@@ -31,7 +38,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-export const signUpWithEmailAndPassword = ({ email, password }) => {
+export const onSignUpWithEmailAndPassword = ({ email, password }) => {
   return createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
@@ -53,18 +60,49 @@ export const signUpWithEmailAndPassword = ({ email, password }) => {
     });
 }
 
-export const signInWithEmailAndPassword = ({ email, password }) => {
+export const onSignInWithEmailAndPassword = ({ email, password }) => {
   return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in 
       const user = userCredential.user;
-      // ...
+      return { user };
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
+      const { code, message } = error;
+      if (code.includes('auth/user-not-found')) {
+        return {
+          error: { 
+            code, 
+            message: `No account associated with ${email}! Please create a new account`
+          } 
+        }
+      }
+      if (code.includes('auth/wrong-password')) {
+        return {
+          error: { 
+            code, 
+            message: `Wrong password!`
+          } 
+        }
+      }
+      return { 
+        error: { code, message } 
+      };
     });
+}
 
+export const onSignout = () => {
+  return signOut(auth).then(() => {
+    // Sign-out successful.
+    return {
+      isSignoutComplete: true,
+    }
+  }).catch((error) => {
+    // An error happened.
+    return {
+      error: 'Issue with sign out at the moment'
+    }
+  });
 }
 
 
