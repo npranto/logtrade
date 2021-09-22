@@ -22,7 +22,7 @@ onAuthStateChanged(auth, (user) => {
       phoneNumber, 
       photoURL, 
     } = user;
-    console.info(`User is signed in - [${uid}; ${email}]`, user);
+    console.info(`User is signed in - [${uid}; ${email}]`);
     saveUserOnLocalStorage({
       uid,  
       email, 
