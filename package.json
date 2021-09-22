@@ -21,9 +21,12 @@
   },
   "homepage": "https://github.com/npranto/logtrade#readme",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@popperjs/core": "^2.10.1",
     "bootstrap": "^5.1.1",
-    "query-string": "^7.0.1"
+    "firebase": "^9.0.2",
+    "query-string": "^7.0.1",
+    "uniqid": "^5.4.0"
   },
   "devDependencies": {
     "concurrently": "^6.2.1",
