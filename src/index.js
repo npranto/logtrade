@@ -38,6 +38,9 @@ const styles = () => `
 `;
 
 const App = () => {
+  const isLoggedIn = getUserFromLocalStorage() !== null; 
+  console.log({ isLoggedIn });
+
   return Router(
     [
       { 
@@ -49,6 +52,7 @@ const App = () => {
           },
         ],
         matchingQuery: 'login',
+        props: { isLoggedIn },
       },
       { 
         page: Signup, 
@@ -59,6 +63,7 @@ const App = () => {
           },
         ],
         matchingQuery: 'signup',
+        props: { isLoggedIn },
       },
       { 
         page: Dashboard,
@@ -69,12 +74,13 @@ const App = () => {
           },
         ],
         matchingQuery: 'dashboard',
-      }
+        props: { isLoggedIn },
+      },
     ], 
     'page', 
     { 
       page: Home, 
-      props: { app: 'LogTrade' },
+      props: { app: 'LogTrade', isLoggedIn },
     }
   );
 };

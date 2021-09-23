@@ -1,7 +1,8 @@
 import getUniqueId from "../utils/getUniqueId";
-import getUserFromLocalStorage from "../utils/getUserFromLocalStorage";
 import render from "../utils/render";
 import { onSignout } from "../vendors/firebase/firebase.authentication";
+import Calendar from "./Calendar";
+import Nav from "./Nav";
 
 const componentId = getUniqueId();
 
@@ -47,17 +48,12 @@ const listenForSignout = () => {
 }
 
 const onLoad = () => {
-  listenForSignout();
+  // listenForSignout();
 };
 
 const styles = () => `
   .${componentId} {
-    padding: 3em 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    padding: 1em 0;
   }
   .${componentId} .close-modal-btn {
     outline: none;
@@ -67,9 +63,11 @@ const styles = () => `
   }
 `;
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   return `
+    ${Nav(props)}
     <section class="Dashboard ${componentId}">
+      
       <div class="modal fade" id="logout-confirm-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -94,21 +92,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <h1 class="text-center">Welcome to Dashboard</h1>
-      <div class="p-3 text-center">
-        <button 
-          class="btn btn-danger" 
-          role="button"
-          id="logout-btn"
-          data-toggle="modal"
-          data-target="#logout-confirm-modal"
-        >
-          Logout
-        </button>
-        <pre class="text-left">
-          ${JSON.stringify(getUserFromLocalStorage(), null, 2)}
-        </pre>
-      </div>
+      ${Calendar({ type: 'MONTHLY', currentDate: new Date('January 1, 2021') })}
     </section>
   `
 };
@@ -120,3 +104,20 @@ export default (props) => render(
   styles, 
   onLoad, 
 );
+
+
+{/* <h1 class="text-center">Welcome to Dashboard</h1>
+<div class="p-3 text-center">
+  <button 
+    class="btn btn-danger" 
+    role="button"
+    id="logout-btn"
+    data-toggle="modal"
+    data-target="#logout-confirm-modal"
+  >
+    Logout
+  </button>
+  <pre class="text-left">
+    ${JSON.stringify(getUserFromLocalStorage(), null, 2)}
+  </pre>
+</div> */}

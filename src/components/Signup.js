@@ -1,6 +1,7 @@
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import { onSignUpWithEmailAndPassword } from "../vendors/firebase/firebase.authentication";
+import Nav from "./Nav";
 
 const componentId = getUniqueId();
 
@@ -268,7 +269,6 @@ function styles() {
       font-weight: normal;
     }
     .${componentId} .form-signup .form-control {
-      position: relative;
       font-size: 16px;
       height: auto;
       padding: 10px;
@@ -287,6 +287,7 @@ function styles() {
 
 function Signup (props) {
   return `
+    ${Nav(props)}
     <section class="Signup ${componentId}">
       <h1 class="text-center mb-4 text-muted"> Log Trade </h1>
       <form class="form-signup" id="signup-form" action="#">       
