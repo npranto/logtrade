@@ -1,6 +1,7 @@
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import { onSignout } from "../vendors/firebase/firebase.authentication";
+import OldCalendar from "./CalendarOld";
 import Calendar from "./Calendar";
 import Nav from "./Nav";
 
@@ -92,7 +93,15 @@ const Dashboard = (props) => {
         </div>
       </div>
 
-      ${Calendar({ type: 'MONTHLY', currentDate: new Date('January 1, 2021') })}
+      ${Calendar()}
+
+      ${ 1 > 1 
+          ? OldCalendar({ 
+              type: 'MONTHLY', 
+              currentDate: new Date('January 1, 2021')
+            })
+          : ''
+        }
     </section>
   `
 };

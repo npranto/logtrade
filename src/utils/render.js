@@ -4,7 +4,7 @@ const render = (
   component, 
   styles = '',
   onLoad = () => {}, 
-  parentElement = document.getElementById('root'), 
+  parentElement, 
 ) => {
   if (!componentId || typeof componentId !== 'string') {
     throw new Error('Please provide a component ID to render');
