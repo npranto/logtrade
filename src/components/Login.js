@@ -1,6 +1,7 @@
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import { onSignInWithEmailAndPassword } from "../vendors/firebase/firebase.authentication";
+import Nav from "./Nav";
 
 const componentId = getUniqueId();
 
@@ -209,7 +210,6 @@ const styles = () => `
     font-weight: normal;
   }
   .${componentId} .form-signin .form-control {
-    position: relative;
     font-size: 16px;
     height: auto;
     padding: 10px;
@@ -225,8 +225,9 @@ const styles = () => `
   }
 `;
 
-const Login = () => {
+const Login = (props) => {
   return `
+    ${Nav(props)}
     <section class="Login ${componentId}">
       <h1 class="text-center mb-4 text-muted"> Log Trade </h1>
       <form class="form-signin" id="signin-form" action="#">       

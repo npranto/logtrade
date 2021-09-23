@@ -1,5 +1,6 @@
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
+import Nav from "./Nav";
 
 const componentId = getUniqueId();
 
@@ -22,8 +23,9 @@ const styles = () => `
   }
 `;
 
-const Home = ({ app }) => {
+const Home = ({ app, isLoggedIn }) => {
   return `
+    ${Nav({ isLoggedIn })}
     <section class="Home ${componentId}">
       <img src="assets/img/LOGTRADE.png" alt="LogTrade Logo" class="logtrade-logo" />
       <h1 class="text-center">Welcome to ${app}</h1>
