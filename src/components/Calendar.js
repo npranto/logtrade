@@ -1,5 +1,6 @@
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
+import { getStocksByMonthAndYear } from "../utils/stocks";
 import MonthlyCalendar from "./MonthlyCalendar";
 
 const componentId = getUniqueId();
@@ -14,15 +15,27 @@ const styles = () => `
   }
 `;
 
-const Calendar = (props) => {
-  const date = new Date();
+const Calendar = (props, state) => {
+  const { date } = props.getState();
+  // const getStocksForMonth = (month, year) => {
+  //   return getStocksByMonthAndYear(month, year) || [];
+  // }
 
-  const getStocksByMonth = () => {
-    return [
-      { date: new Date('September 20, 2021'), stock: 20 },
-      { date: new Date('September 21, 2021'), stock: 21 },
-      { date: new Date('September 22, 2021'), stock: 22 }
-    ]
+  const updateDate = (newDate) => {
+    props.setState(() => {
+      return {
+        date: newDate,
+      };
+    })
+    // render(
+    //   props, 
+    //   componentId, 
+    //   Calendar, 
+    //   styles, 
+    //   onLoad,
+    //   null,
+    //   {...state, date: newDate },
+    // )
   }
 
   return `
@@ -30,9 +43,10 @@ const Calendar = (props) => {
       <h1 class="header mb-3 text-center">Calendar</h1>
       ${MonthlyCalendar({ 
         date,
-        activeDate: date, 
-        stocks: [],
-        getStocksByMonth, 
+        // activeDate: state.date, 
+        // stocks: [],
+        // getStocksForMonth, 
+        updateDate,
       })}
     </section>
   `
@@ -44,4 +58,5 @@ export default (props) => render(
   Calendar, 
   styles, 
   onLoad,
+  null,
 );

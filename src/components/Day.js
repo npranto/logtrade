@@ -8,11 +8,11 @@ const onLoad = (props = {}) => {
    
 }
 
-const styles = () => `
-  .${componentId} {
+const styles = (props) => `
+  .${props.key || componentId} {
     border: 1px solid lightgrey; 
   }
-  .${componentId}.date {
+  .${props.key || componentId}.date {
     
     border-bottom-right-radius: 5px;
     background: maroon; 
@@ -22,7 +22,7 @@ const styles = () => `
     color: white;
     font-size: 0.75rem;
   }
-  .${componentId}.void {
+  .${props.key || componentId}.void {
     width: 100%;
     height: 100%;
     background: lightgrey;
@@ -31,23 +31,24 @@ const styles = () => `
 `;
 
 const Day = (props = {}) => {
-  const { isVoidDay, date } = props;
+  const { isVoidDay, month, date, year, stock } = props;
+  console.log({ month, date, year, stock });
 
   if (isVoidDay) {
     return `
-      <div class="Day ${componentId} ${isVoidDay ? 'void' : ''}"></div>
+      <div class="Day ${props.key || componentId} ${isVoidDay ? 'void' : ''}"></div>
     `
   }
   return `
-    <div class="Day ${componentId} ${!isVoidDay ? 'date' : ''}">
-      Day - ${date}
+    <div class="Day ${props.key || componentId} ${!isVoidDay ? 'date' : ''}">
+      ${month}/${date}/${year} - ${!!stock?.stock ? `${stock.stock}` : 'lol'}
     </div>
   `
 };
 
 export default (props) => render(
   props, 
-  componentId, 
+  props.key || componentId, 
   Day, 
   styles, 
   onLoad,

@@ -1,32 +1,52 @@
 import { getDateFromDate, getMonthFromDate, getNumberOfDaysInMonth, getYearFromDate } from "../utils/date";
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
+import { findMatchingStock } from "../utils/stocks";
 import Day from "./Day";
 
 const componentId = getUniqueId();
 
 const loadStocksByMonth = (props) => {
-  const {     
-    getStocksByMonth, 
-  } = props;
+  props.getStocksForMonth();
 
-  const stocks = getStocksByMonth();
-  console.log({ stocks });
+  // if (JSON.stringify(stocks) !== JSON.stringify(props.stocks)) {
+  //   console.log('stocks diff detected... re-rendering');
+  //   render(
+  //     {...props, stocks }, 
+  //     componentId, 
+  //     MonthlyCalendar, 
+  //     styles, 
+  //     onLoad,
+  //   )
+  // }
+}
 
-  if (JSON.stringify(stocks) !== JSON.stringify(props.stocks)) {
-    console.log('stocks diff detected... re-rendering');
-    render(
-      {...props, stocks }, 
-      componentId, 
-      MonthlyCalendar, 
-      styles, 
-      onLoad,
-    )
-  }
+const onUpdateDate = (props) => {
+  setTimeout(() => {
+    console.log('updating date now...');
+    const newDate = new Date(`October 1, 2021`);
+    props.updateDate(newDate);
+  }, 5000);
+  
+
+  // if (JSON.stringify(newDate) !== JSON.stringify(props.date)) {
+  //   console.log('updating date...');
+  //   const result = render(
+  //     {...props, date: newDate }, 
+  //     componentId, 
+  //     MonthlyCalendar, 
+  //     styles, 
+  //     onLoad,
+  //   )
+  //   console.log({ result: JSON.stringify(result, null, 2) });
+  // } else {
+  //   console.log('no new changes... not updating date...');
+  // }
 }
 
 const onLoad = (props = {}) => {
-  loadStocksByMonth(props);
+  // loadStocksByMonth(props);
+  onUpdateDate(props);
 }
 
 const styles = () => `
@@ -68,7 +88,7 @@ const MonthlyCalendar = (props = {}) => {
   const { 
     date: currentDate,
     activeDate,
-    stocks = [],
+    stocks,
   } = props;
 
   console.log({ props });
@@ -83,15 +103,28 @@ const MonthlyCalendar = (props = {}) => {
   const indexOfFirstDayInMonth = firstOfMonth.getDay(); // i.e., 0-6, Sun - Saturday
 
   const numberOfDaysInGrid = numberOfDaysInMonth + indexOfFirstDayInMonth;
-  const daysGrid = [...Array(numberOfDaysInGrid).keys()].map((day, index) => {
-    const isVoidDay = index < indexOfFirstDayInMonth;
-    return {
-      isVoidDay,
-      date: isVoidDay 
-        ? null 
-        : new Date(`${month} ${(index - indexOfFirstDayInMonth) + 1}, ${year}`),
-    }
-  });
+  
+  const daysGrid = [...Array(numberOfDaysInGrid).keys()]
+    .map((_, index) => {
+      const isVoidDay = index < indexOfFirstDayInMonth;
+      return {
+        isVoidDay,
+        month: isVoidDay ? null : `${month}`,
+        date: isVoidDay ? null : `${(index - indexOfFirstDayInMonth) + 1}`,
+        year: isVoidDay ? null : `${year}`,
+      }
+    });
+  console.log({ daysGrid });
+
+  const daysGridWithStocks = daysGrid.map((dayGrid) => {
+    const { month, date, year } = dayGrid;
+    const matchingStock = findMatchingStock(stocks, month, date, year);
+    return { 
+      ...dayGrid, 
+      stock: matchingStock || null 
+    };
+  })
+  console.log({ daysGridWithStocks });
 
   console.log({ 
     month,
@@ -103,6 +136,20 @@ const MonthlyCalendar = (props = {}) => {
     numberOfDaysInGrid,
     daysGrid,
   });
+
+  const renderList = (list, cb) => {
+    let randomId = getUniqueId();
+    const newList = [];
+
+    for(let i = 0; i<list.length; i++) {
+      newList.push(cb(list[i], randomId));
+      randomId = getUniqueId();
+    }
+
+    console.log({ newList });
+
+    return newList.join('\n');
+  };
 
   return `
     <section class="MonthlyCalendar ${componentId}">
@@ -124,12 +171,9 @@ const MonthlyCalendar = (props = {}) => {
         <p class="day">Saturday</p>
       </div>
       <div class="month-grid" id="month-grid">
-        ${daysGrid.map((day) => {
-          const { isVoidDay, date } = day || {};
-          return `
-            ${Day({ isVoidDay, date })}
-          `;
-        }).join('\n')}
+        ${renderList(daysGridWithStocks, (dayGrid, key) => {
+          return `${Day({ ...dayGrid, key })}`;
+        })}
       </div>
     </section>
   `

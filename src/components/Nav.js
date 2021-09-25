@@ -15,7 +15,7 @@ const listenForSignout = () => {
     window.location.replace('?page=login');
   }
 
-  logoutButton.addEventListener('click', onLogout);
+  logoutButton && logoutButton.addEventListener('click', onLogout);
 }
 
 const onLoad = () => {
@@ -85,14 +85,16 @@ const Nav = ({ isLoggedIn = false, activePage = 'home' } = {}) => {
           <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-          <div class="profile">
-            <img 
-              src="https://avatars.githubusercontent.com/u/13524077?v=4" 
-              alt="Avatar" 
-              class="avatar" 
-            />
-            <p class="name mt-2">Artyom Kim</p>
-          </div>
+          ${isLoggedIn ? (`
+            <div class="profile">
+              <img 
+                src="https://avatars.githubusercontent.com/u/13524077?v=4" 
+                alt="Avatar" 
+                class="avatar" 
+              />
+              <p class="name mt-2">Artyom Kim</p>
+            </div>
+          `) : ''}
           <div class="list-group nav-items">
             <a href="?page=home" class="list-group-item list-group-item-action ${activePage === 'home' ? 'active' : ''}" aria-current="true">
               Home

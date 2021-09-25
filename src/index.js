@@ -12,6 +12,32 @@ import getUserFromLocalStorage from './utils/getUserFromLocalStorage';
 
 const appId = getUniqueId();
 
+export const store = (initialState = {}) => {
+  let state = {...initialState};
+  return {
+    getState: () => {
+      return {...state};
+    },
+    setState: (cb) => {
+      const updatedState = {...state, ...cb(state)};
+      if (JSON.stringify(updatedState) !== JSON.stringify(state)) {
+        state = {...updatedState};
+        render(
+          {
+            getState,
+            setState,
+          }, 
+          appId,
+          App, 
+          styles,
+          onLoad,
+          document.getElementById('root'),
+        );
+      }
+    }
+  };
+}
+
 const onLoad = () => {};
 
 const styles = () => `
@@ -37,9 +63,19 @@ const styles = () => `
   }
 `;
 
-const App = () => {
-  const isLoggedIn = getUserFromLocalStorage() !== null; 
-  console.log({ isLoggedIn });
+const initialState = { 
+  isLoggedIn: getUserFromLocalStorage() !== null,
+  date: new Date(),
+}
+
+// global state
+const { getState, setState } = store(initialState);
+
+const App = (props = {}) => {
+  const { getState } = props;
+  const { isLoggedIn } = getState();
+
+  console.log('App rendering...', { ...getState() });
 
   return Router(
     [
@@ -52,7 +88,7 @@ const App = () => {
           },
         ],
         matchingQuery: 'login',
-        props: { isLoggedIn },
+        props: { ...props, isLoggedIn },
       },
       { 
         page: Signup, 
@@ -63,7 +99,7 @@ const App = () => {
           },
         ],
         matchingQuery: 'signup',
-        props: { isLoggedIn },
+        props: { ...props, isLoggedIn },
       },
       { 
         page: Dashboard,
@@ -74,22 +110,25 @@ const App = () => {
           },
         ],
         matchingQuery: 'dashboard',
-        props: { isLoggedIn },
+        props: { ...props, isLoggedIn },
       },
     ], 
     'page', 
     { 
       page: Home, 
-      props: { app: 'LogTrade', isLoggedIn },
+      props: { ...props, app: 'LogTrade', isLoggedIn },
     }
   );
 };
 
 render(
-  {}, 
+  {
+    getState, 
+    setState,
+  }, 
   appId,
   App, 
   styles,
   onLoad,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
