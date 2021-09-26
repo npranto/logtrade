@@ -37,9 +37,61 @@ const styles = () => `
   }
 `;
 
-const App = () => {
-  const isLoggedIn = getUserFromLocalStorage() !== null; 
-  console.log({ isLoggedIn });
+
+const store = (initialState = {}) => {
+  let state = {...initialState};
+  return {
+    getState: () => {
+      return {...state};
+    },
+    setState: (cb) => {
+      const updatedState = {...state, ...cb(state)};
+      if (JSON.stringify(updatedState) !== JSON.stringify(state)) {
+        state = {...updatedState};
+        render(
+          {
+            getState,
+            setState,
+          }, 
+          appId,
+          App, 
+          styles,
+          onLoad,
+          document.getElementById('root'),
+        );
+      }
+    }
+  };
+}
+
+const dateToday = new Date();
+
+const initialState = { 
+  isLoggedIn: getUserFromLocalStorage() !== null,
+  dateToday,
+  activeDate: dateToday,
+  stocks: [],
+}
+
+// global state
+const { getState, setState } = store(initialState);
+
+const App = (props = {}) => {
+  const { getState } = props;
+  const { 
+    isLoggedIn, 
+    dateToday,
+    activeDate,
+    stocks,
+  } = getState();
+  const state = {
+    isLoggedIn,
+    dateToday,
+    activeDate,
+    stocks,
+  }
+
+  console.log('App rendering...', { ...getState() });
 
   return Router(
     [
@@ -47,49 +99,52 @@ const App = () => {
         page: Login,
         redirectRules: [
           { 
-            rule: () => getUserFromLocalStorage() !== null,
+            rule: () => isLoggedIn,
             redirectTo: '?page=dashboard',
           },
         ],
         matchingQuery: 'login',
-        props: { isLoggedIn },
+        props: { ...props, ...state },
       },
       { 
         page: Signup, 
         redirectRules: [
           { 
-            rule: () => getUserFromLocalStorage() !== null,
+            rule: () => isLoggedIn,
             redirectTo: '?page=dashboard',
           },
         ],
         matchingQuery: 'signup',
-        props: { isLoggedIn },
+        props: { ...props, ...state },
       },
       { 
         page: Dashboard,
         redirectRules: [
           { 
-            rule: () => getUserFromLocalStorage() === null,
+            rule: () => !isLoggedIn,
             redirectTo: '?page=home',
           },
         ],
         matchingQuery: 'dashboard',
-        props: { isLoggedIn },
+        props: { ...props, ...state },
       },
     ], 
     'page', 
     { 
       page: Home, 
-      props: { app: 'LogTrade', isLoggedIn },
+      props: { ...props, ...state, app: 'LogTrade' },
     }
   );
 };
 
 render(
-  {}, 
+  {
+    getState, 
+    setState,
+  }, 
   appId,
   App, 
   styles,
   onLoad,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

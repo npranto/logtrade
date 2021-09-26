@@ -56,3 +56,37 @@ export const getDayFromDate = (date) => {
 export const getNumberOfDaysInMonth = (month, year) => {
   return new Date(year, month + 1, 0).getDate();
 };
+
+/**
+ * Given a date, returns date of previous month. Note: the default date 
+ * if previous month is set to 1 by default
+ * @param {Date} date - a Date object
+ * @returns {Date} - a Date object
+ */
+export const getPrevMonthFromDate = (date) => {
+  if (!date || !(date instanceof Date)) {
+    throw new Error(
+      'Please pass in a `Date` object to generate previous month'
+    );
+  }
+  const x = new Date(date);
+  x.setDate(1);
+  x.setMonth(x.getMonth() - 1);
+  return x;
+}
+
+/**
+ * Given a date, returns date of next month. Note: the default date 
+ * if previous month is set to 1 by default
+ * @param {Date} date - a Date object
+ * @returns {Date} - a Date object
+ */
+ export const getNextMonthFromDate = (date) => {
+  if (!date || !(date instanceof Date)) {
+    throw new Error('Please pass in a `Date` object to generate next month');
+  }
+  const x = new Date(date);
+  x.setDate(1);
+  x.setMonth(x.getMonth() + 1);
+  return x;
+}

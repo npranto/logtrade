@@ -4,16 +4,28 @@ import render from "../utils/render";
 
 const componentId = getUniqueId();
 
-const onLoad = (props = {}) => {
-   
+const listenForClickOnDay = (props) => {
+  const { month, date, year, onClick } = props;
+
+  const dayBlock = document.querySelector(`#${month}-${date}-${year}`);
+  // console.log({ dayBlock });
+
+  if (dayBlock) {
+    // console.log('setting up day block click event...');
+    dayBlock.addEventListener('click', onClick);
+  }
 }
 
-const styles = () => `
-  .${componentId} {
+const onLoad = (props = {}) => {
+  listenForClickOnDay(props);
+}
+
+const styles = (props) => `
+  .${props.key || componentId} {
     border: 1px solid lightgrey; 
   }
-  .${componentId}.date {
-    
+  .${props.key || componentId}.date {
+    cursor: pointer;
     border-bottom-right-radius: 5px;
     background: maroon; 
     display: flex;
@@ -22,7 +34,7 @@ const styles = () => `
     color: white;
     font-size: 0.75rem;
   }
-  .${componentId}.void {
+  .${props.key || componentId}.void {
     width: 100%;
     height: 100%;
     background: lightgrey;
@@ -31,23 +43,24 @@ const styles = () => `
 `;
 
 const Day = (props = {}) => {
-  const { isVoidDay, date } = props;
+  const { isVoidDay, month, date, year, stock } = props;
+  console.log({ month, date, year, stock });
 
   if (isVoidDay) {
     return `
-      <div class="Day ${componentId} ${isVoidDay ? 'void' : ''}"></div>
+      <div class="Day ${props.key || componentId} ${isVoidDay ? 'void' : ''}"></div>
     `
   }
   return `
-    <div class="Day ${componentId} ${!isVoidDay ? 'date' : ''}">
-      Day - ${date}
+    <div class="Day ${props.key || componentId} ${!isVoidDay ? 'date' : ''}" id="${month}-${date}-${year}">
+      ${month}/${date}/${year} - ${!!stock?.stock ? `${stock.stock}` : 'lol'}
     </div>
   `
 };
 
 export default (props) => render(
   props, 
-  componentId, 
+  props.key || componentId, 
   Day, 
   styles, 
   onLoad,

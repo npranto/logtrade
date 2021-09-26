@@ -1,32 +1,24 @@
-import { getDateFromDate, getMonthFromDate, getNumberOfDaysInMonth, getYearFromDate } from "../utils/date";
+import { getDateFromDate, getMonthFromDate, getNextMonthFromDate, getNumberOfDaysInMonth, getPrevMonthFromDate, getYearFromDate } from "../utils/date";
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
+import renderList from "../utils/renderList";
+import { findMatchingStock } from "../utils/stocks";
 import Day from "./Day";
+import MonthNavigator from "./MonthNavigator";
 
 const componentId = getUniqueId();
 
-const loadStocksByMonth = (props) => {
-  const {     
-    getStocksByMonth, 
-  } = props;
+const getStocksForCurrentMonth = (props) => {
+  const { activeDate } = props;
 
-  const stocks = getStocksByMonth();
-  console.log({ stocks });
+  const month = getMonthFromDate(activeDate);  // i.e., "February"
+  const year = getYearFromDate(activeDate);    // i.e., 2020
 
-  if (JSON.stringify(stocks) !== JSON.stringify(props.stocks)) {
-    console.log('stocks diff detected... re-rendering');
-    render(
-      {...props, stocks }, 
-      componentId, 
-      MonthlyCalendar, 
-      styles, 
-      onLoad,
-    )
-  }
+  props.getStocksByMonthAndYear(month, year);
 }
 
 const onLoad = (props = {}) => {
-  loadStocksByMonth(props);
+  getStocksForCurrentMonth(props);
 }
 
 const styles = () => `
@@ -66,46 +58,82 @@ const styles = () => `
 
 const MonthlyCalendar = (props = {}) => {
   const { 
-    date: currentDate,
+    dateToday,
     activeDate,
-    stocks = [],
+    stocks,
+    onUpdateActiveDate,
   } = props;
 
-  console.log({ props });
+  const onClickOnPrevMonth = () => {
+    console.log('click on prev month detected...');
+    const firstOfPrevMonth = getPrevMonthFromDate(activeDate);
+    onUpdateActiveDate(firstOfPrevMonth);
+  }
+  const onClickOnNextMonth = () => {
+    console.log('click on next month detected...');
+    const firstOfNextMonth = getNextMonthFromDate(activeDate);
+    onUpdateActiveDate(firstOfNextMonth);
+  }
 
-  const month = getMonthFromDate(currentDate);  // i.e., "February"
-  const date = getDateFromDate(currentDate);    // i.e., 21
-  const year = getYearFromDate(currentDate);    // i.e., 2020
+  // console.log({ props });
+
+  const month = getMonthFromDate(activeDate);  // i.e., "February"
+  const date = getDateFromDate(activeDate);    // i.e., 21
+  const year = getYearFromDate(activeDate);    // i.e., 2020
 
   const numberOfDaysInMonth = 
-    getNumberOfDaysInMonth(currentDate.getMonth(), year); // i.e., 28, 30, 31
+    getNumberOfDaysInMonth(activeDate.getMonth(), year); // i.e., 28, 30, 31
   const firstOfMonth = new Date(`${month} 1, ${year}`);
   const indexOfFirstDayInMonth = firstOfMonth.getDay(); // i.e., 0-6, Sun - Saturday
 
+  // calculates total number of day blocks to show on calendar (includes 
+  // both void days in the beginning of month and the total number of days 
+  // in that month). Note: "void" days referring to the grey blocked days 
+  // in this calendar - https://i.postimg.cc/SxqdHqgN/Screen-Shot-2021-09-25-at-11-28-17-PM.png, as an example
   const numberOfDaysInGrid = numberOfDaysInMonth + indexOfFirstDayInMonth;
-  const daysGrid = [...Array(numberOfDaysInGrid).keys()].map((day, index) => {
-    const isVoidDay = index < indexOfFirstDayInMonth;
-    return {
-      isVoidDay,
-      date: isVoidDay 
-        ? null 
-        : new Date(`${month} ${(index - indexOfFirstDayInMonth) + 1}, ${year}`),
-    }
-  });
+  
+  const daysInGrid = [...Array(numberOfDaysInGrid).keys()]
+    // maps over each day, calculates void day and month, date and year info
+    .map((_, index) => {
+      const isVoidDay = index < indexOfFirstDayInMonth;
+      return {
+        isVoidDay,
+        month: isVoidDay ? null : `${month}`,
+        date: isVoidDay ? null : `${(index - indexOfFirstDayInMonth) + 1}`,
+        year: isVoidDay ? null : `${year}`,
+      }
+    })
+    // maps over each day and finds potential matching stocks from that day 
+    .map((dayGrid) => {
+    const { month, date, year } = dayGrid;
+    const matchingStock = findMatchingStock(stocks, month, date, year);
+    return { 
+      ...dayGrid, 
+      stock: matchingStock || null 
+    };
+  })
+
+  // console.log({ daysInGrid });
 
   console.log({ 
     month,
     date,
     year,
-    numberOfDaysInMonth,
-    firstOfMonth,
-    indexOfFirstDayInMonth,
-    numberOfDaysInGrid,
-    daysGrid,
+    // numberOfDaysInMonth,
+    // firstOfMonth,
+    // indexOfFirstDayInMonth,
+    // numberOfDaysInGrid,
+    daysInGrid,
   });
 
   return `
     <section class="MonthlyCalendar ${componentId}">
+      ${MonthNavigator({
+        prevMonth: getMonthFromDate(getPrevMonthFromDate(activeDate)),
+        nextMonth: getMonthFromDate(getNextMonthFromDate(activeDate)),
+        onClickOnPrevMonth,
+        onClickOnNextMonth
+      })}
       <div class="date-and-stats">
         <h3 class="date text-center text-muted">${month} ${date}, ${year}</h1>
         <div class="stats text-muted">
@@ -124,12 +152,18 @@ const MonthlyCalendar = (props = {}) => {
         <p class="day">Saturday</p>
       </div>
       <div class="month-grid" id="month-grid">
-        ${daysGrid.map((day) => {
-          const { isVoidDay, date } = day || {};
+        ${renderList(daysInGrid, (dayGrid, key) => {
+          const { month, date, year } = dayGrid || {};
+          const currentDate = new Date(`${month} ${date}, ${year}`);
           return `
-            ${Day({ isVoidDay, date })}
+            ${Day({ 
+              ...dayGrid, 
+              key, 
+              activeDate, 
+              onClick: () => onUpdateActiveDate(currentDate),
+            })}
           `;
-        }).join('\n')}
+        })}
       </div>
     </section>
   `

@@ -1,5 +1,6 @@
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
+import { fetchStocksByMonthAndYear } from "../utils/stocks";
 import MonthlyCalendar from "./MonthlyCalendar";
 
 const componentId = getUniqueId();
@@ -14,25 +15,37 @@ const styles = () => `
   }
 `;
 
-const Calendar = (props) => {
-  const date = new Date();
+const Calendar = (props = {}) => {
+  console.log({ props });
+  const { dateToday, activeDate, stocks } = props;
 
-  const getStocksByMonth = () => {
-    return [
-      { date: new Date('September 20, 2021'), stock: 20 },
-      { date: new Date('September 21, 2021'), stock: 21 },
-      { date: new Date('September 22, 2021'), stock: 22 }
-    ]
+  const getStocksByMonthAndYear = (month, year) => {
+    const fetchedStocks = fetchStocksByMonthAndYear(month, year) || [];
+    props.setState(() => {
+      return { stocks: fetchedStocks }; 
+    });
+  }
+
+  const onUpdateActiveDate = (newDate) => {
+    if (!newDate || !(newDate instanceof Date)) {
+      throw new Error(
+        'Invalid `newDate` is passed to update active day. Please pass in a valid `Date` object to alter active date.'
+      );
+    }
+    props.setState(() => {
+      return { activeDate: newDate };
+    });
   }
 
   return `
     <section class="Calendar ${componentId}">
-      <h1 class="header mb-3 text-center">Calendar</h1>
+      <h1 class="header text-center">Calendar</h1>
       ${MonthlyCalendar({ 
-        date,
-        activeDate: date, 
-        stocks: [],
-        getStocksByMonth, 
+        dateToday,
+        activeDate, 
+        stocks,
+        getStocksByMonthAndYear, 
+        onUpdateActiveDate,
       })}
     </section>
   `
@@ -44,4 +57,5 @@ export default (props) => render(
   Calendar, 
   styles, 
   onLoad,
+  null,
 );
