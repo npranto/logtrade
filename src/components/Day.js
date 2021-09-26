@@ -4,8 +4,20 @@ import render from "../utils/render";
 
 const componentId = getUniqueId();
 
+const listenForClickOnDay = (props) => {
+  const { month, date, year, onClick } = props;
+
+  const dayBlock = document.querySelector(`#${month}-${date}-${year}`);
+  // console.log({ dayBlock });
+
+  if (dayBlock) {
+    // console.log('setting up day block click event...');
+    dayBlock.addEventListener('click', onClick);
+  }
+}
+
 const onLoad = (props = {}) => {
-   
+  listenForClickOnDay(props);
 }
 
 const styles = (props) => `
@@ -13,7 +25,7 @@ const styles = (props) => `
     border: 1px solid lightgrey; 
   }
   .${props.key || componentId}.date {
-    
+    cursor: pointer;
     border-bottom-right-radius: 5px;
     background: maroon; 
     display: flex;
@@ -40,7 +52,7 @@ const Day = (props = {}) => {
     `
   }
   return `
-    <div class="Day ${props.key || componentId} ${!isVoidDay ? 'date' : ''}">
+    <div class="Day ${props.key || componentId} ${!isVoidDay ? 'date' : ''}" id="${month}-${date}-${year}">
       ${month}/${date}/${year} - ${!!stock?.stock ? `${stock.stock}` : 'lol'}
     </div>
   `

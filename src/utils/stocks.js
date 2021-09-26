@@ -1,4 +1,4 @@
-export const getStocksByMonthAndYear = (month, year) => {
+export const fetchStocksByMonthAndYear = (month, year) => {
   // 1. checks if user is logged in or not
   // 2. if user is not logged in, throw an error stating unauthorized access
   // 3. otherwise, get user by uid and pass in user uid, month and year to 

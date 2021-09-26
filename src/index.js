@@ -12,32 +12,6 @@ import getUserFromLocalStorage from './utils/getUserFromLocalStorage';
 
 const appId = getUniqueId();
 
-export const store = (initialState = {}) => {
-  let state = {...initialState};
-  return {
-    getState: () => {
-      return {...state};
-    },
-    setState: (cb) => {
-      const updatedState = {...state, ...cb(state)};
-      if (JSON.stringify(updatedState) !== JSON.stringify(state)) {
-        state = {...updatedState};
-        render(
-          {
-            getState,
-            setState,
-          }, 
-          appId,
-          App, 
-          styles,
-          onLoad,
-          document.getElementById('root'),
-        );
-      }
-    }
-  };
-}
-
 const onLoad = () => {};
 
 const styles = () => `
@@ -63,9 +37,40 @@ const styles = () => `
   }
 `;
 
+
+const store = (initialState = {}) => {
+  let state = {...initialState};
+  return {
+    getState: () => {
+      return {...state};
+    },
+    setState: (cb) => {
+      const updatedState = {...state, ...cb(state)};
+      if (JSON.stringify(updatedState) !== JSON.stringify(state)) {
+        state = {...updatedState};
+        render(
+          {
+            getState,
+            setState,
+          }, 
+          appId,
+          App, 
+          styles,
+          onLoad,
+          document.getElementById('root'),
+        );
+      }
+    }
+  };
+}
+
+const dateToday = new Date();
+
 const initialState = { 
   isLoggedIn: getUserFromLocalStorage() !== null,
-  date: new Date(),
+  dateToday,
+  activeDate: dateToday,
+  stocks: [],
 }
 
 // global state
@@ -73,7 +78,18 @@ const { getState, setState } = store(initialState);
 
 const App = (props = {}) => {
   const { getState } = props;
-  const { isLoggedIn } = getState();
+  const { 
+    isLoggedIn, 
+    dateToday,
+    activeDate,
+    stocks,
+  } = getState();
+  const state = {
+    isLoggedIn,
+    dateToday,
+    activeDate,
+    stocks,
+  }
 
   console.log('App rendering...', { ...getState() });
 
@@ -83,40 +99,40 @@ const App = (props = {}) => {
         page: Login,
         redirectRules: [
           { 
-            rule: () => getUserFromLocalStorage() !== null,
+            rule: () => isLoggedIn,
             redirectTo: '?page=dashboard',
           },
         ],
         matchingQuery: 'login',
-        props: { ...props, isLoggedIn },
+        props: { ...props, ...state },
       },
       { 
         page: Signup, 
         redirectRules: [
           { 
-            rule: () => getUserFromLocalStorage() !== null,
+            rule: () => isLoggedIn,
             redirectTo: '?page=dashboard',
           },
         ],
         matchingQuery: 'signup',
-        props: { ...props, isLoggedIn },
+        props: { ...props, ...state },
       },
       { 
         page: Dashboard,
         redirectRules: [
           { 
-            rule: () => getUserFromLocalStorage() === null,
+            rule: () => !isLoggedIn,
             redirectTo: '?page=home',
           },
         ],
         matchingQuery: 'dashboard',
-        props: { ...props, isLoggedIn },
+        props: { ...props, ...state },
       },
     ], 
     'page', 
     { 
       page: Home, 
-      props: { ...props, app: 'LogTrade', isLoggedIn },
+      props: { ...props, ...state, app: 'LogTrade' },
     }
   );
 };

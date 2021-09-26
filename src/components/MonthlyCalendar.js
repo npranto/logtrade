@@ -1,52 +1,23 @@
 import { getDateFromDate, getMonthFromDate, getNumberOfDaysInMonth, getYearFromDate } from "../utils/date";
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
+import renderList from "../utils/renderList";
 import { findMatchingStock } from "../utils/stocks";
 import Day from "./Day";
 
 const componentId = getUniqueId();
 
-const loadStocksByMonth = (props) => {
-  props.getStocksForMonth();
+const getStocksForCurrentMonth = (props) => {
+  const { activeDate } = props;
 
-  // if (JSON.stringify(stocks) !== JSON.stringify(props.stocks)) {
-  //   console.log('stocks diff detected... re-rendering');
-  //   render(
-  //     {...props, stocks }, 
-  //     componentId, 
-  //     MonthlyCalendar, 
-  //     styles, 
-  //     onLoad,
-  //   )
-  // }
-}
+  const month = getMonthFromDate(activeDate);  // i.e., "February"
+  const year = getYearFromDate(activeDate);    // i.e., 2020
 
-const onUpdateDate = (props) => {
-  setTimeout(() => {
-    console.log('updating date now...');
-    const newDate = new Date(`October 1, 2021`);
-    props.updateDate(newDate);
-  }, 5000);
-  
-
-  // if (JSON.stringify(newDate) !== JSON.stringify(props.date)) {
-  //   console.log('updating date...');
-  //   const result = render(
-  //     {...props, date: newDate }, 
-  //     componentId, 
-  //     MonthlyCalendar, 
-  //     styles, 
-  //     onLoad,
-  //   )
-  //   console.log({ result: JSON.stringify(result, null, 2) });
-  // } else {
-  //   console.log('no new changes... not updating date...');
-  // }
+  props.getStocksByMonthAndYear(month, year);
 }
 
 const onLoad = (props = {}) => {
-  // loadStocksByMonth(props);
-  onUpdateDate(props);
+  getStocksForCurrentMonth(props);
 }
 
 const styles = () => `
@@ -86,25 +57,31 @@ const styles = () => `
 
 const MonthlyCalendar = (props = {}) => {
   const { 
-    date: currentDate,
+    dateToday,
     activeDate,
     stocks,
+    onUpdateActiveDate,
   } = props;
 
-  console.log({ props });
+  // console.log({ props });
 
-  const month = getMonthFromDate(currentDate);  // i.e., "February"
-  const date = getDateFromDate(currentDate);    // i.e., 21
-  const year = getYearFromDate(currentDate);    // i.e., 2020
+  const month = getMonthFromDate(activeDate);  // i.e., "February"
+  const date = getDateFromDate(activeDate);    // i.e., 21
+  const year = getYearFromDate(activeDate);    // i.e., 2020
 
   const numberOfDaysInMonth = 
-    getNumberOfDaysInMonth(currentDate.getMonth(), year); // i.e., 28, 30, 31
+    getNumberOfDaysInMonth(activeDate.getMonth(), year); // i.e., 28, 30, 31
   const firstOfMonth = new Date(`${month} 1, ${year}`);
   const indexOfFirstDayInMonth = firstOfMonth.getDay(); // i.e., 0-6, Sun - Saturday
 
+  // calculates total number of day blocks to show on calendar (includes 
+  // both void days in the beginning of month and the total number of days 
+  // in that month). Note: "void" days referring to the grey blocked days 
+  // in this calendar - https://i.postimg.cc/SxqdHqgN/Screen-Shot-2021-09-25-at-11-28-17-PM.png, as an example
   const numberOfDaysInGrid = numberOfDaysInMonth + indexOfFirstDayInMonth;
   
-  const daysGrid = [...Array(numberOfDaysInGrid).keys()]
+  const daysInGrid = [...Array(numberOfDaysInGrid).keys()]
+    // maps over each day, calculates void day and month, date and year info
     .map((_, index) => {
       const isVoidDay = index < indexOfFirstDayInMonth;
       return {
@@ -113,10 +90,9 @@ const MonthlyCalendar = (props = {}) => {
         date: isVoidDay ? null : `${(index - indexOfFirstDayInMonth) + 1}`,
         year: isVoidDay ? null : `${year}`,
       }
-    });
-  console.log({ daysGrid });
-
-  const daysGridWithStocks = daysGrid.map((dayGrid) => {
+    })
+    // maps over each day and finds potential matching stocks from that day 
+    .map((dayGrid) => {
     const { month, date, year } = dayGrid;
     const matchingStock = findMatchingStock(stocks, month, date, year);
     return { 
@@ -124,32 +100,19 @@ const MonthlyCalendar = (props = {}) => {
       stock: matchingStock || null 
     };
   })
-  console.log({ daysGridWithStocks });
+
+  // console.log({ daysInGrid });
 
   console.log({ 
     month,
     date,
     year,
-    numberOfDaysInMonth,
-    firstOfMonth,
-    indexOfFirstDayInMonth,
-    numberOfDaysInGrid,
-    daysGrid,
+    // numberOfDaysInMonth,
+    // firstOfMonth,
+    // indexOfFirstDayInMonth,
+    // numberOfDaysInGrid,
+    daysInGrid,
   });
-
-  const renderList = (list, cb) => {
-    let randomId = getUniqueId();
-    const newList = [];
-
-    for(let i = 0; i<list.length; i++) {
-      newList.push(cb(list[i], randomId));
-      randomId = getUniqueId();
-    }
-
-    console.log({ newList });
-
-    return newList.join('\n');
-  };
 
   return `
     <section class="MonthlyCalendar ${componentId}">
@@ -171,8 +134,17 @@ const MonthlyCalendar = (props = {}) => {
         <p class="day">Saturday</p>
       </div>
       <div class="month-grid" id="month-grid">
-        ${renderList(daysGridWithStocks, (dayGrid, key) => {
-          return `${Day({ ...dayGrid, key })}`;
+        ${renderList(daysInGrid, (dayGrid, key) => {
+          const { month, date, year } = dayGrid || {};
+          const currentDate = new Date(`${month} ${date}, ${year}`);
+          return `
+            ${Day({ 
+              ...dayGrid, 
+              key, 
+              activeDate, 
+              onClick: () => onUpdateActiveDate(currentDate),
+            })}
+          `;
         })}
       </div>
     </section>

@@ -1,55 +1,11 @@
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
-import { onSignout } from "../vendors/firebase/firebase.authentication";
 import Calendar from "./Calendar";
 import Nav from "./Nav";
 
 const componentId = getUniqueId();
 
-// const listenForSignout = () => {
-//   // elements
-//   const logoutButton = document
-//     .querySelector(`.${componentId} #logout-btn`);
-//   const logoutConfirmButton = document
-//     .querySelector(`.${componentId} #logout-confirm-btn`);
-//   const logoutConfirmModalCloseButton = document
-//     .querySelector(`.${componentId} #logout-confirm-modal-close-btn`)
-//   const logoutConfirmModalCancelButton = document
-//     .querySelector(`.${componentId} #logout-confirm-modal-cancel-btn`)
-//   const logoutConfirmModal = new bootstrap
-//     .Modal(
-//       document.querySelector(`.${componentId} #logout-confirm-modal`), {}
-//     );
-  
-  
-//   const showLogoutConfirmationModal = () => {
-//     logoutConfirmModal.show();
-//   }
-
-//   const hideLogoutConfirmationModal = () => {
-//     logoutConfirmModal.hide();
-//   }
-
-//   const onLogout = async () => {
-//     const { error } = await onSignout();
-//     if (error) console.info(error);
-//     hideLogoutConfirmationModal();
-//     window.location.replace('?page=login');
-//   }
-  
-//   logoutButton
-//     .addEventListener('click', showLogoutConfirmationModal);
-//   logoutConfirmModalCloseButton
-//     .addEventListener('click', hideLogoutConfirmationModal);
-//   logoutConfirmModalCancelButton
-//     .addEventListener('click', hideLogoutConfirmationModal);
-//   logoutConfirmButton
-//     .addEventListener('click', onLogout);
-// }
-
-const onLoad = () => {
-  // listenForSignout();
-};
+const onLoad = () => {};
 
 const styles = () => `
   .${componentId} {
@@ -63,7 +19,7 @@ const styles = () => `
   }
 `;
 
-const Dashboard = (props) => {
+const Dashboard = (props = {}) => {
   return `
     ${Nav({ ...props })}
     <section class="Dashboard ${componentId}">
@@ -121,3 +77,46 @@ export default (props) => render(
     ${JSON.stringify(getUserFromLocalStorage(), null, 2)}
   </pre>
 </div> */}
+
+// const listenForSignout = () => {
+//   // elements
+//   const logoutButton = document
+//     .querySelector(`.${componentId} #logout-btn`);
+//   const logoutConfirmButton = document
+//     .querySelector(`.${componentId} #logout-confirm-btn`);
+//   const logoutConfirmModalCloseButton = document
+//     .querySelector(`.${componentId} #logout-confirm-modal-close-btn`)
+//   const logoutConfirmModalCancelButton = document
+//     .querySelector(`.${componentId} #logout-confirm-modal-cancel-btn`)
+//   const logoutConfirmModal = new bootstrap
+//     .Modal(
+//       document.querySelector(`.${componentId} #logout-confirm-modal`), {}
+//     );
+  
+  
+//   const showLogoutConfirmationModal = () => {
+//     logoutConfirmModal.show();
+//   }
+
+//   const hideLogoutConfirmationModal = () => {
+//     logoutConfirmModal.hide();
+//   }
+
+//   const onLogout = async () => {
+//     const { error } = await onSignout();
+//     if (error) console.info(error);
+//     hideLogoutConfirmationModal();
+//     window.location.replace('?page=login');
+//   }
+  
+//   logoutButton
+//     .addEventListener('click', showLogoutConfirmationModal);
+//   logoutConfirmModalCloseButton
+//     .addEventListener('click', hideLogoutConfirmationModal);
+//   logoutConfirmModalCancelButton
+//     .addEventListener('click', hideLogoutConfirmationModal);
+//   logoutConfirmButton
+//     .addEventListener('click', onLogout);
+// }
+
+// listenForSignout();
