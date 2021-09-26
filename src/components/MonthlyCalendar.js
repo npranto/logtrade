@@ -1,9 +1,10 @@
-import { getDateFromDate, getMonthFromDate, getNumberOfDaysInMonth, getYearFromDate } from "../utils/date";
+import { getDateFromDate, getMonthFromDate, getNextMonthFromDate, getNumberOfDaysInMonth, getPrevMonthFromDate, getYearFromDate } from "../utils/date";
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import renderList from "../utils/renderList";
 import { findMatchingStock } from "../utils/stocks";
 import Day from "./Day";
+import MonthNavigator from "./MonthNavigator";
 
 const componentId = getUniqueId();
 
@@ -63,6 +64,17 @@ const MonthlyCalendar = (props = {}) => {
     onUpdateActiveDate,
   } = props;
 
+  const onClickOnPrevMonth = () => {
+    console.log('click on prev month detected...');
+    const firstOfPrevMonth = getPrevMonthFromDate(activeDate);
+    onUpdateActiveDate(firstOfPrevMonth);
+  }
+  const onClickOnNextMonth = () => {
+    console.log('click on next month detected...');
+    const firstOfNextMonth = getNextMonthFromDate(activeDate);
+    onUpdateActiveDate(firstOfNextMonth);
+  }
+
   // console.log({ props });
 
   const month = getMonthFromDate(activeDate);  // i.e., "February"
@@ -116,6 +128,12 @@ const MonthlyCalendar = (props = {}) => {
 
   return `
     <section class="MonthlyCalendar ${componentId}">
+      ${MonthNavigator({
+        prevMonth: getMonthFromDate(getPrevMonthFromDate(activeDate)),
+        nextMonth: getMonthFromDate(getNextMonthFromDate(activeDate)),
+        onClickOnPrevMonth,
+        onClickOnNextMonth
+      })}
       <div class="date-and-stats">
         <h3 class="date text-center text-muted">${month} ${date}, ${year}</h1>
         <div class="stats text-muted">

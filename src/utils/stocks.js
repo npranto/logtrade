@@ -11,7 +11,9 @@ export const fetchStocksByMonthAndYear = (month, year) => {
   return [
     { month: 'September', date: '20', year: '2021', stock: 20 },
     { month: 'September', date: '21', year: '2021', stock: 21 },
-    { month: 'September', date: '22', year: '2021', stock: 22 }
+    { month: 'September', date: '22', year: '2021', stock: 22 },
+    { month: 'August', date: '21', year: '2021', stock: 22 },
+    { month: 'October', date: '22', year: '2021', stock: 22 }
   ]
 }
 

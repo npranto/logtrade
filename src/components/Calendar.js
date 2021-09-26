@@ -39,7 +39,7 @@ const Calendar = (props = {}) => {
 
   return `
     <section class="Calendar ${componentId}">
-      <h1 class="header mb-3 text-center">Calendar</h1>
+      <h1 class="header text-center">Calendar</h1>
       ${MonthlyCalendar({ 
         dateToday,
         activeDate, 
