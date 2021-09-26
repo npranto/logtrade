@@ -17,10 +17,11 @@ const styles = () => `
 
 const Calendar = (props = {}) => {
   console.log({ props });
-  const { dateToday, activeDate, stocks } = props;
+  const { dateToday, activeDate, stocks, user = {} } = props;
+  const { uid } = user
 
   const getStocksByMonthAndYear = (month, year) => {
-    const fetchedStocks = fetchStocksByMonthAndYear(month, year) || [];
+    const fetchedStocks = fetchStocksByMonthAndYear(uid, month, year) || [];
     props.setState(() => {
       return { stocks: fetchedStocks }; 
     });

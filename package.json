@@ -28,6 +28,7 @@
     "bootstrap": "^5.1.1",
     "firebase": "^9.0.2",
     "query-string": "^7.0.1",
+    "ticker-list": "^2.0.1",
     "uniqid": "^5.4.0"
   },
   "devDependencies": {

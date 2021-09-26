@@ -51,7 +51,7 @@ const styles = () => `
   .${componentId} .month-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-auto-rows: 100px;
+    grid-auto-rows: minmax(125px, auto);
     grid-gap: 0.5em;
   }
 `;

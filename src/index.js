@@ -9,6 +9,9 @@ import Signup from './components/Signup';
 import getUniqueId from './utils/getUniqueId';
 import Dashboard from './components/Dashboard';
 import getUserFromLocalStorage from './utils/getUserFromLocalStorage';
+import { getStocksByUserId } from './vendors/firebase/firebase.firestore';
+
+getStocksByUserId('51XeDcMHQzYfB3clHKZZnnp87uq2');
 
 const appId = getUniqueId();
 
@@ -71,6 +74,7 @@ const initialState = {
   dateToday,
   activeDate: dateToday,
   stocks: [],
+  user: getUserFromLocalStorage(),
 }
 
 // global state
@@ -83,12 +87,14 @@ const App = (props = {}) => {
     dateToday,
     activeDate,
     stocks,
+    user,
   } = getState();
   const state = {
     isLoggedIn,
     dateToday,
     activeDate,
     stocks,
+    user,
   }
 
   console.log('App rendering...', { ...getState() });
