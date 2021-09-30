@@ -8,30 +8,30 @@ export const fetchAllTradesByUserId = async (userId) => {
   }
 
   // fake API data
-  // const userTrades = {
-  //   exists: () => true,
-  //   data: () => ({
-  //     trades: [
-  //       {
-  //         closingPirce: "11.50",
-  //         date: "30",
-  //         month: "September",
-  //         name: "Cellect Biotechnology",
-  //         notes: "Awesome win today!",
-  //         numberOfShares: 2,
-  //         openingPrice: "10.50",
-  //         stopLoss: "9.00",
-  //         takeProfit: "12.00",
-  //         ticker: "APOPA",
-  //         tradeType: "long",
-  //         year: "2021",
-  //       }
-  //     ],
-  //     userId: '51XeDcMHQzYfB3clHKZZnnp87uq2',
-  //   })
-  // };
+  const userTrades = {
+    exists: () => true,
+    data: () => ({
+      trades: [
+        {
+          closingPrice: "11.50",
+          date: "30",
+          month: "September",
+          name: "Cellect Biotechnology",
+          notes: "Awesome win today!",
+          numberOfShares: 2,
+          openingPrice: "10.50",
+          stopLoss: "9.00",
+          takeProfit: "12.00",
+          ticker: "APOPA",
+          tradeType: "long",
+          year: "2021",
+        }
+      ],
+      userId: '51XeDcMHQzYfB3clHKZZnnp87uq2',
+    })
+  };
 
-  const userTrades = await getDoc(doc(db, "tradelogs", userId));
+  // const userTrades = await getDoc(doc(db, "tradelogs", userId));
 
   if (userTrades?.exists()) {
     return userTrades?.data()?.trades;

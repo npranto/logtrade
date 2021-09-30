@@ -112,7 +112,7 @@ const Day = (props = {}) => {
         ${!!totalProfit ? `
           <p class="profit mt-1 mb-1 border-bottom border-light">
             <span class="label">Profit</span>
-            <span class="value">${totalProfit}</span>
+            <span class="value">$${totalProfit}</span>
           </p>
         ` : ''}
 
