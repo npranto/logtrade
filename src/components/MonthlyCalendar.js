@@ -2,7 +2,7 @@ import { getDateFromDate, getMonthFromDate, getNextMonthFromDate, getNumberOfDay
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import renderList from "../utils/renderList";
-import { findMatchingStock } from "../utils/stocks";
+import { findMatchingTradesByDate } from "../utils/stocks";
 import Day from "./Day";
 import MonthNavigator from "./MonthNavigator";
 
@@ -18,7 +18,7 @@ const getStocksForCurrentMonth = (props) => {
 }
 
 const onLoad = (props = {}) => {
-  getStocksForCurrentMonth(props);
+  // getStocksForCurrentMonth(props);
 }
 
 const styles = () => `
@@ -60,7 +60,7 @@ const MonthlyCalendar = (props = {}) => {
   const { 
     dateToday,
     activeDate,
-    stocks,
+    tradeLogs,
     onUpdateActiveDate,
   } = props;
 
@@ -106,10 +106,10 @@ const MonthlyCalendar = (props = {}) => {
     // maps over each day and finds potential matching stocks from that day 
     .map((dayGrid) => {
     const { month, date, year } = dayGrid;
-    const matchingStock = findMatchingStock(stocks, month, date, year);
+    const matchingTrades = findMatchingTradesByDate(tradeLogs, month, date, year);
     return { 
       ...dayGrid, 
-      stock: matchingStock || null 
+      trades: matchingTrades || null 
     };
   })
 

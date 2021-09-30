@@ -1,12 +1,36 @@
+import { getMonthFromDate, getYearFromDate } from "../utils/date";
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import { fetchStocksByMonthAndYear } from "../utils/stocks";
+import { fetchAllTradesByUserId } from "../vendors/firebase/firebase.firestore";
 import MonthlyCalendar from "./MonthlyCalendar";
 
 const componentId = getUniqueId();
 
+const filterTradesByMonthAndYear = (trades = [], month, year) => {
+  return trades.filter(trade => trade.month === month && trade.year === year);
+}
+
+const getTradesByMonthAndYear = async (props) => {
+  const { user, activeDate } = props;
+  const { uid } = user || {};
+  const activeMonth = getMonthFromDate(activeDate);  // i.e., "February"
+  const activeYear = getYearFromDate(activeDate).toString();    // i.e., 2020
+
+  const fetchedAllTrades = await fetchAllTradesByUserId(uid);
+  const filteredTradesByMonthAndYear = filterTradesByMonthAndYear(
+    fetchedAllTrades,
+    activeMonth,
+    activeYear,
+  );
+  console.log({ fetchedAllTrades, filteredTradesByMonthAndYear });
+  props.setState(() => {
+    return { tradeLogs: filteredTradesByMonthAndYear }; 
+  });
+}
+
 const onLoad = (props = {}) => {
-   
+  getTradesByMonthAndYear(props);
 }
 
 const styles = () => `
@@ -16,16 +40,9 @@ const styles = () => `
 `;
 
 const Calendar = (props = {}) => {
-  console.log({ props });
-  const { dateToday, activeDate, stocks, user = {} } = props;
-  const { uid } = user
+  const { dateToday, activeDate, tradeLogs, user } = props;
 
-  const getStocksByMonthAndYear = (month, year) => {
-    const fetchedStocks = fetchStocksByMonthAndYear(uid, month, year) || [];
-    props.setState(() => {
-      return { stocks: fetchedStocks }; 
-    });
-  }
+  console.log({ dateToday, activeDate, user, tradeLogs });
 
   const onUpdateActiveDate = (newDate) => {
     if (!newDate || !(newDate instanceof Date)) {
@@ -44,8 +61,8 @@ const Calendar = (props = {}) => {
       ${MonthlyCalendar({ 
         dateToday,
         activeDate, 
-        stocks,
-        getStocksByMonthAndYear, 
+        tradeLogs,
+        // getStocksByMonthAndYear, 
         onUpdateActiveDate,
       })}
     </section>

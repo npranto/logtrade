@@ -81,12 +81,12 @@ export const onSignInWithEmailAndPassword = ({ email, password }) => {
         return {
           error: { 
             code, 
-            message: `Wrong password!`
+            message: `Incorrect password!`
           } 
         }
       }
       return { 
-        error: { code, message } 
+        error: { code, message: 'Unable to login at the moment. Try again later.' } 
       };
     });
 }

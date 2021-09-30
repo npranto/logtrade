@@ -61,7 +61,6 @@ const styles = () => `
 `;
 
 const Nav = ({ isLoggedIn = false, activePage = 'home', user } = {}) => {
-  console.log({ user });
   return `
     <nav class="Nav ${componentId}">
       <a 

@@ -1,3 +1,4 @@
+import isEqual from 'lodash.isequal';
 import './vendors/index';
 
 import Router from "./utils/Router.js";
@@ -9,9 +10,6 @@ import Signup from './components/Signup';
 import getUniqueId from './utils/getUniqueId';
 import Dashboard from './components/Dashboard';
 import getUserFromLocalStorage from './utils/getUserFromLocalStorage';
-import { getStocksByUserId } from './vendors/firebase/firebase.firestore';
-
-getStocksByUserId('51XeDcMHQzYfB3clHKZZnnp87uq2');
 
 const appId = getUniqueId();
 
@@ -49,7 +47,8 @@ const store = (initialState = {}) => {
     },
     setState: (cb) => {
       const updatedState = {...state, ...cb(state)};
-      if (JSON.stringify(updatedState) !== JSON.stringify(state)) {
+      console.log({ updatedState, state });
+      if (!isEqual(updatedState, state)) {
         state = {...updatedState};
         render(
           {
@@ -73,7 +72,7 @@ const initialState = {
   isLoggedIn: getUserFromLocalStorage() !== null,
   dateToday,
   activeDate: dateToday,
-  stocks: [],
+  tradeLogs: [],
   user: getUserFromLocalStorage(),
 }
 
@@ -86,14 +85,14 @@ const App = (props = {}) => {
     isLoggedIn, 
     dateToday,
     activeDate,
-    stocks,
+    tradeLogs,
     user,
   } = getState();
   const state = {
     isLoggedIn,
     dateToday,
     activeDate,
-    stocks,
+    tradeLogs,
     user,
   }
 

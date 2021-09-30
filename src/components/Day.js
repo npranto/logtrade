@@ -35,7 +35,6 @@ const styles = (props) => {
       border-bottom-right-radius: 5px;
       font-size: 0.75rem;
       transition: box-shadow 0.4s ease-in-out;
-      color: white;
       padding: 0.5em;
     }
     .${componentId}.date:hover {
@@ -55,16 +54,50 @@ const styles = (props) => {
   `
 };
 
-const Day = (props = {}) => {
-  const { isVoidDay, month, date, year, stock } = props;
-  const currentStock = {
-    totalProfit: '71.93',
-    numberOfTrades: '2',
-    tickers: 'IIPR, ALB, MATIC'
-  };
-  console.log({ month, date, year, currentStock });
+const getTotalProfitFromTrades = (trades = []) => {
+  if (trades === null || !trades.length) return '0.00';
+  return trades
+    // extract each trade properties to calculate total profit
+    .map(trade => ({ 
+      tradeType: trade.tradeType, 
+      openingPrice: parseFloat(trade.openingPrice).toFixed(2),
+      closingPrice: parseFloat(trade.closingPrice).toFixed(2),
+      numberOfShares: parseInt(trade.numberOfShares),
+    }))
+    // calculate each trade profit by trade type
+    .map((trade) => {
+      // on short trade, opening price > closing price
+      if (trade.tradeType === 'short') {
+        return trade.openingPrice - trade.closingPrice;
+      }
+      // on long trade, closing price > opening price
+      return trade.closingPrice - trade.openingPrice;
+    }) 
+    // adds up all the trade profits together
+    .reduce((totalProfit, eachTradeProfit) => {
+      return totalProfit + eachTradeProfit;
+    }, 0)
+    .toFixed(2);
+}
 
-  const isProfitNegative = parseInt(currentStock?.totalProfit) < 0;
+const getTickersFromTrades = (trades = []) => {
+  if (trades === null || !trades.length) return '';
+  return trades
+    .map(trade => trade.ticker)
+    .join(', ');
+}
+
+const Day = (props = {}) => {
+  const { isVoidDay, month, date, year, trades } = props;
+  // console.log({ dayProps: props });
+
+  const totalProfit = getTotalProfitFromTrades(trades);
+  const tickers = getTickersFromTrades(trades);
+  const numberOfTrades = trades?.length || 0;
+
+  const isTotalProfitNegative = totalProfit < 0;
+
+  console.log({ date, totalProfit, tickers, numberOfTrades });
 
   if (isVoidDay) {
     return `
@@ -72,21 +105,32 @@ const Day = (props = {}) => {
     `
   }
   return `
-    <div class="Day p-1 ${props.key || componentId} ${!isVoidDay ? 'date' : ''} ${isProfitNegative ? 'bg-danger' : 'bg-success'}" id="${month}-${date}-${year}">
+    <div class="Day p-1 ${props.key || componentId} ${!isVoidDay ? 'date' : ''} ${numberOfTrades < 0 ? 'bg-light text-black' : ''} ${numberOfTrades && isTotalProfitNegative ? 'bg-danger text-white' : ''} ${numberOfTrades && !isTotalProfitNegative ? 'bg-success text-white' : ''}" id="${month}-${date}-${year}">
       <span class="date-label">${date}</span>
-      <div class="daily-stat p-2">
-        <p class="profit mt-1 mb-1 border-bottom border-light">
-          <span class="label">Profit</span>
-          <span class="value">${currentStock.totalProfit}</span>
-        </p>
-        <p class="number-of-trades mt-1 mb-1 border-bottom border-light">
-          <span class="label"># Trades</span>
-          <span class="value">${currentStock.numberOfTrades}</span>
-        </p>
-        <p class="tickers mt-1 mb-1">
-          <span class="value">${currentStock.tickers}</span>
-        </p>
+      ${numberOfTrades > 0 ? `
+        <div class="daily-stat p-2">
+        ${!!totalProfit ? `
+          <p class="profit mt-1 mb-1 border-bottom border-light">
+            <span class="label">Profit</span>
+            <span class="value">${totalProfit}</span>
+          </p>
+        ` : ''}
+
+        ${!!numberOfTrades ? `
+          <p class="number-of-trades mt-1 mb-1 border-bottom border-light">
+            <span class="label"># Trades</span>
+            <span class="value">${numberOfTrades}</span>
+          </p>
+        ` : ''}
+
+        ${!!tickers ? `
+          <p class="tickers mt-1 mb-1">
+            <span class="value">${tickers}</span>
+          </p>
+        ` : ''}
       </div>
+      ` : ''
+      }
     </div>
   `
 };
