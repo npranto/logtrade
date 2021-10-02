@@ -19,6 +19,21 @@ const styles = () => `
     position: absolute;
     z-index: 5;
   }
+  .${componentId} .opening-price-block,
+  .${componentId} .closing-price-block,
+  .${componentId} .stop-loss-block,
+  .${componentId} .take-profit-block {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+  .${componentId} .opening-price-block > *,
+  .${componentId} .closing-price-block > *,
+  .${componentId} .stop-loss-block > *,
+  .${componentId} .take-profit-block > * {
+    width: 160px;
+  }
 `;
 
 const AddTradeForm = (props = {}) => {
@@ -40,7 +55,7 @@ const AddTradeForm = (props = {}) => {
         </div>
       </div>
 
-      <div class="mb-3 hide ticker-input-block" id="ticker-input-block">
+      <div class="mb-1 hide ticker-input-block" id="ticker-input-block">
         <label for="ticker" class="form-label">Ticker</label>
         <input type="text" class="form-control" id="ticker" name="ticker" aria-describedby="tickerHelp" placeholder="AAPL" required />
         <div id="tickerHelp" class="form-text">
@@ -57,44 +72,44 @@ const AddTradeForm = (props = {}) => {
       <div class="mb-3">
         <label for="numberOfShares" class="form-label">Number of Shares</label>
         <input type="range" class="form-range" value="1" name="numberOfShares" step="1" min="1" max="10" id="numberOfShares" required />
-        <div class="range-label">
+        <div class="range-label text-center">
           <span class="label" id="range-value">1</span>
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-1 opening-price-block">
         <label for="openingPrice" class="form-label">Opening Price</label>
-        <div class="input-group mb-3">
+        <div class="input-group mb-1">
           <span class="input-group-text" id="basic-addon1">$</span>
           <input type="number" class="form-control" name="openingPrice" id="openingPrice" placeholder="10.50" aria-label="Opening Price" aria-describedby="opening-price" required />
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-1 closing-price-block">
         <label for="closingPrice" class="form-label">Closing Price</label>
-        <div class="input-group mb-3">
+        <div class="input-group mb-1">
           <span class="input-group-text" id="basic-addon1">$</span>
           <input type="number" name="closingPrice" class="form-control" id="closingPrice" placeholder="10.50" aria-label="Closing Price" aria-describedby="closing-price" required />
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-1 stop-loss-block">
         <label for="stopLoss" class="form-label">Stop Loss</label>
-        <div class="input-group mb-3">
+        <div class="input-group mb-1">
           <span class="input-group-text" id="basic-addon1">$</span>
           <input type="number" name="stopLoss" class="form-control" id="stopLoss" placeholder="10.50" aria-label="Stop Loss" aria-describedby="stop-loss" required />
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3 take-profit-block">
         <label for="takeProfit" class="form-label">Take Profit</label>
-        <div class="input-group mb-3">
+        <div class="input-group mb-1">
           <span class="input-group-text" id="basic-addon1">$</span>
           <input type="number" name="takeProfit" class="form-control" id="takeProfit" placeholder="10.50" aria-label="Take Profit" aria-describedby="take-profit" required />
         </div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-1">
         <label for="notes" class="form-label">Notes</label>
         <textarea class="form-control" placeholder="Any comments..." name="notes" id="notes" rows="3"></textarea>
       </div>

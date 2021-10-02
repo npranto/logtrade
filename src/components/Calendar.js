@@ -1,8 +1,8 @@
-import { getMonthFromDate, getYearFromDate } from "../utils/date";
+import { getDateFromDate, getMonthFromDate, getYearFromDate } from "../utils/date";
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import { fetchStocksByMonthAndYear } from "../utils/stocks";
-import { fetchAllTradesByUserId } from "../vendors/firebase/firebase.firestore";
+import { createNewTradeLog, fetchAllTradesByUserId } from "../vendors/firebase/firebase.firestore";
 import AddTradeModal from "./AddTradeModal";
 import MonthlyCalendar from "./MonthlyCalendar";
 import TICKERS from '../assets/data/tickers.json';
@@ -32,6 +32,9 @@ const getTradesByMonthAndYear = async (props) => {
 }
 
 const listenForClickOnAddTradeAction = (props) => {
+  const { activeDate, user } = props;
+  const userId = user.uid;
+
   const addTradeBtn = document
     .querySelector(`.${componentId} #add-trade-btn`);
   const addTradeConfirmBtnModal = document
@@ -111,6 +114,14 @@ const listenForClickOnAddTradeAction = (props) => {
         isValid: false, 
       }
     }
+    
+    if (ticker.includes(' ')) {
+      return {
+        error: 'Ticker must not have any spaces',
+        isValid: false, 
+      }
+    }
+
     return {
       error: null,
       isValid: true,
@@ -295,6 +306,60 @@ const listenForClickOnAddTradeAction = (props) => {
   // resets add trade form error message
   const resetAddTradeFormError = () => addTradeFormError.innerHTML = '';
 
+  const sanitizeAddTradeFields = (fields) => {
+    let sanitizedFields = {};
+
+    for (const [key, value] of Object.entries(fields)) {
+      // sanitize each field as needed...
+      if (key === 'ticker') {
+        sanitizedFields[key] = value.trim().toUpperCase();
+      } else if (key === 'organization') {
+        sanitizedFields[key] = value.trim().replace(/\s+/g,' ');
+      } else if (key === 'numberOfShares') {
+        sanitizedFields[key] = parseInt(value.trim());
+      } else if (key === 'openingPrice') {
+        sanitizedFields[key] = parseFloat(value.trim()).toFixed(2);
+      } else if (key === 'closingPrice') {
+        sanitizedFields[key] = parseFloat(value.trim()).toFixed(2);
+      } else if (key === 'stopLoss') {
+        sanitizedFields[key] = parseFloat(value.trim()).toFixed(2);
+      } else if (key === 'takeProfit') {
+        sanitizedFields[key] = parseFloat(value.trim()).toFixed(2);
+      } else {
+        sanitizedFields[key] = value
+      };
+    }
+
+    return sanitizedFields;
+  }
+
+  const getTickerFromOrganization = (org) => {
+    return TICKERS
+      .find(ticker => 
+        ticker.organization.toLowerCase() === org.toLowerCase()
+      ).ticker;
+  }
+
+  const formatFields = (fields) => {
+    const ticker = fields.ticker 
+      ? fields.ticker 
+      : getTickerFromOrganization(fields.tickerSelect);
+    const organization = fields.organization 
+      ? fields.organization
+      : fields.tickerSelect;
+    return {
+      ticker,
+      name: organization,
+      numberOfShares: fields.numberOfShares,
+      openingPrice: fields.openingPrice,
+      closingPrice: fields.closingPrice,
+      stopLoss: fields.stopLoss,
+      takeProfit: fields.takeProfit,
+      notes: fields.notes,
+    }
+    // return data;
+  }
+
 
   const onAddTrade = async (e) => {
     e.preventDefault();
@@ -317,6 +382,31 @@ const listenForClickOnAddTradeAction = (props) => {
     }
     // hides or removes any form field from DOM
     resetAddTradeFormError();
+
+    // sanitize form fields
+    const sanitizedFields = sanitizeAddTradeFields(fields);
+    console.log({ sanitizedFields });
+
+    const formattedFields = formatFields(sanitizedFields);
+
+    // creates new trade for user by taking in form fields
+    const { isNewTradeCreated, error } = await createNewTradeLog({ 
+      ...formattedFields,
+      date: String(getDateFromDate(activeDate)),
+      month: String(getMonthFromDate(activeDate)), 
+      year: String(getYearFromDate(activeDate)),
+    }, userId);
+    console.log({ isNewTradeCreated, error });
+
+    // display potential add trade error from firebase store
+    if (error) {
+      return showAddTradeFormError(error || 'Unable to add trade now. Try again later');
+    } 
+    // clears the sign up form fields in DOM
+    addTradeForm.reset();
+
+    // close out add trade form modal
+    hideAddTradeFormModal();
   }
 
   const showCustomTickerOption = () => {

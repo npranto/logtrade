@@ -113,8 +113,9 @@ const listenForSignInSubmit = () => {
       // sanitize each field as needed...
       if (key === 'email') {
         sanitizedFields[key] = value.trim().toLowerCase();
+      } else {
+       sanitizedFields[key] = value;
       }
-      sanitizedFields[key] = value;
     }
 
     return sanitizedFields;

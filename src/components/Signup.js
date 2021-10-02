@@ -201,12 +201,11 @@ const listenForSignUpSubmit = (props) => {
       // sanitize each field as needed...
       if (key === 'fullName') {
         sanitizedFields[key] = value.trim();
-      }
-      if (key === 'email') {
+      } else if (key === 'email') {
         sanitizedFields[key] = value.trim().toLowerCase();
+      } else {
+        sanitizedFields[key] = value;
       }
-
-      sanitizedFields[key] = value;
     }
 
     return sanitizedFields;
