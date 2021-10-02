@@ -7,29 +7,32 @@ const onLoad = (props = {}) => {
 }
 
 const styles = () => `
-  .${componentId} {
-    
+  .${componentId} .hide {
+    display: none;
   }
 `;
 
 const AddTradeForm = (props = {}) => {
   return `
-    <form>
-      <div class="mb-3">
+    <form class="add-trade-form AddTradeForm ${componentId}" id="add-trade-form">
+      <div class="mb-3 hide" id="ticker-input-block">
         <label for="ticker" class="form-label">Ticker</label>
         <input type="text" class="form-control" id="ticker" name="ticker" aria-describedby="tickerHelp" placeholder="AAPL" required />
-        <div id="tickerHelp" class="form-text">i.e., "AAPL" or "TSLA"</div>
+        <div id="tickerHelp" class="form-text">
+          i.e., "AAPL" or "TSLA" 
+          <button type="button" class="btn btn-link" id="select-default-ticker-btn">Select from default ticker list?</button> 
+        </div>
       </div>
-      <div class="mb-3">
+      <div class="mb-3 hide" id="organization-input-block">
         <label for="organization" class="form-label">Organization</label>
         <input type="text" class="form-control" id="organization" name="organization" aria-describedby="organizationHelp" placeholder="Apple Inc." required />
         <div id="organizationHelp" class="form-text">i.e., "Apple Inc."</div>
       </div>
 
-      <div class="mb-3">
+      <div class="mb-3" id="ticker-select-block">
         <label for="tickerSelect" class="form-label">Ticker</label>
         <select class="form-select" id="tickerSelect" name="tickerSelect" aria-label="Select Ticker" required>
-          <option selected>Choose Ticker</option>
+          <option selected>Select a ticker</option>
           <option value="AAPL">
             <strong>AAPL:</strong> 
             <i>Apple Inc.</i>
@@ -43,11 +46,14 @@ const AddTradeForm = (props = {}) => {
             <i>Alphabet Inc Class A</i>
           </option>
         </select>
+        <div class="custom-ticker-option text-center">
+          <button type="button" class="btn btn-link" id="custom-ticker-btn">Custom Ticker?</button>
+        </div>
       </div>
 
       <div class="mb-3">
         <label for="numberOfShares" class="form-label">Number of Shares</label>
-        <input type="range" class="form-range" name="numberOfShares" step="1" min="1" max="10" id="numberOfShares" required />
+        <input type="range" class="form-range" value="1" name="numberOfShares" step="1" min="1" max="10" id="numberOfShares" required />
         <div class="range-label">
           <span class="label">1</span>
         </div>
@@ -86,8 +92,8 @@ const AddTradeForm = (props = {}) => {
       </div>
 
       <div class="mb-3">
-        <label for="notes" name="notes" class="form-label">Notes</label>
-        <textarea class="form-control" id="notes" rows="3"></textarea>
+        <label for="notes" class="form-label">Notes</label>
+        <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
       </div>
     </form>
   `
