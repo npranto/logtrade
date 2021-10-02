@@ -87,6 +87,8 @@ const App = (props = {}) => {
     activeDate,
     tradeLogs,
     user,
+    newTrade,
+    isNewTradeModalOpen,
   } = getState();
   const state = {
     isLoggedIn,
@@ -94,6 +96,8 @@ const App = (props = {}) => {
     activeDate,
     tradeLogs,
     user,
+    newTrade,
+    isNewTradeModalOpen,
   }
 
   console.log('App rendering...', { ...getState() });
