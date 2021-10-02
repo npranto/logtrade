@@ -5,6 +5,7 @@ import { fetchStocksByMonthAndYear } from "../utils/stocks";
 import { fetchAllTradesByUserId } from "../vendors/firebase/firebase.firestore";
 import AddTradeModal from "./AddTradeModal";
 import MonthlyCalendar from "./MonthlyCalendar";
+import TICKERS from '../assets/data/tickers.json';
 
 const componentId = getUniqueId();
 
@@ -44,12 +45,16 @@ const listenForClickOnAddTradeAction = (props) => {
   );
   const addTradeForm = document
     .querySelector(`.${componentId} #add-trade-form`);
+  const numberOfSharesRange = document.querySelector(`.${componentId} #numberOfShares`);
+  const numberOfSharesRangeValue = document.querySelector(`.${componentId} #range-value`);
 
   const customTickerBtn = document.querySelector(`.${componentId} #custom-ticker-btn`);
   const selectDefaultTickerBtn = document.querySelector(`.${componentId} #select-default-ticker-btn`);
   const tickerInputBlock = document.querySelector(`.${componentId} #ticker-input-block`);
   const tickerOrganizationBlock = document.querySelector(`.${componentId} #organization-input-block`);
   const tickerSelectBlock = document.querySelector(`.${componentId} #ticker-select-block`);
+  const tickerInput = document.querySelector(`.${componentId} .AddTradeForm #ticker`);
+  const organizationInput = document.querySelector(`.${componentId} .AddTradeForm #organization`);
 
   const addTradeFormError = document
     .querySelector(`.${componentId} #add-trade-form-error`);
@@ -59,7 +64,6 @@ const listenForClickOnAddTradeAction = (props) => {
   }
 
   const hideAddTradeFormModal = () => {
-    console.log('sdjfjhsdfjh...');
     addTradeFormModal.hide();
   }
 
@@ -92,6 +96,15 @@ const listenForClickOnAddTradeAction = (props) => {
 
   // validate each field for new trade log
   const validateTicker = (ticker) => {
+    const isTickerInputHidden = tickerInputBlock.classList.contains('hide');
+
+    if (isTickerInputHidden) {
+      return {
+        error: null,
+        isValid: true,
+      }
+    }
+
     if (!ticker || !ticker.length) {
       return {
         error: 'Please provide a valid ticker',
@@ -104,12 +117,161 @@ const listenForClickOnAddTradeAction = (props) => {
     }
   } 
 
+  // validate each field for new trade log
+  const validateOrganization = (organization) => {
+    const isTickerInputHidden = tickerInputBlock.classList.contains('hide');
+
+    if (isTickerInputHidden) {
+      return {
+        error: null,
+        isValid: true,
+      }
+    }
+
+    if (!organization || !organization.length) {
+      return {
+        error: 'Please provide a valid organization or company',
+        isValid: false, 
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  } 
+
+  // validate each field for new trade log
+  const validateTickerSelect = (tickerSelect) => {
+    const isTickerInputHidden = tickerInputBlock.classList.contains('hide');
+
+    if (!isTickerInputHidden) {
+      return {
+        error: null,
+        isValid: true,
+      }
+    }
+
+    if (!tickerSelect || !tickerSelect.length || tickerSelect === 'Select a ticker') {
+      return {
+        error: 'Please choose a ticker',
+        isValid: false, 
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  }  
+
+  // validate each field for new trade log
+  const validateOpeningPrice = (openingPrice) => {
+    if (!openingPrice) {
+      return {
+        error: 'Please provide a valid opening price',
+        isValid: false, 
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  } 
+  
+  // validate each field for new trade log
+  const validateClosingPrice = (closingPrice) => {
+    if (!closingPrice) {
+      return {
+        error: 'Please provide a valid closing price',
+        isValid: false, 
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  }  
+
+  // validate each field for new trade log
+  const validateStopLoss = (stopLoss) => {
+    if (!stopLoss) {
+      return {
+        error: 'Please provide a valid stop loss price',
+        isValid: false, 
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  }  
+
+  // validate each field for new trade log
+  const validateTakeProfit = (takeProfit) => {
+    if (!takeProfit) {
+      return {
+        error: 'Please provide a valid take profit price',
+        isValid: false, 
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  }  
+
   const validateAddTradeForm = (fields = {}) => {
     const { error: tickerError, isValid: isTickerValid } = validateTicker(fields.ticker);
-
     if (!isTickerValid) {
       return {
         error: tickerError,
+        isValid: false,
+      }
+    }
+    
+    const { error: organizationError, isValid: isOrganizationValid } = validateOrganization(fields.organization);
+    if (!isOrganizationValid) {
+      return {
+        error: organizationError,
+        isValid: false,
+      }
+    }
+
+    const { error: tickerSelectError, isValid: isTickerSelectValid } = validateTickerSelect(fields.tickerSelect);
+    if (!isTickerSelectValid) {
+      return {
+        error: tickerSelectError,
+        isValid: false,
+      }
+    }
+
+    const { error: openingPriceError, isValid: isOpeningPriceValid } = validateOpeningPrice(fields.openingPrice);
+    if (!isOpeningPriceValid) {
+      return {
+        error: openingPriceError,
+        isValid: false,
+      }
+    }
+
+    const { error: closingPriceError, isValid: isClosingPriceValid } = validateClosingPrice(fields.closingPrice);
+    if (!isClosingPriceValid) {
+      return {
+        error: closingPriceError,
+        isValid: false,
+      }
+    }
+
+    const { error: stopLossError, isValid: isStopLossValid } = validateStopLoss(fields.stopLoss);
+    if (!isStopLossValid) {
+      return {
+        error: stopLossError,
+        isValid: false,
+      }
+    }
+
+    const { error: takeProfitError, isValid: isTakeProfitValid } = validateTakeProfit(fields.takeProfit);
+    if (!isTakeProfitValid) {
+      return {
+        error: takeProfitError,
         isValid: false,
       }
     }
@@ -119,6 +281,20 @@ const listenForClickOnAddTradeAction = (props) => {
       isValid: true,
     }
   }
+
+  // takes in an error message and displays it on top of add trade form
+  const showAddTradeFormError = (message) => {
+    addTradeFormError.innerHTML = `
+      <div class="alert alert-danger text-center" role="alert">
+        ${message}
+      </div>
+    `;
+    addTradeFormError.scrollIntoView();
+  };
+  
+  // resets add trade form error message
+  const resetAddTradeFormError = () => addTradeFormError.innerHTML = '';
+
 
   const onAddTrade = async (e) => {
     e.preventDefault();
@@ -134,28 +310,10 @@ const listenForClickOnAddTradeAction = (props) => {
       isValid: isFormValid,
     } = validateAddTradeForm(fields);
 
-    
-    const { error: tickerError, isValid: isTickerValid } = validateTicker(fields.ticker);
-    console.log({ tickerError, isTickerValid });
-
-    // takes in an error message and displays it on top of add trade form
-    const showAddTradeFormError = (message) => {
-      addTradeFormError.innerHTML = `
-        <div class="alert alert-danger text-center" role="alert">
-          ${message}
-        </div>
-      `;
-      addTradeFormError.scrollIntoView();
-    };
-    
-    // resets add trade form error message
-    const resetAddTradeFormError = () => addTradeFormError.innerHTML = '';
-
-
     // show error message in DOM for user
-    if (!isTickerValid) {
+    if (!isFormValid) {
       // displays form field error in DOM
-      return showAddTradeFormError(tickerError);
+      return showAddTradeFormError(formError);
     }
     // hides or removes any form field from DOM
     resetAddTradeFormError();
@@ -172,6 +330,21 @@ const listenForClickOnAddTradeAction = (props) => {
     tickerOrganizationBlock.classList.add('hide');
     tickerSelectBlock.classList.remove('hide');
   }
+
+  const updateNumberOfSharesValue = (e = {}) => {
+    e.preventDefault();
+    const numberOfShares = e.target?.value || 1;
+    console.log({ numberOfShares });
+    numberOfSharesRangeValue.innerHTML = numberOfShares;
+  }
+
+  const showTickerMatches = (e) => {
+    e.preventDefault();
+    const tickerInputValue = e.target?.value || '';
+    console.log({ tickerInputValue });
+    const matchingTickers = TICKERS.filter(ticker => ticker.ticker.toLowerCase().includes(tickerInputValue.toLowerCase()));
+    console.log({ matchingTickers });
+  }
   
   addTradeBtn
     .addEventListener('click', showAddTradeFormModal);
@@ -184,6 +357,8 @@ const listenForClickOnAddTradeAction = (props) => {
 
   customTickerBtn.addEventListener('click', showCustomTickerOption);
   selectDefaultTickerBtn.addEventListener('click', showSelectTickerOption);
+  numberOfSharesRange.addEventListener('change', updateNumberOfSharesValue);
+  // tickerInput.addEventListener('change', showTickerMatches);
 }
 
 const onLoad = (props = {}) => {
