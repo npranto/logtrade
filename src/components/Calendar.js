@@ -3,6 +3,7 @@ import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import { fetchStocksByMonthAndYear } from "../utils/stocks";
 import { fetchAllTradesByUserId } from "../vendors/firebase/firebase.firestore";
+import AddTradeModal from "./AddTradeModal";
 import MonthlyCalendar from "./MonthlyCalendar";
 
 const componentId = getUniqueId();
@@ -29,15 +30,53 @@ const getTradesByMonthAndYear = async (props) => {
   });
 }
 
+const listenForClickOnAddTradeAction = (props) => {
+  const addTradeBtn = document
+    .querySelector(`.${componentId} #add-trade-btn`);
+  const addTradeConfirmBtnModal = document
+    .querySelector(`.${componentId} #add-trade-confirm-btn-modal`);
+  const addTradeCancelIconModal = document
+    .querySelector(`.${componentId} #add-trade-cancel-icon-modal`)
+  const addTradeCancelBtnModal = document
+    .querySelector(`.${componentId} #add-trade-cancel-btn-modal`);
+  const addTradeFormModal = new bootstrap.Modal(
+    document.querySelector(`.${componentId} #add-trade-form-modal`), {}
+  );
+
+  const showAddTradeFormModal = () => {
+    addTradeFormModal.show();
+  }
+
+  const hideAddTradeFormModal = () => {
+    console.log('sdjfjhsdfjh...');
+    addTradeFormModal.hide();
+  }
+
+  const onAddTrade = async () => {
+    console.log('Now... lets add trade to DB!');
+    props.setState(() => ({ newTrade: { ticker: 'AAPL' } }));
+  }
+  
+  addTradeBtn
+    .addEventListener('click', showAddTradeFormModal);
+  addTradeCancelIconModal
+    .addEventListener('click', hideAddTradeFormModal);
+  addTradeConfirmBtnModal
+    .addEventListener('click', onAddTrade);
+  addTradeCancelBtnModal
+    .addEventListener('click', hideAddTradeFormModal);
+}
+
 const onLoad = (props = {}) => {
   getTradesByMonthAndYear(props);
+  listenForClickOnAddTradeAction(props);
 }
 
 const styles = () => `
   .${componentId} {
     padding: 1em;
   }
-  .${componentId} .add-trade-action {
+  .${componentId} .add-trade-btn {
     cursor: pointer;
     position: fixed;
     bottom: 0;
@@ -58,16 +97,16 @@ const styles = () => `
     color: whitesmoke;
     transition: box-shadow font-size 0.4s ease;
   }
-  .${componentId} .add-trade-action:hover, 
-  .${componentId} .add-trade-action:focus {
+  .${componentId} .add-trade-btn:hover, 
+  .${componentId} .add-trade-btn:focus {
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   }
-  .${componentId} .add-trade-action svg, 
-  .${componentId} .add-trade-action svg {
+  .${componentId} .add-trade-btn svg, 
+  .${componentId} .add-trade-btn svg {
     transition: font-size 0.2s ease;
   }
-  .${componentId} .add-trade-action:hover svg, 
-  .${componentId} .add-trade-action:focus svg {
+  .${componentId} .add-trade-btn:hover svg, 
+  .${componentId} .add-trade-btn:focus svg {
     font-size: 1.75rem;
   }
 `;
@@ -88,6 +127,10 @@ const Calendar = (props = {}) => {
     });
   }
 
+  const onAddTrade = (newTrade) => {
+    console.log('running onAddTrade()...');
+  }
+
   return `
     <section class="Calendar ${componentId}">
       <h1 class="header text-center">Calendar</h1>
@@ -95,12 +138,21 @@ const Calendar = (props = {}) => {
         dateToday,
         activeDate, 
         tradeLogs,
-        // getStocksByMonthAndYear, 
         onUpdateActiveDate,
       })}
-      <div class="add-trade-action">
+      <div 
+        class="add-trade-btn" 
+        id="add-trade-btn"
+        data-toggle="modal"
+        data-target="#add-trade-btn"
+      >
         <i class="fas fa-plus fa-lg"></i>
       </div>
+
+      ${AddTradeModal({
+        ...props,
+        onAddTrade
+      })}
     </section>
   `
 };

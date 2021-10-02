@@ -96,7 +96,8 @@ export default (props) => render(
 
 // listenForSignout();
 
-{/* <div class="modal fade" id="logout-confirm-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{/* 
+<div class="modal fade" id="logout-confirm-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -118,4 +119,5 @@ export default (props) => render(
       </div>
     </div>
   </div>
-</div> */}
+</div> 
+*/}

@@ -74,6 +74,7 @@ const initialState = {
   activeDate: dateToday,
   tradeLogs: [],
   user: getUserFromLocalStorage(),
+  newTrade: null,
 }
 
 // global state
@@ -87,6 +88,7 @@ const App = (props = {}) => {
     activeDate,
     tradeLogs,
     user,
+    newTrade,
   } = getState();
   const state = {
     isLoggedIn,
@@ -94,6 +96,7 @@ const App = (props = {}) => {
     activeDate,
     tradeLogs,
     user,
+    newTrade,
   }
 
   console.log('App rendering...', { ...getState() });
