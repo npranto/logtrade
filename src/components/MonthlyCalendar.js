@@ -160,7 +160,8 @@ const MonthlyCalendar = (props = {}) => {
               ...dayGrid, 
               key, 
               activeDate, 
-              onClick: () => onUpdateActiveDate(currentDate),
+              isActiveDay: currentDate.getTime() === activeDate.getTime(),
+              onClick: () => onUpdateActiveDate(currentDate, { showActiveDateTrades: true }),
             })}
           `;
         })}

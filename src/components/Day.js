@@ -54,7 +54,7 @@ const styles = (props) => {
   `
 };
 
-const getTotalProfitFromTrades = (trades = []) => {
+export const getTotalProfitFromTrades = (trades = []) => {
   if (trades === null || !trades.length) return '0.00';
   return trades
     // extract each trade properties to calculate total profit
@@ -68,14 +68,14 @@ const getTotalProfitFromTrades = (trades = []) => {
     .map((trade) => {
       // on short trade, opening price > closing price
       if (trade.tradeType === 'short') {
-        return trade.openingPrice - trade.closingPrice;
+        return (trade.openingPrice - trade.closingPrice) * trade.numberOfShares;
       }
       // on long trade, closing price > opening price
-      return trade.closingPrice - trade.openingPrice;
+      return (trade.closingPrice - trade.openingPrice) * trade.numberOfShares;
     }) 
     // adds up all the trade profits together
     .reduce((totalProfit, eachTradeProfit) => {
-      return totalProfit + eachTradeProfit;
+      return totalProfit + (eachTradeProfit);
     }, 0)
     .toFixed(2);
 }
@@ -88,7 +88,7 @@ const getTickersFromTrades = (trades = []) => {
 }
 
 const Day = (props = {}) => {
-  const { isVoidDay, month, date, year, trades } = props;
+  const { isVoidDay, month, date, year, trades, isActiveDay } = props;
   // console.log({ dayProps: props });
 
   const totalProfit = getTotalProfitFromTrades(trades);
@@ -105,7 +105,7 @@ const Day = (props = {}) => {
     `
   }
   return `
-    <div class="Day p-1 ${props.key || componentId} ${!isVoidDay ? 'date' : ''} ${numberOfTrades < 0 ? 'bg-light text-black' : ''} ${numberOfTrades && isTotalProfitNegative ? 'bg-danger text-white' : ''} ${numberOfTrades && !isTotalProfitNegative ? 'bg-success text-white' : ''}" id="${month}-${date}-${year}">
+    <div class="Day p-1 ${props.key || componentId} ${!isVoidDay ? 'date' : ''} ${numberOfTrades < 0 ? 'bg-light text-black' : ''} ${numberOfTrades && isTotalProfitNegative ? 'bg-danger text-white' : ''} ${numberOfTrades && !isTotalProfitNegative ? 'bg-success text-white' : ''} ${isActiveDay ? 'border border-warning border-4' : ''}" id="${month}-${date}-${year}">
       <span class="date-label">${date}</span>
       ${numberOfTrades > 0 ? `
         <div class="daily-stat p-2">

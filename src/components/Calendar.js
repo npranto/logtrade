@@ -6,6 +6,7 @@ import { createNewTradeLog, fetchAllTradesByUserId } from "../vendors/firebase/f
 import AddTradeModal from "./AddTradeModal";
 import MonthlyCalendar from "./MonthlyCalendar";
 import TICKERS from '../assets/data/tickers.json';
+import DailyTradesModal from "./DailyTradesModal";
 
 const componentId = getUniqueId();
 
@@ -61,6 +62,18 @@ const listenForClickOnAddTradeAction = (props) => {
 
   const addTradeFormError = document
     .querySelector(`.${componentId} #add-trade-form-error`);
+
+  const dailyTradesModal = new bootstrap.Modal(
+    document.querySelector(`.${componentId} #daily-trades-modal `), {}
+  );
+  // dailyTradesModal.show();
+
+  const dailyTradesCancelIcon = document.querySelector(`.${componentId} #daily-trades-cancel-icon`);
+  const dailyTradesCancelBtn = document.querySelector(`.${componentId} #daily-trades-cancel-btn`);
+  const dailyTradesNewTradeBtn = document.querySelector(`.${componentId} #daily-trades-new-trade-btn`);
+
+  // const dateDayBlocks = document.querySelectorAll(`.${componentId} .MonthlyCalendar .Day.date`);
+  // console.log({ dateDayBlocks });
 
   const showAddTradeFormModal = () => {
     addTradeFormModal.show();
@@ -435,6 +448,30 @@ const listenForClickOnAddTradeAction = (props) => {
     const matchingTickers = TICKERS.filter(ticker => ticker.ticker.toLowerCase().includes(tickerInputValue.toLowerCase()));
     console.log({ matchingTickers });
   }
+
+  // const onSelectDateDay = (e = {}) => {
+  //   const dayId = e.target?.id || '';
+  //   const [month, date, year] = dayId.split('-');
+  //   if (month && date && year) {
+  //     props.setState(() => ({ activeDate: new Date(`${month} ${date}, ${year}`) }));
+  //   }
+  // }
+
+  const showDailyTradesModal = (e) => {
+    dailyTradesModal.show();
+  }
+
+  const hideDailyTradesModal = (e) => {
+    dailyTradesModal.hide();
+  }
+
+  const loadAddTradeForm = (e) => {
+    e.preventDefault();
+    hideDailyTradesModal();
+    setTimeout(() => {
+      showAddTradeFormModal();
+    }, 500);
+  }
   
   addTradeBtn
     .addEventListener('click', showAddTradeFormModal);
@@ -449,6 +486,23 @@ const listenForClickOnAddTradeAction = (props) => {
   selectDefaultTickerBtn.addEventListener('click', showSelectTickerOption);
   numberOfSharesRange.addEventListener('change', updateNumberOfSharesValue);
   // tickerInput.addEventListener('change', showTickerMatches);
+  dailyTradesCancelIcon.addEventListener('click', (e) => {
+    hideDailyTradesModal();
+    props.setState(() => ({ isDailyTradeModalOpen: false }));
+  });
+  dailyTradesCancelBtn.addEventListener('click', (e) => {
+    hideDailyTradesModal();
+    props.setState(() => ({ isDailyTradeModalOpen: false }));
+  });
+  dailyTradesNewTradeBtn.addEventListener('click', loadAddTradeForm)
+
+  // dateDayBlocks.forEach(dateDayBlock => {
+  //   dateDayBlock.addEventListener('click', onSelectDateDay)
+  // })
+  if (props.isDailyTradeModalOpen) {
+    console.log('daily trade should open now...');
+    showDailyTradesModal();
+  } 
 }
 
 const onLoad = (props = {}) => {
@@ -495,19 +549,29 @@ const styles = () => `
   }
 `;
 
+const filterTradesByDate = (activeDate, trades = []) => {
+  const date = String(getDateFromDate(activeDate));
+  const month = String(getMonthFromDate(activeDate));
+  const year = String(getYearFromDate(activeDate));
+  console.log('filterTradesByDate...', { date, month, year });
+  return trades.filter(trade => (trade.date === date) && (trade.month === month) && (trade.year === year));
+}
+
 const Calendar = (props = {}) => {
   const { dateToday, activeDate, tradeLogs, user } = props;
 
-  console.log({ dateToday, activeDate, user, tradeLogs });
+  const activeDateTrades = filterTradesByDate(activeDate, tradeLogs);
 
-  const onUpdateActiveDate = (newDate) => {
+  console.log({ dateToday, activeDate, user, tradeLogs, activeDateTrades });
+
+  const onUpdateActiveDate = (newDate, options = { showActiveDateTrades: false }) => {
     if (!newDate || !(newDate instanceof Date)) {
       throw new Error(
         'Invalid `newDate` is passed to update active day. Please pass in a valid `Date` object to alter active date.'
       );
     }
     props.setState(() => {
-      return { activeDate: newDate };
+      return { activeDate: newDate, isDailyTradeModalOpen: options.showActiveDateTrades };
     });
   }
 
@@ -530,6 +594,7 @@ const Calendar = (props = {}) => {
       </div>
 
       ${AddTradeModal({...props})}
+      ${DailyTradesModal({...props, activeDateTrades})}
     </section>
   `
 };
