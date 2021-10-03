@@ -66,7 +66,7 @@ const store = (initialState = {}) => {
   };
 }
 
-const dateToday = new Date();
+const dateToday = new Date(`October 2, 2021`);
 
 const initialState = { 
   isLoggedIn: getUserFromLocalStorage() !== null,
@@ -74,6 +74,7 @@ const initialState = {
   activeDate: dateToday,
   tradeLogs: [],
   user: getUserFromLocalStorage(),
+  isDailyTradeModalOpen: false,
 }
 
 // global state
@@ -88,7 +89,7 @@ const App = (props = {}) => {
     tradeLogs,
     user,
     newTrade,
-    isNewTradeModalOpen,
+    isDailyTradeModalOpen,
   } = getState();
   const state = {
     isLoggedIn,
@@ -97,7 +98,7 @@ const App = (props = {}) => {
     tradeLogs,
     user,
     newTrade,
-    isNewTradeModalOpen,
+    isDailyTradeModalOpen,
   }
 
   console.log('App rendering...', { ...getState() });
