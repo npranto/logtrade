@@ -194,6 +194,23 @@ const listenForSignUpSubmit = (props) => {
     }
   }
 
+  const sanitizeSignUpFields = (fields) => {
+    let sanitizedFields = {};
+
+    for (const [key, value] of Object.entries(fields)) {
+      // sanitize each field as needed...
+      if (key === 'fullName') {
+        sanitizedFields[key] = value.trim();
+      } else if (key === 'email') {
+        sanitizedFields[key] = value.trim().toLowerCase();
+      } else {
+        sanitizedFields[key] = value;
+      }
+    }
+
+    return sanitizedFields;
+  }
+
   async function onSignUpSubmit(e) {
     // restricts browser from auto page refresh on form submit
     e.preventDefault();
@@ -217,10 +234,13 @@ const listenForSignUpSubmit = (props) => {
     // hides or removes any form field from DOM
     resetSignUpFormError();
 
+    // sanitize form fields for cleaner and more consistent credentials
+    const sanitizedFields = sanitizeSignUpFields(fields);
+
     // creates new account for user by taking in email and password
     const { user, error } = await onSignUpWithEmailAndPassword({ 
-      email: fields.email, 
-      password: fields.password 
+      email: sanitizedFields.email, 
+      password: sanitizedFields.password 
     });
     console.log({ user, error });
 
@@ -259,7 +279,7 @@ function styles() {
       padding: 15px 35px 45px;
       margin: 0 auto;
       background-color: #fff;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
     }
     .${componentId} .form-signup .form-signup-heading,
     .${componentId} .form-signup .checkbox {
@@ -289,13 +309,15 @@ function Signup (props) {
   return `
     ${Nav(props)}
     <section class="Signup ${componentId}">
-      <h1 class="text-center mb-4 text-muted"> Log Trade </h1>
+      <a href="?page=home">
+        <h1 class="text-center mb-4 text-muted"> LogTrade </h1>
+      </a>
       <form class="form-signup" id="signup-form" action="#">       
         <h2 class="form-signup-heading">Sign Up</h2>
         <div class="signup-form-error" id="signup-form-error"></div>
         <input 
           type="text" 
-          class="form-control" 
+          class="form-control mt-1" 
           name="signup-fullname" 
           placeholder="Full Name" 
           required
@@ -303,21 +325,21 @@ function Signup (props) {
         />
         <input 
           type="email" 
-          class="form-control" 
+          class="form-control mt-1" 
           name="signup-email" 
           placeholder="Email Address" 
           required
         />
         <input 
           type="password" 
-          class="form-control" 
+          class="form-control mt-1" 
           name="signup-password" 
           placeholder="Password" 
           required
         />    
         <input 
           type="password" 
-          class="form-control" 
+          class="form-control mt-1" 
           name="signup-confirm-password" 
           placeholder="Confirm Password" 
           required

@@ -2,7 +2,7 @@ import { getDateFromDate, getMonthFromDate, getNextMonthFromDate, getNumberOfDay
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import renderList from "../utils/renderList";
-import { findMatchingStock } from "../utils/stocks";
+import { findMatchingTradesByDate } from "../utils/stocks";
 import Day from "./Day";
 import MonthNavigator from "./MonthNavigator";
 
@@ -18,7 +18,7 @@ const getStocksForCurrentMonth = (props) => {
 }
 
 const onLoad = (props = {}) => {
-  getStocksForCurrentMonth(props);
+  // getStocksForCurrentMonth(props);
 }
 
 const styles = () => `
@@ -51,7 +51,7 @@ const styles = () => `
   .${componentId} .month-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-auto-rows: 100px;
+    grid-auto-rows: minmax(125px, auto);
     grid-gap: 0.5em;
   }
 `;
@@ -60,7 +60,7 @@ const MonthlyCalendar = (props = {}) => {
   const { 
     dateToday,
     activeDate,
-    stocks,
+    tradeLogs,
     onUpdateActiveDate,
   } = props;
 
@@ -106,10 +106,10 @@ const MonthlyCalendar = (props = {}) => {
     // maps over each day and finds potential matching stocks from that day 
     .map((dayGrid) => {
     const { month, date, year } = dayGrid;
-    const matchingStock = findMatchingStock(stocks, month, date, year);
+    const matchingTrades = findMatchingTradesByDate(tradeLogs, month, date, year);
     return { 
       ...dayGrid, 
-      stock: matchingStock || null 
+      trades: matchingTrades || null 
     };
   })
 
@@ -160,7 +160,8 @@ const MonthlyCalendar = (props = {}) => {
               ...dayGrid, 
               key, 
               activeDate, 
-              onClick: () => onUpdateActiveDate(currentDate),
+              isActiveDay: currentDate.getTime() === activeDate.getTime(),
+              onClick: () => onUpdateActiveDate(currentDate, { showActiveDateTrades: true }),
             })}
           `;
         })}

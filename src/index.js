@@ -1,3 +1,4 @@
+import isEqual from 'lodash.isequal';
 import './vendors/index';
 
 import Router from "./utils/Router.js";
@@ -46,7 +47,8 @@ const store = (initialState = {}) => {
     },
     setState: (cb) => {
       const updatedState = {...state, ...cb(state)};
-      if (JSON.stringify(updatedState) !== JSON.stringify(state)) {
+      console.log({ updatedState, state });
+      if (!isEqual(updatedState, state)) {
         state = {...updatedState};
         render(
           {
@@ -64,13 +66,15 @@ const store = (initialState = {}) => {
   };
 }
 
-const dateToday = new Date();
+const dateToday = new Date(`October 2, 2021`);
 
 const initialState = { 
   isLoggedIn: getUserFromLocalStorage() !== null,
   dateToday,
   activeDate: dateToday,
-  stocks: [],
+  tradeLogs: [],
+  user: getUserFromLocalStorage(),
+  isDailyTradeModalOpen: false,
 }
 
 // global state
@@ -82,13 +86,19 @@ const App = (props = {}) => {
     isLoggedIn, 
     dateToday,
     activeDate,
-    stocks,
+    tradeLogs,
+    user,
+    newTrade,
+    isDailyTradeModalOpen,
   } = getState();
   const state = {
     isLoggedIn,
     dateToday,
     activeDate,
-    stocks,
+    tradeLogs,
+    user,
+    newTrade,
+    isDailyTradeModalOpen,
   }
 
   console.log('App rendering...', { ...getState() });

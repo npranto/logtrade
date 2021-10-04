@@ -106,6 +106,21 @@ const listenForSignInSubmit = () => {
     }
   };
 
+  const sanitizeSignInFields = (fields = {}) => {
+    let sanitizedFields = {};
+
+    for (const [key, value] of Object.entries(fields)) {
+      // sanitize each field as needed...
+      if (key === 'email') {
+        sanitizedFields[key] = value.trim().toLowerCase();
+      } else {
+       sanitizedFields[key] = value;
+      }
+    }
+
+    return sanitizedFields;
+  }
+
   // takes in form fields and validates each field one-by-one
   const validateSignUpForm = (fields) => {
     // validate email
@@ -143,14 +158,13 @@ const listenForSignInSubmit = () => {
     // extracts out each form field in name / value pairs
     // i.e., { email: '...', password: '...' ... }
     const fields = extractFormFields();
-    console.log({ fields });
 
     // takes in all form fields, validates each one-by-one and returns 
     // data regarding form validity
     const { 
-      error: formError, isValid: isFormValid 
+      error: formError, 
+      isValid: isFormValid,
     } = validateSignUpForm(fields);
-    console.log({ formError, isFormValid });
 
     if (!isFormValid) {
       // displays form field error in DOM
@@ -159,10 +173,13 @@ const listenForSignInSubmit = () => {
     // hides or removes any form field from DOM
     resetSignInFormError();
 
+    // sanitize form fields for cleaner and more consistent credentials
+    const sanitizedFields = sanitizeSignInFields(fields);
+
     // creates new account for user by taking in email and password
     const { user, error } = await onSignInWithEmailAndPassword({ 
-      email: fields.email, 
-      password: fields.password 
+      email: sanitizedFields.email, 
+      password: sanitizedFields.password,
     });
     console.log({ user, error });
 
@@ -193,6 +210,7 @@ const styles = () => `
     flex-direction: column;
     justify-content: center;
     overflow: auto;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   }
   .${componentId} .form-signin {
     max-width: 380px;
@@ -200,7 +218,7 @@ const styles = () => `
     padding: 15px 35px 45px;
     margin: 0 auto;
     background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
   }
   .${componentId} .form-signin .form-signin-heading,
   .${componentId} .form-signin .checkbox {
@@ -229,13 +247,15 @@ const Login = (props) => {
   return `
     ${Nav(props)}
     <section class="Login ${componentId}">
-      <h1 class="text-center mb-4 text-muted"> Log Trade </h1>
+      <a href="?page=home">
+        <h1 class="text-center mb-4 text-muted"> LogTrade </h1>
+      </a>
       <form class="form-signin" id="signin-form" action="#">       
         <h2 class="form-signin-heading">Login</h2>
         <div class="signin-form-error" id="signin-form-error"></div>
         <input 
           type="email" 
-          class="form-control" 
+          class="form-control mt-1" 
           name="signin-email" 
           placeholder="Email Address" 
           autofocus 
@@ -243,7 +263,7 @@ const Login = (props) => {
         />
         <input 
           type="password" 
-          class="form-control" 
+          class="form-control mt-1" 
           name="signin-password" 
           placeholder="Password" 
           required 

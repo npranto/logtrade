@@ -60,7 +60,7 @@ const styles = () => `
   }
 `;
 
-const Nav = ({ isLoggedIn = false, activePage = 'home' } = {}) => {
+const Nav = ({ isLoggedIn = false, activePage = 'home', user } = {}) => {
   return `
     <nav class="Nav ${componentId}">
       <a 
