@@ -2,7 +2,7 @@ import { getDateFromDate, getMonthFromDate, getYearFromDate } from "../utils/dat
 import getUniqueId from "../utils/getUniqueId";
 import render from "../utils/render";
 import { fetchStocksByMonthAndYear } from "../utils/stocks";
-import { createNewTradeLog, fetchAllTradesByUserId } from "../vendors/firebase/firebase.firestore";
+import { createNewTradeLog, deleteTradeLog, fetchAllTradesByUserId } from "../vendors/firebase/firebase.firestore";
 import AddTradeModal from "./AddTradeModal";
 import MonthlyCalendar from "./MonthlyCalendar";
 import TICKERS from '../assets/data/tickers.json';
@@ -595,6 +595,7 @@ const filterTradesByDate = (activeDate, trades = []) => {
 
 const Calendar = (props = {}) => {
   const { dateToday, activeDate, tradeLogs, user } = props;
+  const userId = user.uid;
 
   const activeDateTrades = filterTradesByDate(activeDate, tradeLogs);
 
@@ -615,6 +616,7 @@ const Calendar = (props = {}) => {
     const tradelogToDelete = 
       tradeLogs.find(tradeLog => tradeLog.tradeId === tradeId);
     console.log({ tradelogToDelete });
+    deleteTradeLog(tradeId, userId);
   }
 
   const onUpdateTradeLog = (tradeId) => {
@@ -645,7 +647,7 @@ const Calendar = (props = {}) => {
         ...props, 
         activeDateTrades,
         onDeleteTradeLog,
-        onUpdateTradeLog
+        // onUpdateTradeLog
       })}
       ${UpdateTradeModal({...props})}
     </section>

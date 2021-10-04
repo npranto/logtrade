@@ -55,7 +55,7 @@ const DailyTradesModal = (props = {}) => {
     activeDateTrades = [], 
     activeDate,
     onDeleteTradeLog,
-    onUpdateTradeLog,
+    // onUpdateTradeLog,
   } = props;
   const totalProfit = getTotalProfitFromTrades(activeDateTrades);
   const numberOfTrades = activeDateTrades.length;
@@ -97,15 +97,16 @@ const DailyTradesModal = (props = {}) => {
             </div>
             
             <ul class="trade-list">
-              ${renderList(activeDateTrades, (activeDateTrade) => {
+              ${renderList(activeDateTrades, (activeDateTrade, key) => {
                 const currentTradeProfit = 
                   getTotalProfitFromTrades([{ ...activeDateTrade }]);
                 return `
                   ${TradeItem({ 
+                    key,
                     currentTradeProfit, 
                     activeDateTrade,
                     onDeleteTradeLog,
-                    onUpdateTradeLog
+                    // onUpdateTradeLog
                   })}
                 `;
                 // return `

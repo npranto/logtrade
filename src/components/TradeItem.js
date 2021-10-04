@@ -5,36 +5,36 @@ const componentId = getUniqueId();
 
 const onLoad = (props = {}) => {
   const { activeDateTrade = {} } = props;
-  const componentId = activeDateTrade.tradeId;
+  // const componentId = activeDateTrade.tradeId;
 
   // elements
   const deleteTradeBtn = document
-    .querySelector(`.${componentId} #delete-trade-btn`);
-  const deleteTradeConfirmModalCancelIcon = document
-    .querySelector(`.${componentId} #delete-trade-confirm-modal-cancel-icon`);
-  const deleteTradeConfirmModalCancelBtn = document
-    .querySelector(`.${componentId} #delete-trade-confirm-modal-cancel-btn`);
-  const deleteTradeConfirmBtn = document
-    .querySelector(`.${componentId} #delete-trade-confirm-modal-btn`);
+    .querySelector(`.${props.key || componentId} #delete-trade-btn`);
+  // const deleteTradeConfirmModalCancelIcon = document
+  //   .querySelector(`.${componentId} #delete-trade-confirm-modal-cancel-icon`);
+  // const deleteTradeConfirmModalCancelBtn = document
+  //   .querySelector(`.${componentId} #delete-trade-confirm-modal-cancel-btn`);
+  // const deleteTradeConfirmBtn = document
+  //   .querySelector(`.${componentId} #delete-trade-confirm-modal-btn`);
   // const updateTradeBtn = document
   //   .querySelector(`.${componentId} #update-trade-btn`);
   
-  const deleteTradeConfirmModal = new bootstrap
-    .Modal(
-      document.querySelector(`.${componentId}#delete-trade-confirm-modal`), {}
-    );
+  // const deleteTradeConfirmModal = new bootstrap
+  //   .Modal(
+  //     document.querySelector(`.${componentId}#delete-trade-confirm-modal`), {}
+  //   );
 
-  const showDeleteTradeConfirmModal = () => {
-    deleteTradeConfirmModal.show();
-  }
-  const hideDeleteTradeConfirmModal = () => {
-    deleteTradeConfirmModal.hide();
-  }
+  // const showDeleteTradeConfirmModal = () => {
+  //   deleteTradeConfirmModal.show();
+  // }
+  // const hideDeleteTradeConfirmModal = () => {
+  //   deleteTradeConfirmModal.hide();
+  // }
 
   const onDeleteTrade = () => {
     console.log('detected delete trade...', activeDateTrade.tradeId);
     const { tradeId } = activeDateTrade;
-    // props.onDeleteTradeLog(tradeId);
+    props.onDeleteTradeLog(tradeId);
   }
 
   // const onUpdateTrade = () => {
@@ -44,33 +44,33 @@ const onLoad = (props = {}) => {
   // }
 
   deleteTradeBtn
-    .addEventListener('click', showDeleteTradeConfirmModal);
-  deleteTradeConfirmModalCancelBtn
-    .addEventListener('click', hideDeleteTradeConfirmModal);
-  deleteTradeConfirmModalCancelIcon
-    .addEventListener('click', hideDeleteTradeConfirmModal);
-  deleteTradeConfirmBtn
-    .addEventListener('click', onDeleteTrade)
+    .addEventListener('click', onDeleteTrade);
+  // deleteTradeConfirmModalCancelBtn
+  //   .addEventListener('click', hideDeleteTradeConfirmModal);
+  // deleteTradeConfirmModalCancelIcon
+  //   .addEventListener('click', hideDeleteTradeConfirmModal);
+  // deleteTradeConfirmBtn
+  //   .addEventListener('click', onDeleteTrade)
   // updateTradeBtn
   //   .addEventListener('click', onUpdateTrade);
 }
 
 const styles = (props = {}) => {
-  const componentId = props.activeDateTrade?.tradeId;
+  // const componentId = props.activeDateTrade?.tradeId;
   return `
-    .${componentId} .trade-block {
+    .${props.key || componentId} .trade-block {
       box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;  
     }
-    .${componentId} .trade-block p:first-child {
+    .${props.key || componentId} .trade-block p:first-child {
       font-size: 0.90rem;
     }
-    .${componentId} .trade-block p:first-child {
+    .${props.key || componentId} .trade-block p:first-child {
       font-size: 0.90rem;
     }
-    .${componentId} .trade-block p:last-child {
+    .${props.key || componentId} .trade-block p:last-child {
       font-size: 0.75rem;
     }
-    .${componentId} .trade-block .profit-details .total-profit {
+    .${props.key || componentId} .trade-block .profit-details .total-profit {
       font-size: 2.75rem;
     }
   `;
@@ -78,9 +78,9 @@ const styles = (props = {}) => {
 
 const TradeItem = (props = {}) => {
   const { activeDateTrade = {}, currentTradeProfit } = props;
-  const componentId = activeDateTrade.tradeId;
+  // const componentId = activeDateTrade.tradeId;
   return `
-    <li class="trade-item TradeItem mb-3 rounded ${componentId}">
+    <li class="trade-item TradeItem mb-3 rounded ${props.key || componentId}">
       <div class="trade-block p-2">
         <div class="d-flex justify-content-between flex-wrap">
           <div class="stock-details d-flex">
@@ -131,9 +131,20 @@ const TradeItem = (props = {}) => {
           <button type="button" class="btn btn-sm btn-outline-warning mx-2" id="update-trade-btn" data-trade-id="${activeDateTrade.tradeId}">Update</button>
         </div>
       </div>
-    </li>
+    </li> 
+  `;
+};
 
-    <div class="modal fade ${componentId}" id="delete-trade-confirm-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+export default (props) => render(
+  props, 
+  props.key || componentId, 
+  TradeItem, 
+  styles, 
+  onLoad,
+  null,
+);
+
+{/* <div class="modal fade ${componentId}" id="delete-trade-confirm-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header bg-danger text-white">
@@ -155,15 +166,4 @@ const TradeItem = (props = {}) => {
           </div>
         </div>
       </div>
-    </div> 
-  `;
-};
-
-export default (props) => render(
-  props, 
-  componentId, 
-  TradeItem, 
-  styles, 
-  onLoad,
-  null,
-);
+    </div> */}
