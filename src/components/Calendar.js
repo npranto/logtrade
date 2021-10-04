@@ -7,6 +7,7 @@ import AddTradeModal from "./AddTradeModal";
 import MonthlyCalendar from "./MonthlyCalendar";
 import TICKERS from '../assets/data/tickers.json';
 import DailyTradesModal from "./DailyTradesModal";
+import UpdateTradeModal from "./UpdateTradeModal";
 
 const componentId = getUniqueId();
 
@@ -63,10 +64,24 @@ const listenForClickOnAddTradeAction = (props) => {
   const addTradeFormError = document
     .querySelector(`.${componentId} #add-trade-form-error`);
 
+  const updateTradeConfirmBtnModal = document
+    .querySelector(`.${componentId} #update-trade-confirm-btn-modal`);
+  const updateTradeCancelIconModal = document
+    .querySelector(`.${componentId} #update-trade-cancel-icon-modal`)
+  const updateTradeCancelBtnModal = document
+    .querySelector(`.${componentId} #update-trade-cancel-btn-modal`);
+  const updateTradeFormError = document
+    .querySelector(`.${componentId} #update-trade-form-error`);
+
   const dailyTradesModal = new bootstrap.Modal(
     document.querySelector(`.${componentId} #daily-trades-modal `), {}
   );
   // dailyTradesModal.show();
+
+  const updateTradeModal = new bootstrap.Modal(
+    document.querySelector(`.${componentId} #update-trade-form-modal`), {}
+  );
+  // updateTradeModal.show();
 
   const dailyTradesCancelIcon = document.querySelector(`.${componentId} #daily-trades-cancel-icon`);
   const dailyTradesCancelBtn = document.querySelector(`.${componentId} #daily-trades-cancel-btn`);
@@ -81,6 +96,14 @@ const listenForClickOnAddTradeAction = (props) => {
 
   const hideAddTradeFormModal = () => {
     addTradeFormModal.hide();
+  }
+
+  const showUpdateTradeFormModal = () => {
+    updateTradeModal.show();
+  }
+
+  const hideUpdateTradeFormModal = () => {
+    updateTradeModal.hide();
   }
 
   const extractFormFields = () => {
@@ -472,6 +495,10 @@ const listenForClickOnAddTradeAction = (props) => {
       showAddTradeFormModal();
     }, 500);
   }
+
+  const onUpdateTrade = () => {
+    console.log('update trade now...');
+  }
   
   addTradeBtn
     .addEventListener('click', showAddTradeFormModal);
@@ -495,6 +522,15 @@ const listenForClickOnAddTradeAction = (props) => {
     props.setState(() => ({ isDailyTradeModalOpen: false }));
   });
   dailyTradesNewTradeBtn.addEventListener('click', loadAddTradeForm)
+
+
+  updateTradeCancelIconModal
+    .addEventListener('click', hideUpdateTradeFormModal);
+  updateTradeConfirmBtnModal
+    .addEventListener('click', onUpdateTrade);
+  updateTradeCancelBtnModal
+    .addEventListener('click', hideUpdateTradeFormModal);
+
 
   // dateDayBlocks.forEach(dateDayBlock => {
   //   dateDayBlock.addEventListener('click', onSelectDateDay)
@@ -575,6 +611,17 @@ const Calendar = (props = {}) => {
     });
   }
 
+  const onDeleteTradeLog = (tradeId) => {
+    const tradelogToDelete = 
+      tradeLogs.find(tradeLog => tradeLog.tradeId === tradeId);
+    console.log({ tradelogToDelete });
+  }
+
+  const onUpdateTradeLog = (tradeId) => {
+    const tradelogToUpdate = 
+      tradeLogs.find(tradeLog => tradeLog.tradeId === tradeId);
+  }
+
   return `
     <section class="Calendar ${componentId}">
       <h1 class="header text-center">Calendar</h1>
@@ -594,7 +641,13 @@ const Calendar = (props = {}) => {
       </div>
 
       ${AddTradeModal({...props})}
-      ${DailyTradesModal({...props, activeDateTrades})}
+      ${DailyTradesModal({
+        ...props, 
+        activeDateTrades,
+        onDeleteTradeLog,
+        onUpdateTradeLog
+      })}
+      ${UpdateTradeModal({...props})}
     </section>
   `
 };

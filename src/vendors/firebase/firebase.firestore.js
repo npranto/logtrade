@@ -17,6 +17,7 @@ const fakeDB = {
       ticker: "APOPA",
       tradeType: "long",
       year: "2021",
+      tradeId: 'xwtr34535',
     },
     {
       closingPrice: "15.00",
@@ -30,6 +31,7 @@ const fakeDB = {
       takeProfit: "20.00",
       ticker: "AAME",
       year: "2021",
+      tradeId: '74t6e657',
     },
     {
       closingPrice: "43543543.00",
@@ -43,6 +45,7 @@ const fakeDB = {
       takeProfit: "4534.00",
       ticker: "AGLE",
       year: "2021",
+      tradeId: 'xn73i434x',
     },
     {
       closingPrice: "15.00",
@@ -56,6 +59,7 @@ const fakeDB = {
       takeProfit: "18.00",
       ticker: "TSLA",
       year: "2021",
+      tradeId: 'x4w56wx54',
     }
   ],
   userId: '51XeDcMHQzYfB3clHKZZnnp87uq2',
