@@ -10,6 +10,7 @@ import Signup from './components/Signup';
 import getUniqueId from './utils/getUniqueId';
 import Dashboard from './components/Dashboard';
 import getUserFromLocalStorage from './utils/getUserFromLocalStorage';
+import { fetchAllTradesByUserId } from './vendors/firebase/firebase.firestore';
 
 const appId = getUniqueId();
 
@@ -147,14 +148,16 @@ const App = (props = {}) => {
   );
 };
 
-render(
-  {
-    getState, 
-    setState,
-  }, 
-  appId,
-  App, 
-  styles,
-  onLoad,
-  document.getElementById('root'),
-);
+// render(
+//   {
+//     getState, 
+//     setState,
+//   }, 
+//   appId,
+//   App, 
+//   styles,
+//   onLoad,
+//   document.getElementById('root'),
+// );
+
+fetchAllTradesByUserId('H8XTiCvnxOWojohm2DewzlBxrjG2');
