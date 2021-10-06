@@ -21,6 +21,7 @@
     "eject": "react-scripts eject",
     "prepare": "husky install",
     "build:clean": "npx rimraf build",
+    "build:tailwind": "npx tailwindcss -i public/assets/styles/vendors/tailwindcss/tailwind.directive.css -o public/assets/styles/vendors/tailwindcss/tailwind.css",
     "open:dev": "npm start",
     "build:prod": "npm run build:clean && npm run build",
     "open:prod": "npm run build:clean && npm run build:prod && npx serve -s build"
