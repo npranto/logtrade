@@ -4,7 +4,7 @@ const renderList = (list, cb) => {
   let randomId = getUniqueId();
   const newList = [];
 
-  for(let i = 0; i<list.length; i++) {
+  for(let i = 0; i < list.length; i++) {
     newList.push(cb(list[i], randomId));
     randomId = getUniqueId();
   }

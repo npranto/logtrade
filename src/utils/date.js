@@ -90,3 +90,9 @@ export const getPrevMonthFromDate = (date) => {
   x.setMonth(x.getMonth() + 1);
   return x;
 }
+
+export const addMinutesToDate = (date = new Date(), minutesToAdd = 0) => {  
+  const currentDate = new Date();
+  const futureDate = new Date(currentDate.getTime() + (minutesToAdd * 60000));
+  return futureDate.getTime();
+}
