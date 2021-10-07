@@ -1,6 +1,6 @@
 
 
-const Nav = ({ isLoggedIn = true, activePage = 'home' } = {}) => {
+const Nav = ({ isLoggedIn = false, activePage = 'home' } = {}) => {
   return `
   <!-- navbar (start) -->
   <nav class="Nav bg-gray-800 fixed top-0 left-0 right-0">
