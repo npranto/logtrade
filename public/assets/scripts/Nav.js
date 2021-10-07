@@ -134,7 +134,7 @@ const navMenuIcon = document
 const navMobileMenu = document
   .querySelector(`.Nav #nav-mobile-menu`);
 
-// actions
+// functions
 const showProfileMenuDropdown = () => {
   profileMenuDropdown.classList.remove('opacity-0', 'scale-95');
   profileMenuDropdown.classList.add('opacity-100', 'scale-100');
@@ -180,7 +180,7 @@ const toggleShowMobileNavMenu = () => {
 } 
 
 // events
-profileAvatar.addEventListener('click', toggleShowProfileMenuDropdown);
+profileAvatar !== null && profileAvatar.addEventListener('click', toggleShowProfileMenuDropdown);
 // profileAvatar.addEventListener('focusout', hideProfileMenuDropdown);
-navMenuIcon.addEventListener('click', toggleShowMobileNavMenu);
+navMenuIcon !== null && navMenuIcon.addEventListener('click', toggleShowMobileNavMenu);
 // navMenuIcon.addEventListener('focusout', hideMobileNavMenu);

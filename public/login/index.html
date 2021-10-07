@@ -34,20 +34,26 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     
     <section id="navbar"></section>
-
+    
     <main class="h-screen w-screen flex flex-col justify-center items-center">
       <h1 class="text-black text-4xl font-bold text-gray-300 underline">LogTrade</h1>
+      
       <section class="Login lg:w-2/6 md:w-1/2 bg-white-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 mx-auto my-0 shadow-2xl">
         <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Login</h2>
-        <div class="relative mb-4">
-          <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
-          <input type="email" id="email" name="email" placeholder="jsmith@gmail.com" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-        </div>
-        <div class="relative mb-4">
-          <label for="password" class="leading-7 text-sm text-gray-600">Password</label>
-          <input type="email" id="password" name="password" placeholder="*****" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-        </div>
-        <button class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg">Login</button>
+        
+        <div id="signin-form-error"></div>
+        
+        <form id="signin-form" class="w-full" action="#">
+          <div class="relative mb-4">
+            <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
+            <input type="email" id="email" name="email" placeholder="jsmith@gmail.com" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
+          </div>
+          <div class="relative mb-4">
+            <label for="password" class="leading-7 text-sm text-gray-600">Password</label>
+            <input type="password" id="password" name="password" placeholder="*****" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required />
+          </div>
+          <button class="text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg">Login</button>
+        </form>
         <div class="flex flex-col">
           <a href="/signup" class="text-xs mt-3 hover:underline text-blue-500 inline-flex items-center">Create new account?</a>
         </div>
@@ -66,5 +72,44 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
     <script src="/assets/scripts/Nav.js"></script>
+    <!-- <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.1/firebase-app.js';
+      // import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore-lite.js';
+      // Follow this pattern to import other Firebase services
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-analytics.js";
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-app-check.js";
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-auth.js";
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-functions.js";
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-firestore.js";
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-storage.js";
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-performance.js";
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-remote-config.js";
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-messaging.js";
+      // import {} from "https://www.gstatic.com/firebasejs/${FIREBASE_VERSION}/firebase-database.js";
+      
+      // TODO: Replace the following with your app's Firebase project configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyArgNoY7luYCUYJlVAxapXEjw2nuDu5Ny8",
+        authDomain: "log-trade-dev.firebaseapp.com",
+        projectId: "log-trade-dev",
+        storageBucket: "log-trade-dev.appspot.com",
+        messagingSenderId: "427284527632",
+        appId: "1:427284527632:web:9232621b47da1f73dca895"
+      };
+  
+      const app = initializeApp(firebaseConfig);
+      // const db = getFirestore(app);
+  
+      // Get a list of cities from your database
+      // async function getCities(db) {
+      // const citiesCol = collection(db, 'cities');
+      // const citySnapshot = await getDocs(citiesCol);
+      // const cityList = citySnapshot.docs.map(doc => doc.data());
+      // return cityList;
+      // }
+    </script> -->
+    <!-- <script type="module" src="/assets/vendors/firebase/firebase.js"></script> -->
+    <!-- <script type="module" src="/public/assets/vendors/firebase/firebase.js"></script> -->
+    <script type="module" src="/assets/scripts/Login.js"></script>
   </body>
 </html>
