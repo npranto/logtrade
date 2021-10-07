@@ -1,0 +1,14 @@
+.Home {
+  padding-top: 64px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+.Home .logtrade-logo {
+  max-width: 200px;
+  height: auto;
+  margin: 0 auto;
+}
