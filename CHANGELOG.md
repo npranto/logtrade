@@ -6,8 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2021-10-06
+## [1.0.0] - 2021-10-07
 ### Added
+- Added sign up page inside CRA architecture
 - Added login page inside CRA architecture
 - Added home page inside CRA architecture
 - Added create-react-app for dashboard
