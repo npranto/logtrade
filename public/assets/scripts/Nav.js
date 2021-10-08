@@ -1,6 +1,13 @@
+import '../vendors/firebase/firebase.js';
+import { onSignout } from "../vendors/firebase/firebase.authentication.js";
+import getUserFromLocalStorage from '../utils/getUserFromLocalStorage.js';
 
-
-const Nav = ({ isLoggedIn = false, activePage = 'home' } = {}) => {
+const Nav = ({ 
+  isLoggedIn = false, 
+  user = null, 
+  activePage = 'home',
+} = {}) => {
+  console.log({ isLoggedIn, user, activePage });
   return `
   <!-- navbar (start) -->
   <nav class="Nav bg-gray-800">
@@ -39,19 +46,19 @@ const Nav = ({ isLoggedIn = false, activePage = 'home' } = {}) => {
           <div class="hidden sm:block sm:ml-6">
             <div class="flex space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <a href="/home" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
+              <a href="/home" class="${activePage === 'home' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
 
               ${isLoggedIn
-                ? `<a href="/" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</a>`
+                ? `<a href="/" class="${activePage === 'dashboard' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</a>`
                 : ''
               }
                             
               ${!isLoggedIn
-                ? `<a href="/login" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a>`
+                ? `<a href="/login" class="${activePage === 'login' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a>`
                 : ''
               }
               ${!isLoggedIn
-                ? `<a href="/signup" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</a>`
+                ? `<a href="/signup" class="${activePage === 'signup' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</a>`
                 : ''
               }
             </div>
@@ -66,7 +73,7 @@ const Nav = ({ isLoggedIn = false, activePage = 'home' } = {}) => {
               <div>
                 <button type="button" id="profile-avatar" class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                   <span class="sr-only">Open user menu</span>
-                  <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                  <img class="h-8 w-8 rounded-full bg-white" src="${user?.photoURL || '/assets/img/icons/user.png'}" alt="Avatar">
                 </button>
               </div>
 
@@ -82,8 +89,8 @@ const Nav = ({ isLoggedIn = false, activePage = 'home' } = {}) => {
               -->
               <div id="profile-menu-dropdown" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-in duration-75 transform opacity-0 scale-95" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                 <!-- Active: "bg-gray-100", Not Active: "" -->
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-0">Account</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+                <a href="/" id="account-btn" class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-0">Account</a>
+                <a href="#" id="sign-out-btn" class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
               </div>
             </div>
           </div>
@@ -99,19 +106,19 @@ const Nav = ({ isLoggedIn = false, activePage = 'home' } = {}) => {
     <div class="hidden" id="nav-mobile-menu">
       <div class="px-2 pt-2 pb-3 space-y-1">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <a href="/home" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
+        <a href="/home" class="${activePage === 'home' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
 
         ${isLoggedIn
-          ? `<a href="/" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Dashboard</a>`
+          ? `<a href="/" class="${activePage === 'dashboard' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Dashboard</a>`
           : ''
         }        
 
         ${!isLoggedIn
-          ? `<a href="/login" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Login</a>`
+          ? `<a href="/login" class="${activePage === 'login' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Login</a>`
           : ''
         }
         ${!isLoggedIn
-          ? `<a href="/signup" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Sign Up</a>`
+          ? `<a href="/signup" class="${activePage === 'signup' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Sign Up</a>`
           : ''
         }
       </div>
@@ -121,8 +128,28 @@ const Nav = ({ isLoggedIn = false, activePage = 'home' } = {}) => {
   `
 };
 
+const isLoggedIn = getUserFromLocalStorage() !== null;
+const user = getUserFromLocalStorage();
+const getActivePage = () => {
+  const urlPathName = window?.location?.pathname || '';
+  if (urlPathName.includes('/home/')) {
+    return 'home'
+  }
+  if (urlPathName.includes('/login/')) {
+    return 'login'
+  }
+  if (urlPathName.includes('/signup/')) {
+    return 'signup'
+  }
+  return 'dashboard';
+}
+
 document
-  .querySelector('#navbar').innerHTML = `${Nav()}`;
+  .querySelector('#navbar').innerHTML = `${Nav({ 
+    isLoggedIn, 
+    user,
+    activePage: getActivePage(),
+  })}`;
 
 // elements
 const profileAvatar = document
@@ -133,6 +160,11 @@ const navMenuIcon = document
   .querySelector(`.Nav #nav-menu-icon`);
 const navMobileMenu = document
   .querySelector(`.Nav #nav-mobile-menu`);
+const accountBtn = document
+  .querySelector(`.Nav #account-btn`);
+const signOutBtn = document
+  .querySelector(`.Nav #sign-out-btn`);
+  
 
 // functions
 const showProfileMenuDropdown = () => {
@@ -179,8 +211,20 @@ const toggleShowMobileNavMenu = () => {
   }
 } 
 
+const redirectToUserAccount = () => {
+  window.location.replace('/');
+}
+const onLogout = async () => {
+  const { error } = await onSignout();
+  if (error) console.info(error);
+  window.location.replace('/home');
+}
+
+
 // events
 profileAvatar !== null && profileAvatar.addEventListener('click', toggleShowProfileMenuDropdown);
 // profileAvatar.addEventListener('focusout', hideProfileMenuDropdown);
 navMenuIcon !== null && navMenuIcon.addEventListener('click', toggleShowMobileNavMenu);
 // navMenuIcon.addEventListener('focusout', hideMobileNavMenu);
+accountBtn !== null && accountBtn.addEventListener('click', redirectToUserAccount)
+accountBtn !== null && signOutBtn.addEventListener('click', onLogout)
