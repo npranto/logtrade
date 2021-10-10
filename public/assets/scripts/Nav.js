@@ -10,7 +10,7 @@ const Nav = ({
   console.log({ isLoggedIn, user, activePage });
   return `
   <!-- navbar (start) -->
-  <nav class="Nav bg-gray-800">
+  <nav class="Nav bg-white">
     <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
       <div class="relative flex items-center justify-between h-16">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -41,7 +41,7 @@ const Nav = ({
         </div>
         <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex-shrink-0 flex items-center">
-            <h1 class="text-white border-2 border-white">LogTrade</h1>
+            <h1>LogTrade</h1>
           </div>
           <div class="hidden sm:block sm:ml-6">
             <div class="flex space-x-4">
