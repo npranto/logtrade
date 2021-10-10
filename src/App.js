@@ -1,61 +1,17 @@
 import React, { Component } from 'react';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import './App.css';
+import MonthlyCalendar from './MonthlyCalendar/MonthlyCalendar';
+import { getUserFromLocalStorage, getTickersFromTrades, getTotalProfitFromTrades } from './utils';
 
-const MonthlyCalendar = props => {
-  return (
-    <section className="MonthlyCalendar">
-      <header className="flex py-2 px-2 justify-between flex-wrap">
-        <MonthNavigator className="pr-2" />
-        <h1 className="active-date sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900 pr-2 text-center">November 1, 2021</h1>
-        <div className="monthly-stats flex pr-2">
-          <p className="gains pr-2">
-            <sub className="text-gray-900">Gains: </sub> 
-            <span className="text-green-900 title-font sm:text-4xl text-3xl font-medium"> $254 </span>
-          </p>
-          <p className="losses text-red-900 pr-2">
-            <sub className="text-gray-900">Losses: </sub> 
-            <span className="text-red-900 title-font sm:text-4xl text-3xl font-medium"> $100 </span>
-          </p>
-          <p className="p-l text-gray-900 pr-2">
-            <sub className="text-gray-900">P/L: </sub> 
-            <span className="text-gray-900 title-font sm:text-4xl text-3xl font-medium"> $154 </span> 
-          </p>
-        </div>
-      </header>
-    </section>
-  )
-};
-
-const MonthNavigator = (props = {}) => {
-  const { 
-    prevMonth = 'October', 
-    nextMonth = 'December', 
-  } = props;
-  
-  // if (!prevMonth || !nextMonth) return ``;
-
-  return (
-    <div class="MonthNavigator flex items-center">
-      <button type="button" class="inline-flex items-center justify-center px-2 py-1 border border-transparent text-base font-small text-white bg-indigo-600 hover:bg-indigo-700">
-        <AiOutlineArrowLeft className="mr-1" /> {prevMonth}
-      </button>
-
-      <button type="button" class="inline-flex items-center justify-center px-2 py-1 ml-1 border border-transparent text-base font-small text-white bg-indigo-600 hover:bg-indigo-700">
-        {nextMonth} <AiOutlineArrowRight className="ml-1" />
-      </button>
-    </div>
-  );
-};
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      todayDate: new Date(),
-      activeDate: new Date(),
-      tradeLogs: [],
+      user: getUserFromLocalStorage(),
+      allTradeLogs: [],
     }
   }
 
@@ -69,3 +25,73 @@ class App extends Component {
 }
 
 export default App;
+
+
+
+
+// const Day = (props) => {
+//   const { 
+//     isVoidDay = false, 
+//     month = 'October', 
+//     date = '10', 
+//     year = '2021', 
+//     trades = [], 
+//     isActiveDay = false,
+//   } = props;
+
+//   const totalProfit = getTotalProfitFromTrades(trades);
+//   const tickers = getTickersFromTrades(trades);
+//   const numberOfTrades = trades?.length || 0;
+//   const isTotalProfitNegative = totalProfit < 0;
+
+//   console.log({ date, totalProfit, tickers, numberOfTrades });
+
+//   if (isVoidDay) {
+//     return (
+//       <div className={`Day ${isVoidDay ? 'void' : ''}`}></div>
+//     );
+//   }
+
+//   return (
+//     <div 
+//       className={`
+//         Day p-1 
+//         ${!isVoidDay ? 'date' : ''} 
+//         ${numberOfTrades < 0 ? 'bg-light text-black' : ''} 
+//         ${numberOfTrades && isTotalProfitNegative ? 'bg-danger text-white' : ''} 
+//         ${numberOfTrades && !isTotalProfitNegative 
+//           ? 'bg-success text-white' : ''} 
+//         ${isActiveDay ? 'border border-warning border-4' : ''}
+//       `} 
+//       id={`${month}-${date}-${year}`}
+//     >
+
+//       <span className="date-label">{date}</span>
+
+//       {numberOfTrades > 0 
+//         ? (
+//           <div className="daily-stat p-2">
+//             {!!totalProfit ? (
+//               <p className="profit mt-1 mb-1 border-bottom border-light">
+//                 <span className="label">Profit</span>
+//                 <span className="value">{totalProfit}</span>
+//               </p>
+//             ) : ''}
+//             {!!numberOfTrades ? (
+//               <p className="number-of-trades mt-1 mb-1 border-bottom border-light">
+//                 <span className="label"># Trades</span>
+//                 <span className="value">{numberOfTrades}</span>
+//               </p>
+//             ) : null}
+//             {!!tickers ? (
+//               <p className="tickers mt-1 mb-1">
+//                 <span className="value">{tickers}</span>
+//               </p>
+//             ) : null}
+//           </div>
+//         ) : null
+//       }
+//     </div>
+//   );
+// };
+

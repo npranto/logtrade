@@ -1,0 +1,2 @@
+.DayLabels{display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:auto;grid-column-gap:.5em}.DayLabels>*{color:grey;text-align:center;background:#d3d3d3}.DaysGrid{display:grid;grid-template-columns:repeat(7,1fr);grid-auto-rows:minmax(125px,auto);grid-gap:.5em}.DaysGrid>*{background:#ffb6c1}
+/*# sourceMappingURL=main.55e1cb49.chunk.css.map */
