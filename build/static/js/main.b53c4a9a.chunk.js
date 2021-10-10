@@ -1,2 +1,0 @@
-(this.webpackJsonplogtrade=this.webpackJsonplogtrade||[]).push([[0],{11:function(e,t,n){"use strict";n.r(t);n(1);var c=n(3),o=n.n(c),r=(n(8),n(9),n(0));var s=function(){return Object(r.jsx)("div",{className:"App",children:Object(r.jsx)("h1",{children:"Welcome to LogTrade!"})})};o.a.render(Object(r.jsx)(s,{}),document.getElementById("root"))},8:function(e,t,n){},9:function(e,t,n){}},[[11,1,2]]]);
-//# sourceMappingURL=main.b53c4a9a.chunk.js.map
