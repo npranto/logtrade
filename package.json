@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
-    "firebase": "^9.1.1",
+    "firebase": "^9.1.2",
     "lodash.isequal": "^4.5.0",
     "query-string": "^4.3.4",
     "react": "^16.0.0",

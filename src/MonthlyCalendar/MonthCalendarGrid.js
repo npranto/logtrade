@@ -5,7 +5,7 @@ const MonthlyCalendarGrid = (props) => {
   return (
     <section className="MonthlyCalendarGrid my-2">
       <DayLabels />
-      <DaysGrid />
+      <DaysGrid {...props} />
     </section>
   )
 }

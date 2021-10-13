@@ -1,17 +1,22 @@
-const MonthlyStats = props => {
+const MonthlyStats = (props) => {
+  const { gains, losses, profit } = props;
+  const isTotalProfitNegative = profit.includes('-');
+
+  if (!gains || !losses || !profit) return null;
+
   return (
     <div className="MonthlyStats monthly-stats flex">
       <p className="gains my-1">
         <sub className="text-gray-400">Gains: </sub> 
-        <span className="text-green-900 title-font sm:text-4xl text-3xl font-medium"> $254 </span>
+        <span className="text-green-900 title-font sm:text-3xl text-2xl font-medium"> ${gains} </span>
       </p>
       <p className="losses text-red-900 my-1 ml-2">
         <sub className="text-gray-400">Losses: </sub> 
-        <span className="text-red-900 title-font sm:text-4xl text-3xl font-medium"> $100 </span>
+        <span className="text-red-900 title-font sm:text-3xl text-2xl font-medium"> ${losses} </span>
       </p>
       <p className="p-l text-gray-900 my-1 ml-2">
         <sub className="text-gray-400">P/L: </sub> 
-        <span className="text-gray-500 title-font sm:text-4xl text-3xl font-medium"> $154 </span> 
+        <span className={`${isTotalProfitNegative ? 'text-red-900' : 'text-green-900'} text-gray-500 title-font sm:text-3xl text-2xl font-medium`}> ${profit} </span> 
       </p>
     </div>
   )

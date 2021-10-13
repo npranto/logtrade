@@ -2,7 +2,43 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { createNewTradeLog, deleteTradeLog, fetchAllTradesByUserId, updateTradeLog } from './vendors/firebase/firebase.firestore';
 // import reportWebVitals from './reportWebVitals';
+
+// const userId = 'H8XTiCvnxOWojohm2DewzlBxrjG2';
+// const newTradeLog = {
+//   tradeId: 'sd7f7f8d57fd',
+//   closingPrice: '15.00',
+//   openingPrice: '10.00',
+//   stopLoss: '9.00',
+//   takeProfit: '15.00',
+//   date: '13',
+//   month: 'October',
+//   year: '2021',
+//   notes: '',
+//   numberOfShares: 2,
+//   ticker: 'GOOGL',
+// };
+// const updatedTradeLog = {
+//   tradeId: 'sd7f7f8d57fd',
+//   closingPrice: '15.00',
+//   openingPrice: '10.00',
+//   stopLoss: '9.00',
+//   takeProfit: '15.00',
+//   date: '13',
+//   month: 'October',
+//   year: '2021',
+//   notes: '',
+//   numberOfShares: 2,
+//   ticker: 'LOL',
+// };
+// const tradeLogId = 'sd7f7f8d57fd';
+
+
+// fetchAllTradesByUserId('H8XTiCvnxOWojohm2DewzlBxrjG2');
+// createNewTradeLog(newTradeLog, userId);
+// deleteTradeLog(tradeLogId, userId);
+// updateTradeLog(tradeLogId, updatedTradeLog, userId);
 
 ReactDOM.render(
   // <React.StrictMode>

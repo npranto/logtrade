@@ -1,6 +1,53 @@
+import uniqid from 'uniqid';
+
+export const getStatsFromTrades = (trades = []) => {
+  if (trades === null || !trades.length) return {
+    gains: '0.00',
+    losses: '0.00',
+    profit: '0.00',
+  };
+  const stats = trades
+    // extract each trade properties to calculate total profit
+    .map(trade => ({ 
+      tradeType: trade.tradeType, 
+      openingPrice: parseFloat(trade.openingPrice).toFixed(2),
+      closingPrice: parseFloat(trade.closingPrice).toFixed(2),
+      numberOfShares: parseInt(trade.numberOfShares),
+    }))
+    // calculate each trade profit by trade type
+    .map((trade) => {
+      // on short trade, opening price > closing price
+      if (trade.tradeType === 'short') {
+        return (trade.openingPrice - trade.closingPrice) * trade.numberOfShares;
+      }
+      // on long trade, closing price > opening price
+      return (trade.closingPrice - trade.openingPrice) * trade.numberOfShares;
+    }) 
+    // adds up all the trade profits together
+    .reduce((stats, eachTradeProfit) => {
+      if (eachTradeProfit > 0) {
+        stats.gains = stats.gains + eachTradeProfit;
+      }
+      if (eachTradeProfit < 0) {
+        stats.losses = stats.losses + eachTradeProfit;
+      }
+      stats.profit = stats.profit + eachTradeProfit;
+      return stats;
+    }, {
+      gains: 0.00,
+      losses: 0.00,
+      profit: 0.00,
+    });
+  return {
+    gains: parseFloat(stats.gains).toFixed(2),
+    losses: parseFloat(stats.losses).toFixed(2),
+    profit: parseFloat(stats.profit).toFixed(2),
+  }
+}
+
 export const getTotalProfitFromTrades = (trades = []) => {
   if (trades === null || !trades.length) return '0.00';
-  return trades
+  const totalProfit = trades
     // extract each trade properties to calculate total profit
     .map(trade => ({ 
       tradeType: trade.tradeType, 
@@ -22,6 +69,7 @@ export const getTotalProfitFromTrades = (trades = []) => {
       return totalProfit + (eachTradeProfit);
     }, 0)
     .toFixed(2);
+  return parseFloat(totalProfit).toFixed(2);
 }
 
 export const getTickersFromTrades = (trades = []) => {
@@ -135,3 +183,18 @@ export const addMinutesToDate = (date = new Date(), minutesToAdd = 0) => {
   const futureDate = new Date(currentDate.getTime() + (minutesToAdd * 60000));
   return futureDate.getTime();
 }
+
+export const filterTradesByMonthAndYear = (trades = [], month, year) => {
+  return trades.filter(trade => trade.month === month && trade.year === year);
+}
+
+export const findMatchingTradesByDate = (trades = [], month, date, year) => {
+  if (!trades.length || !Array.isArray(trades)) return;
+  return trades.filter(trade => (
+    (trade.month === month) && 
+    (trade.date === date) &&
+    (trade.year === year)
+  ));
+}
+
+export const getUniqueId = () => uniqid('logtrade-');
