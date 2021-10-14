@@ -348,7 +348,10 @@ export const createNewTradeLog = async (newTrade, userId) => {
 
   const validateNewTrade = (newTrade) => {
     if (!newTrade || typeof newTrade !== 'object') {
-      throw new Error('Please pass in a valid new trade object');
+      return { 
+        isValid: false, 
+        error: 'Please pass in a valid new trade object', 
+      }
     }
     const requiredProperties = [
       'tradeId',
@@ -362,6 +365,7 @@ export const createNewTradeLog = async (newTrade, userId) => {
       'notes',
       'numberOfShares',
       'ticker',
+      'vwap'
     ]
     const missingProperty = requiredProperties.find(property => {
       return !newTrade.hasOwnProperty(property)
@@ -379,7 +383,7 @@ export const createNewTradeLog = async (newTrade, userId) => {
   const { isValid, error } = validateNewTrade(newTrade);
 
   if (!isValid) {
-    throw new Error(error);
+    return { error };
   }
 
   const userTradeLogsRef = doc(db, "tradelogs-stringified", userId)
@@ -420,7 +424,7 @@ export const createNewTradeLog = async (newTrade, userId) => {
       await setDoc(doc(db, "tradelogs-stringified", userId), {
         content: newDataStringified,
       });
-      return { isNewTradeCreated: true };
+      return { isNewTradeLogCreated: true };
     } catch (error) {
       return { 
         error: (error && error.message) || 

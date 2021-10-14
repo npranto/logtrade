@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { filterTradesByMonthAndYear, getDateFromDate, getMonthFromDate, getNextMonthFromDate, getPrevMonthFromDate, getStatsFromTrades, getYearFromDate } from "../utils";
+import { createNewTradeLog } from "../vendors/firebase/firebase.firestore";
 import AddNewTradeBtn from "./AddNewTradeBtn";
 import AddNewTradeFormModal from "./AddNewTradeFormModal";
+import AddNewTradeSuccessAlert from "./AddNewTradeSuccessAlert";
 import DailyTradesModal from "./DailyTradesModal";
 import MonthlyCalendarGrid from "./MonthCalendarGrid";
 import MonthlyStats from "./MonthlyStats";
@@ -17,7 +19,9 @@ class MonthlyCalendar extends Component {
       // activeDate: new Date(`December 10, 2021`),
       // activeMonthTradeLogs: [],
       showDailyTradesModal: false,
-      showAddNewTradeFormModal: true,
+      showAddNewTradeFormModal: false,
+      showAddNewTradeSuccessAlert: false,
+      newTradeLogError: null,
     }
 
     // this.fetchActiveMonthTradeLogs = this.fetchActiveMonthTradeLogs.bind(this);
@@ -26,6 +30,9 @@ class MonthlyCalendar extends Component {
     this.onSelectDay = this.onSelectDay.bind(this);
     this.setShowDailyTradesModal = this.setShowDailyTradesModal.bind(this);
     this.setShowAddNewTradeFormModal = this.setShowAddNewTradeFormModal.bind(this);
+    this.onCreateNewTradeLog = this.onCreateNewTradeLog.bind(this);
+    this.onOpenAddNewTradeForm = this.onOpenAddNewTradeForm.bind(this);
+    this.setShowAddNewTradeSuccessAlert = this.setShowAddNewTradeSuccessAlert.bind(this);
   }
 
   // getTradesByMonthAndYear = async (props) => {
@@ -91,14 +98,35 @@ class MonthlyCalendar extends Component {
     this.setState({ showAddNewTradeFormModal: status })
   }
 
+  setShowAddNewTradeSuccessAlert(status = false) {
+    this.setState({ showAddNewTradeSuccessAlert: status });
+  }
+
   onSelectDay({ month, date, year }) {
     this.setState({ activeDate: new Date(`${month} ${date}, ${year}`) });
     this.setShowDailyTradesModal(true);
   }
 
+  async onCreateNewTradeLog(newTradeLog) {
+    const { uid: userId } = this.props.user || {};
+    const { error, isNewTradeCreated } = await createNewTradeLog(newTradeLog, userId);
+    if (error) {
+      this.setState({ newTradeLogError: error });
+    } else {
+      console.info(`New Trade created... ${isNewTradeCreated}`);
+      this.setShowAddNewTradeFormModal(false);
+      this.setShowAddNewTradeSuccessAlert(true);
+    }
+  } 
+
+  onOpenAddNewTradeForm() {
+    this.setShowDailyTradesModal(false);
+    this.setShowAddNewTradeFormModal(true);
+  }
+
   render() {
     const { allTradeLogs } = this.props;
-    const { activeDate, showDailyTradesModal, showAddNewTradeFormModal } = this.state;
+    const { activeDate, showDailyTradesModal, showAddNewTradeFormModal, newTradeLogError, showAddNewTradeSuccessAlert } = this.state;
 
     const activeDateDate = getDateFromDate(activeDate).toString();  // i.e., "February"
     const activeMonth = getMonthFromDate(activeDate);  // i.e., "February"
@@ -144,6 +172,10 @@ class MonthlyCalendar extends Component {
 
         <AddNewTradeBtn onClick={() => this.setShowAddNewTradeFormModal(true)} />
 
+        {showAddNewTradeSuccessAlert && (
+          <AddNewTradeSuccessAlert />
+        )}
+
         {showDailyTradesModal && (
           <DailyTradesModal
             activeDateDate={activeDateDate}
@@ -151,6 +183,7 @@ class MonthlyCalendar extends Component {
             activeYear={activeYear}
             activeTradeLogs={activeTradeLogs}
             onClose={() => this.setShowDailyTradesModal(false)}
+            onOpenAddNewTradeForm={this.onOpenAddNewTradeForm}
           />
         )}
 
@@ -159,7 +192,8 @@ class MonthlyCalendar extends Component {
             activeDateDate={activeDateDate}
             activeMonth={activeMonth}
             activeYear={activeYear}
-            // activeTradeLogs={activeTradeLogs}
+            newTradeLogError={newTradeLogError}
+            onCreateNewTradeLog={(newTradeLog) => this.onCreateNewTradeLog(newTradeLog)}
             onClose={() => this.setShowAddNewTradeFormModal(false)}
           />
         )}
