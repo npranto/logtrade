@@ -2,7 +2,7 @@ import { BiTrendingUp, BiTrendingDown } from 'react-icons/bi';
 import { getTotalProfitFromTrades, findMatchingTradesByDate } from '../utils';
 
 const DailyTradesModal = props => {
-  const { activeDateDate, activeMonth, activeYear, activeTradeLogs = [], onClose, onOpenAddNewTradeForm } = props;
+  const { activeDateDate, activeMonth, activeYear, activeTradeLogs = [], onClose, onOpenAddNewTradeForm, onEditTradeLog, onDeleteTradeLog } = props;
   const activeDateTradeLogs = findMatchingTradesByDate(
     activeTradeLogs, 
     activeMonth, 
@@ -23,8 +23,7 @@ const DailyTradesModal = props => {
             From: "opacity-100"
             To: "opacity-0"
         --> */}
-        <div 
-        className={`fixed inset-0 bg-gray-500 bg-opacity-75`} aria-hidden="true"></div>
+        <div className={`fixed inset-0 bg-gray-500 bg-opacity-75`} aria-hidden="true"></div>
 
         {/* <!-- This element is to trick the browser into centering the modal contents. --> */}
         <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
@@ -101,8 +100,8 @@ const DailyTradesModal = props => {
                               </div>
                             </div>
                             <div className="log-actions flex justify-center sm:justify-end">
-                              <button className="lg:mt-2 xl:mt-0 btn-small text-white inline bg-yellow-500 border-0 text-xs py-2 px-4 focus:outline-none hover:bg-yellow-600 rounded">Edit</button>
-                              <button className="lg:mt-2 xl:mt-0 ml-1 text-white bg-red-500 border-0 text-xs py-2 px-4 focus:outline-none hover:bg-red-600 rounded">Delete</button>
+                              <button className="lg:mt-2 xl:mt-0 btn-small text-white inline bg-yellow-500 border-0 text-xs py-2 px-4 focus:outline-none hover:bg-yellow-600 rounded" onClick={() => onEditTradeLog(activeTradeLog)}>Edit</button>
+                              <button className="lg:mt-2 xl:mt-0 ml-1 text-white bg-red-500 border-0 text-xs py-2 px-4 focus:outline-none hover:bg-red-600 rounded" onClick={() => onDeleteTradeLog(activeTradeLog)}>Delete</button>
                             </div>
                           </div>
                         </div>

@@ -481,7 +481,10 @@ export const updateTradeLog = async (tradeLogId, updatedTradeLog, userId) => {
   
   const validateNewTrade = (updatedTrade) => {
     if (!updatedTrade || typeof updatedTrade !== 'object') {
-      throw new Error('Please pass in a valid updated trade object');
+      return {
+        isValid: false,
+        error: 'Please pass in a valid updated trade object',
+      }
     }
     const requiredProperties = [
       'tradeId',
@@ -512,7 +515,9 @@ export const updateTradeLog = async (tradeLogId, updatedTradeLog, userId) => {
   const { isValid, error } = validateNewTrade(updatedTradeLog);
 
   if (!isValid) {
-    throw new Error(error);
+    return {
+      error,
+    };
   }
 
   const userTradeLogsRef = doc(db, "tradelogs-stringified", userId)

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { getUniqueId } from '../utils';
+import { BiTrendingUp, BiTrendingDown } from 'react-icons/bi';
+import { getTotalProfitFromTrades, getUniqueId } from '../utils';
 
-class AddNewTradeFormModal extends Component {
+class EditTradeFormModal extends Component {
   constructor(props) {
     super(props);
 
@@ -21,6 +22,25 @@ class AddNewTradeFormModal extends Component {
     this.onInputChange = this.onInputChange.bind(this);
   }
 
+  componentDidMount() {
+    const { tradeToEdit } = this.props;
+
+    if (tradeToEdit) {
+      this.setState({
+        ticker: tradeToEdit.ticker,
+        numberOfShares: tradeToEdit.numberOfShares,
+        openingPrice: tradeToEdit.openingPrice,
+        closingPrice: tradeToEdit.closingPrice,
+        stopLoss: tradeToEdit.stopLoss,
+        takeProfit: tradeToEdit.takeProfit,
+        notes: tradeToEdit.notes,
+        tradeType: tradeToEdit.tradeType,
+        vwap: tradeToEdit.vwap,
+      });
+    }
+    
+  }
+
   onInputChange(e) {
     e.preventDefault();
     const { name, value } = e?.target || {};
@@ -38,7 +58,9 @@ class AddNewTradeFormModal extends Component {
  
   onFormSubmit(e) {
     e.preventDefault();
-    const newTradeLog = {
+    const updatedTradeLog = {
+      ...this.props.tradeToEdit,
+
       ticker: this.state.ticker,
       numberOfShares: this.state.numberOfShares,
       openingPrice: this.state.openingPrice,
@@ -48,23 +70,19 @@ class AddNewTradeFormModal extends Component {
       notes: this.state.notes,
       tradeType: this.state.tradeType,
       vwap: this.state.vwap,
-
-      date: this.props.activeDateDate,
-      month: this.props.activeMonth, 
-      year: this.props.activeYear, 
-
-      tradeId: getUniqueId(),
     }
 
-    console.log({ newTradeLog });
-    this.props.onCreateNewTradeLog(newTradeLog);
+    console.log({ updatedTradeLog });
+    this.props.onUpdateNewTradeLog(updatedTradeLog);
   }
 
   render() {
-    const { activeDateDate, activeMonth, activeYear, onClose, newTradeLogError } = this.props;
+    const { tradeToEdit, onClose, editTradeLogError } = this.props;
+
+    if (!tradeToEdit || tradeToEdit === null) return null;
 
     return (
-      <div className="AddNewTradeFormModal fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <div className="EditTradeFormModal fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           {/* <!--
             Background overlay, show/hide based on modal state.
@@ -98,17 +116,17 @@ class AddNewTradeFormModal extends Component {
                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                   {/* <div className="flex flex-wrap justify-between"> */}
                   <h3 className="text-2xl leading-6 font-medium text-gray-900 mb-2" id="modal-title">
-                    Add Trade
+                    Edit Trade
                   </h3>
-                  <p className="text-sm text-gray-400">{activeMonth} {activeDateDate}, {activeYear}</p>
+                  <p className="text-sm text-gray-400">{tradeToEdit.month} {tradeToEdit.date}, {tradeToEdit.year}</p>
                   
                   <div className="mt-2">
                     <div className="w-full my-5">
 
-                        {newTradeLogError !== null && (
+                        {editTradeLogError !== null && (
                           <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <strong class="font-bold">Oops! </strong>
-                            <span class="block sm:inline">{newTradeLogError}</span>
+                            <span class="block sm:inline">{editTradeLogError}</span>
                           </div>
                         )}
 
@@ -289,8 +307,8 @@ class AddNewTradeFormModal extends Component {
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
-                Create Trade
+              <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-yellow-600 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 sm:ml-3 sm:w-auto sm:text-sm">
+                Update Trade
               </button>
               <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={onClose}>
                 Cancel
@@ -303,4 +321,4 @@ class AddNewTradeFormModal extends Component {
   };
 };
 
-export default AddNewTradeFormModal;
+export default EditTradeFormModal;
