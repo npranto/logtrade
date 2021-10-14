@@ -42,13 +42,13 @@ const Day = props => {
             </p>
           ) : ''}
           {!!numberOfTrades ? (
-            <p class="number-of-trades mb-1">
+            <p class="number-of-trades pb-1">
               <span class="label text-gray-300 font-light">Trades</span>
               <span class="ml-2 font-bold">{numberOfTrades}</span>
             </p>
           ) : ''}
           {!!tickers ? (
-            <p class="tickers border-t border-gray-300 text-gray justify-center">
+            <p class="tickers border-t border-gray-300 text-gray justify-center pt-1">
               <span class="text-gray-300 font-light">{tickers}</span>
             </p>
           ) : ''}

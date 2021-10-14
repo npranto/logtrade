@@ -39,9 +39,10 @@ class App extends Component {
           ticker: "LOL",
           tradeId: "sd7f7f8d57fd",
           year: "2021",
+          tradeType: 'long',
         },
         {
-          closingPrice: "15.00",
+          closingPrice: "12.00",
           date: "14",
           month: "October",
           notes: "",
@@ -52,6 +53,21 @@ class App extends Component {
           ticker: "GOOGL",
           tradeId: "g76df7dg76fg6",
           year: "2021",
+          tradeType: 'long',
+        },
+        {
+          closingPrice: "8.00",
+          date: "14",
+          month: "October",
+          notes: "",
+          numberOfShares: 2,
+          openingPrice: "10.00",
+          stopLoss: "9.00",
+          takeProfit: "15.00",
+          ticker: "GOOGL",
+          tradeId: "df678d867fg",
+          year: "2021",
+          tradeType: 'long',
         }
       ],
       // allTradeLogs: fetchedTradeLogs 

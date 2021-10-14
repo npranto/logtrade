@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { filterTradesByMonthAndYear, getDateFromDate, getMonthFromDate, getNextMonthFromDate, getPrevMonthFromDate, getStatsFromTrades, getYearFromDate } from "../utils";
-import AddTradeBtn from "./AddTradeBtn";
+import AddNewTradeBtn from "./AddNewTradeBtn";
+import AddNewTradeFormModal from "./AddNewTradeFormModal";
 import DailyTradesModal from "./DailyTradesModal";
 import MonthlyCalendarGrid from "./MonthCalendarGrid";
 import MonthlyStats from "./MonthlyStats";
@@ -15,15 +16,16 @@ class MonthlyCalendar extends Component {
       activeDate: new Date(),
       // activeDate: new Date(`December 10, 2021`),
       // activeMonthTradeLogs: [],
-      showActiveDateTradeLogs: true,
+      showDailyTradesModal: false,
+      showAddNewTradeFormModal: true,
     }
 
     // this.fetchActiveMonthTradeLogs = this.fetchActiveMonthTradeLogs.bind(this);
     this.onClickOnPrevMonth = this.onClickOnPrevMonth.bind(this);
     this.onClickOnNextMonth = this.onClickOnNextMonth.bind(this);
-    this.onAddNewTrade = this.onAddNewTrade.bind(this);
     this.onSelectDay = this.onSelectDay.bind(this);
-    this.setShowActiveDateTradeLogs = this.setShowActiveDateTradeLogs.bind(this);
+    this.setShowDailyTradesModal = this.setShowDailyTradesModal.bind(this);
+    this.setShowAddNewTradeFormModal = this.setShowAddNewTradeFormModal.bind(this);
   }
 
   // getTradesByMonthAndYear = async (props) => {
@@ -81,24 +83,24 @@ class MonthlyCalendar extends Component {
     this.setState({ activeDate: firstOfNextMonth });
   }
 
-  onAddNewTrade() {
-    console.log('open new trade modal...');
+  setShowDailyTradesModal(status = false) {
+    this.setState({ showDailyTradesModal: status })
   }
 
-  setShowActiveDateTradeLogs(status = false) {
-    this.setState({ showActiveDateTradeLogs: status })
+  setShowAddNewTradeFormModal(status = false) {
+    this.setState({ showAddNewTradeFormModal: status })
   }
 
   onSelectDay({ month, date, year }) {
     this.setState({ activeDate: new Date(`${month} ${date}, ${year}`) });
-    this.setShowActiveDateTradeLogs(true);
+    this.setShowDailyTradesModal(true);
   }
 
   render() {
     const { allTradeLogs } = this.props;
-    const { activeDate, showActiveDateTradeLogs } = this.state;
+    const { activeDate, showDailyTradesModal, showAddNewTradeFormModal } = this.state;
 
-    const activeDateDate = getDateFromDate(activeDate);  // i.e., "February"
+    const activeDateDate = getDateFromDate(activeDate).toString();  // i.e., "February"
     const activeMonth = getMonthFromDate(activeDate);  // i.e., "February"
     const activeYear = getYearFromDate(activeDate).toString();    // i.e., 2020
     
@@ -140,12 +142,25 @@ class MonthlyCalendar extends Component {
           />
         </section>
 
-        <AddTradeBtn onClick={this.onAddNewTrade} />
+        <AddNewTradeBtn onClick={() => this.setShowAddNewTradeFormModal(true)} />
 
-        {showActiveDateTradeLogs && (
+        {showDailyTradesModal && (
           <DailyTradesModal
-            activeDate={activeDate} 
-            activeTradeLogs={activeTradeLogs} 
+            activeDateDate={activeDateDate}
+            activeMonth={activeMonth}
+            activeYear={activeYear}
+            activeTradeLogs={activeTradeLogs}
+            onClose={() => this.setShowDailyTradesModal(false)}
+          />
+        )}
+
+        {showAddNewTradeFormModal && (
+          <AddNewTradeFormModal
+            activeDateDate={activeDateDate}
+            activeMonth={activeMonth}
+            activeYear={activeYear}
+            // activeTradeLogs={activeTradeLogs}
+            onClose={() => this.setShowAddNewTradeFormModal(false)}
           />
         )}
 

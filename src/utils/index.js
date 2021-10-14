@@ -57,6 +57,7 @@ export const getTotalProfitFromTrades = (trades = []) => {
     }))
     // calculate each trade profit by trade type
     .map((trade) => {
+      console.log({ trade });
       // on short trade, opening price > closing price
       if (trade.tradeType === 'short') {
         return (trade.openingPrice - trade.closingPrice) * trade.numberOfShares;
@@ -66,9 +67,10 @@ export const getTotalProfitFromTrades = (trades = []) => {
     }) 
     // adds up all the trade profits together
     .reduce((totalProfit, eachTradeProfit) => {
-      return totalProfit + (eachTradeProfit);
-    }, 0)
-    .toFixed(2);
+      console.log({ eachTradeProfit });
+      return totalProfit + eachTradeProfit;
+    }, 0);
+  console.log({ totalProfit });
   return parseFloat(totalProfit).toFixed(2);
 }
 
