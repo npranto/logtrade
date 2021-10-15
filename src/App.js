@@ -14,9 +14,11 @@ class App extends Component {
       user: getUserFromLocalStorage(),
       allTradeLogs: [],
     }
+
+    this.fetchAllTrades = this.fetchAllTrades.bind(this);
   }
 
-  async componentDidMount() {
+  async fetchAllTrades() {
     const { user } = this.state;
     
     if (!user || user === null) return;
@@ -74,11 +76,15 @@ class App extends Component {
     });
   }
 
+  componentDidMount() {
+    this.fetchAllTrades();
+  }
+
   render() {
     console.log({ props: this.props, state: this.state });
     return (
       <div className="App Dashboard">
-        <MonthlyCalendar {...this.props} {...this.state} />
+        <MonthlyCalendar {...this.props} {...this.state} refetchAllTrades={this.fetchAllTrades} />
       </div>
     ); 
   }
