@@ -240,14 +240,14 @@ class MonthlyCalendar extends Component {
     
     return (
       <article className="MonthlyCalendar">
-        <header className="flex py-2 px-2 justify-between items-center flex-wrap">
+        <header className="flex py-2 px-2 justify-start items-center flex-wrap">
           <MonthNavigator
-            prevMonth={getMonthFromDate(getPrevMonthFromDate(activeDate))}
-            nextMonth={getMonthFromDate(getNextMonthFromDate(activeDate))}
+            prevMonth={getMonthFromDate(getPrevMonthFromDate(activeDate), { short: true })}
+            nextMonth={getMonthFromDate(getNextMonthFromDate(activeDate), { short: true })}
             onClickOnPrevMonth={this.onClickOnPrevMonth}
             onClickOnNextMonth={this.onClickOnNextMonth}
           />
-          <h1 className="active-date sm:text-3xl text-2xl font-medium title-font text-gray-900 text-center"> {activeMonth} {activeDateDate}, {activeYear} </h1>
+          <h1 className="active-date sm:text-2xl text-xl font-medium title-font text-gray-900 text-center mx-3"> {activeMonth} {activeDateDate}, {activeYear} </h1>
           <MonthlyStats
             gains={gains}
             losses={losses}
