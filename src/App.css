@@ -1,3 +1,66 @@
 .App {
   /* background-color: snow; */
 }
+
+.DayLabels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto;
+  grid-column-gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+.DayLabels > * {
+  font-size: 0.75rem;
+  color: gray;
+  text-align: center;
+}
+
+.DaysGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(50px, auto);
+  grid-gap: 0.5em;
+}
+.DaysGrid > * {
+  /* background: lightpink; */
+}
+
+.Day {
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  border-radius: 5%;
+  outline: none;
+  /* aspect-ratio: 2/1; */
+}
+.Day.date {
+  cursor: pointer;
+  border-bottom-right-radius: 5px;
+  font-size: 0.75rem;
+  transition: box-shadow 0.4s ease-in-out;
+  padding: 0.5em;
+}
+.Day.date:hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.Day.void {
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+}
+.Day .daily-stat > p {
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.MonthlyCalendarGrid {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+@media only screen and (min-width: 600px) {
+  .DaysGrid {
+    grid-auto-rows: minmax(100px, auto);
+  }
+}
