@@ -87,7 +87,7 @@ const Nav = ({
                   From: "transform opacity-100 scale-100"
                   To: "transform opacity-0 scale-95"
               -->
-              <div id="profile-menu-dropdown" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-in duration-75 transform opacity-0 scale-95" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+              <div id="profile-menu-dropdown" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-in duration-75 transform opacity-0 scale-95 z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                 <!-- Active: "bg-gray-100", Not Active: "" -->
                 <a href="/" id="account-btn" class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-0">Account</a>
                 <a href="#" id="sign-out-btn" class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>

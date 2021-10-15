@@ -24,32 +24,32 @@ const Day = props => {
         Day p-1 
         ${!isVoidDay ? 'date' : ''} 
         ${numberOfTrades < 0 ? 'bg-white text-black' : ''} 
-        ${numberOfTrades && isTotalProfitNegative ? 'bg-red-800 text-white' : ''} 
+        ${numberOfTrades && isTotalProfitNegative ? 'bg-red-600 text-white' : ''} 
         ${numberOfTrades && !isTotalProfitNegative ? 'bg-green-700 text-white' : ''} 
         ${isActiveDay ? 'border-4 border-yellow-500' : ''}
       `} 
       id={`${month}-${date}-${year}`}
       onClick={() => onSelectDay({ month, date, year, trades })}
     >
-      <span class="date-label">{date}</span>
+      <span class="date-label sm:block">{date}</span>
       {numberOfTrades > 0 
         ? (
           <div class="daily-stat py-1">
           {!!totalProfit ? (
-            <p class="profit items-center mb-1">
-              <span class="label text-gray-300 font-light">P/L</span>
-              <span class="text-xs font-bold">${totalProfit}</span>
+            <p class="profit items-center mb-1 hidden sm:block">
+              <span class="label text-gray-300 font-light hidden sm:block">P/L</span>
+              <span class="text-xs font-bold hidden sm:block">${totalProfit}</span>
             </p>
           ) : ''}
           {!!numberOfTrades ? (
-            <p class="number-of-trades pb-1">
-              <span class="label text-gray-300 font-light">Trades</span>
-              <span class="ml-2 font-bold">{numberOfTrades}</span>
+            <p class="number-of-trades pb-1 hidden sm:block">
+              <span class="label text-gray-300 font-light hidden sm:block">Trades</span>
+              <span class="ml-2 font-bold hidden sm:block">{numberOfTrades}</span>
             </p>
           ) : ''}
           {!!tickers ? (
-            <p class="tickers border-t border-gray-300 text-gray justify-center pt-1">
-              <span class="text-gray-300 font-light">{tickers}</span>
+            <p class="tickers border-opacity-0 sm:border-opacity-100 border-t sm:border-gray-300 text-gray pt-1 hidden sm:block">
+              <span class="text-gray-300 font-light hidden sm:block">{tickers}</span>
             </p>
           ) : ''}
         </div>

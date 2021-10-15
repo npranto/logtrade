@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { filterTradesByMonthAndYear, getDateFromDate, getMonthFromDate, getNextMonthFromDate, getPrevMonthFromDate, getStatsFromTrades, getYearFromDate } from "../utils";
-import { createNewTradeLog, updateTradeLog } from "../vendors/firebase/firebase.firestore";
+import { createNewTradeLog, deleteTradeLog, updateTradeLog } from "../vendors/firebase/firebase.firestore";
 import AddNewTradeBtn from "./AddNewTradeBtn";
 import AddNewTradeFormModal from "./AddNewTradeFormModal";
 import AddNewTradeSuccessAlert from "./AddNewTradeSuccessAlert";
@@ -9,6 +9,8 @@ import EditTradeFormModal from "./EditTradeFormModal";
 import MonthlyCalendarGrid from "./MonthCalendarGrid";
 import MonthlyStats from "./MonthlyStats";
 import MonthNavigator from "./MonthNavigator";
+import TradeLogDeleteConfirmModal from "./TradeLogDeleteConfirmModal";
+import UpdateTradeSuccessAlert from "./UpdateTradeSuccessAlert";
 
 class MonthlyCalendar extends Component {
   constructor(props) {
@@ -22,11 +24,15 @@ class MonthlyCalendar extends Component {
       showAddNewTradeFormModal: false,
       showAddNewTradeSuccessAlert: false,
       showEditTradeFormModal: false,
+      showUpdateTradeSuccessAlert: false,
+      showTradeLogDeleteConfirmModal: false,
 
       newTradeLogError: null,
       editTradeLogError: null,
+      deleteTradeLogError: null,
 
-      tradeToEdit: null
+      tradeToEdit: null,
+      tradeToDelete: null,
     }
 
     // this.fetchActiveMonthTradeLogs = this.fetchActiveMonthTradeLogs.bind(this);
@@ -42,6 +48,9 @@ class MonthlyCalendar extends Component {
     this.setShowEditTradeFormModal = this.setShowEditTradeFormModal.bind(this);
     this.onDeleteTradeLog = this.onDeleteTradeLog.bind(this);
     this.onEditTradeLog = this.onEditTradeLog.bind(this);
+    this.setShowUpdateTradeSuccessAlert = this.setShowUpdateTradeSuccessAlert.bind(this);
+    this.setShowTradeLogDeleteConfirmModal = this.setShowTradeLogDeleteConfirmModal.bind(this);
+    this.onConfirmDeleteTrade = this.onConfirmDeleteTrade.bind(this);
   }
 
   // getTradesByMonthAndYear = async (props) => {
@@ -120,6 +129,10 @@ class MonthlyCalendar extends Component {
     this.setShowDailyTradesModal(true);
   }
 
+  setShowTradeLogDeleteConfirmModal(status = false) {
+    this.setState({ showTradeLogDeleteConfirmModal: status })
+  }
+
   async onCreateNewTradeLog(newTradeLog) {
     const { uid: userId } = this.props.user || {};
     const { error, isNewTradeCreated } = await createNewTradeLog(newTradeLog, userId);
@@ -131,6 +144,10 @@ class MonthlyCalendar extends Component {
       this.setShowAddNewTradeSuccessAlert(true);
     }
   } 
+
+  setShowUpdateTradeSuccessAlert(status = false) {
+    this.setState({ showUpdateTradeSuccessAlert: status });
+  }
   
   async onUpdateNewTradeLog(updatedTradeLog) {
     const { uid: userId } = this.props.user || {};
@@ -138,8 +155,9 @@ class MonthlyCalendar extends Component {
     if (error) {
       this.setState({ editTradeLogError: error });
     } else {
-      console.info(`New Trade created... ${isTradeLogUpdated}`);
+      console.info(`Trade updated... ${isTradeLogUpdated}`);
       this.setShowEditTradeFormModal(false);
+      this.setShowUpdateTradeSuccessAlert(true);
     }
   }
 
@@ -148,8 +166,13 @@ class MonthlyCalendar extends Component {
     this.setShowAddNewTradeFormModal(true);
   }
 
-  onDeleteTradeLog() {
-    
+  onDeleteTradeLog(tradeToDelete) {
+    this.setShowDailyTradesModal(false);
+    this.setState({ 
+      tradeToDelete, 
+      showTradeLogDeleteConfirmModal: true,
+    });
+    // this.setShowTradeLogDeleteConfirmModal(true);
   }
 
   onEditTradeLog(tradeToEdit) {
@@ -159,6 +182,21 @@ class MonthlyCalendar extends Component {
       showEditTradeFormModal: true 
     });
   } 
+
+  async onConfirmDeleteTrade(tradeToDelete) {
+    const { uid: userId } = this.props.user || {};
+    const { error, isTradeLogDeleted } = await deleteTradeLog(
+      tradeToDelete.tradeId, 
+      userId
+    );
+    if (error) {
+      this.setState({ deleteTradeLogError: error });
+    } else {
+      console.info(`Trade deleted... ${isTradeLogDeleted}`);
+      this.setShowTradeLogDeleteConfirmModal(false);
+      // this.setShowDeleteTradeSuccessAlert(true);
+    }
+  }
 
   render() {
     const { allTradeLogs } = this.props;
@@ -171,6 +209,9 @@ class MonthlyCalendar extends Component {
       editTradeLogError, 
       showAddNewTradeSuccessAlert, 
       tradeToEdit,
+      showUpdateTradeSuccessAlert,
+      tradeToDelete,
+      showTradeLogDeleteConfirmModal,
     } = this.state;
 
     const activeDateDate = getDateFromDate(activeDate).toString();  // i.e., "February"
@@ -185,7 +226,7 @@ class MonthlyCalendar extends Component {
 
     const { gains, losses, profit } = getStatsFromTrades(activeTradeLogs);
 
-    console.log({ activeTradeLogs, gains, losses, profit });
+    console.log({ ...this.props, ...this.state });
     
     return (
       <article className="MonthlyCalendar">
@@ -219,6 +260,18 @@ class MonthlyCalendar extends Component {
 
         {showAddNewTradeSuccessAlert && (
           <AddNewTradeSuccessAlert />
+        )}
+
+        {showUpdateTradeSuccessAlert && (
+          <UpdateTradeSuccessAlert />
+        )}
+
+        {showTradeLogDeleteConfirmModal && (
+          <TradeLogDeleteConfirmModal
+            tradeToDelete={tradeToDelete}
+            onConfirmDeleteTrade={this.onConfirmDeleteTrade}
+            onClose={() => this.setShowTradeLogDeleteConfirmModal(false)}
+          />
         )}
 
         {showDailyTradesModal && (
