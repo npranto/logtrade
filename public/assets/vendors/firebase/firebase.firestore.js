@@ -1,5 +1,5 @@
-import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore"
-import { getDocFromCache, saveDocInCache } from "./firebase.cache";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
+import { getDocFromCache, saveDocInCache } from "./firebase.cache.js";
 
 const db = getFirestore();
 
@@ -309,4 +309,19 @@ export const createNewTradeLog = async (newTrade, userId) => {
   }
 }
 
+export const deleteUserDoc = async (userId) => {
+  if (!userId || typeof userId !== 'string') {
+    throw new Error('Please provide a valid user id to delete document');
+  }
+
+  try {
+    await deleteDoc(doc(db, "tradelogs-stringified", userId))
+    return { isTradeLogDocDeleted: true };
+  } catch (error) {
+    return { 
+      error: (error && error.message) || 
+        'Unable to delete user trade logs at the moment. Try again later.' 
+    }
+  }
+}
 

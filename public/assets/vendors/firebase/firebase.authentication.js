@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   signOut,
   updateProfile,
+  deleteUser,
 } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
 import saveUserOnLocalStorage from "../../utils/saveUserOnLocalStorage.js";
 import removeUserFromLocalStorage from '../../utils/removeUserFromLocalStorage.js';
@@ -122,7 +123,10 @@ export const onSignInWithEmailAndPassword = ({ email, password }) => {
         }
       }
       return { 
-        error: { code, message: 'Unable to login at the moment. Try again later.' } 
+        error: { 
+          code, 
+          message: message || 'Unable to login at the moment. Try again later.' 
+        } 
       };
     });
 }
@@ -141,6 +145,21 @@ export const onSignout = () => {
   });
 }
 
-// add a function to delete user account
+export const onDeleteUserAccount = () => {
+  return deleteUser(auth.currentUser)
+    .then(() => {
+      return { isUserAccountDeleted: true };
+    })
+    .catch((error) => {
+      console.log({ error });
+      const { code, message } = error;
+      return {
+        error: {
+          code, 
+          message: message || 'Unable to delete account at the moment. Try again later.' 
+        }
+      }
+    });
+}
 
 
