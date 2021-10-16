@@ -144,12 +144,15 @@ const getActivePage = () => {
   return 'dashboard';
 }
 
-document
-  .querySelector('#navbar').innerHTML = `${Nav({ 
+const navElement = document.querySelector('#navbar');
+
+if (navElement) {
+  navElement.innerHTML = `${Nav({ 
     isLoggedIn, 
     user,
     activePage: getActivePage(),
   })}`;
+}
 
 // elements
 const profileAvatar = document

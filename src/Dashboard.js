@@ -41,6 +41,7 @@ class Dashboard extends Component {
           tradeId: "sd7f7f8d57fd",
           year: "2021",
           tradeType: 'long',
+          vwap: 'over',
         },
         {
           closingPrice: "12.00",
@@ -55,12 +56,13 @@ class Dashboard extends Component {
           tradeId: "g76df7dg76fg6",
           year: "2021",
           tradeType: 'long',
+          vwap: 'over',
         },
         {
           closingPrice: "8.00",
           date: "14",
           month: "October",
-          notes: "",
+          notes: "No way!",
           numberOfShares: 2,
           openingPrice: "10.00",
           stopLoss: "9.00",
@@ -69,6 +71,7 @@ class Dashboard extends Component {
           tradeId: "df678d867fg",
           year: "2021",
           tradeType: 'long',
+          vwap: 'over',
         }
       ],
       // allTradeLogs: fetchedTradeLogs 
@@ -76,7 +79,7 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    // this.fetchAllTrades();
+    this.fetchAllTrades();
   }
 
   render() {

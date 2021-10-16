@@ -1,5 +1,6 @@
 import { BiTrendingUp, BiTrendingDown } from 'react-icons/bi';
 import { getTotalProfitFromTrades, findMatchingTradesByDate } from '../utils';
+import { getOrganizationFromTicker } from '../utils/tickers';
 
 const DailyTradesModal = props => {
   const { activeDateDate, activeMonth, activeYear, activeTradeLogs = [], onClose, onOpenAddNewTradeForm, onEditTradeLog, onDeleteTradeLog } = props;
@@ -9,6 +10,7 @@ const DailyTradesModal = props => {
     activeDateDate, 
     activeYear,
   );
+
   console.log({ activeDateDate, activeMonth, activeYear, activeTradeLogs, activeDateTradeLogs });
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -65,11 +67,11 @@ const DailyTradesModal = props => {
                           <div className="h-full p-6 rounded-lg border-2 border-gray-300 flex flex-col">
                             <div className="flex flex-wrap justify-between">
                               <div className="flex flex-col">
-                                <h2 className="text-sm tracking-widest title-font mb-1 font-medium">{activeTradeLog.ticker}</h2>
-                                <h1 className="text-2xl title-font mb-1 font-medium">{activeTradeLog.organization || 'Anonymous' }</h1>
+                                <h2 className="text-sm tracking-widest title-font mb-1 font-medium text-left">{activeTradeLog.ticker}</h2>
+                                <h1 className="text-2xl title-font mb-1 font-medium">{getOrganizationFromTicker(activeTradeLog?.ticker) || 'Anonymous' }</h1>
                               </div>
                               <div className="profit">
-                                <p className={`text-4xl font-bold ${isProfitNegative ? 'text-red-500' : 'text-green-500'} flex`}>
+                                <p className={`text-3xl sm:text-4xl font-bold ${isProfitNegative ? 'text-red-500' : 'text-green-500'} flex`}>
                                   <span className="trend mr-2"> 
                                     {isProfitNegative ? <BiTrendingDown /> : <BiTrendingUp />}
                                   </span>  
@@ -77,27 +79,46 @@ const DailyTradesModal = props => {
                                 </p>
                               </div>
                             </div>
-                            <div className="flex flex-wrap content-start text-center rounded bg-white border border-gray-200 mt-3 mb-3 py-2">
-                              <div className="p-1 sm:w-1/2 lg:w-1/5 w-1/3">
-                                <h2 className="title-font text-sm text-gray-900">{activeTradeLog.openingPrice}</h2>
-                                <p className="leading-relaxed text-xs text-gray-400 font-light">Open</p>
+                            <div className="rounded bg-white border border-gray-200 my-3 py-2">
+                              <div className="flex flex-wrap content-start text-center">
+                                <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">
+                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.openingPrice}</h2>
+                                  <p className="leading-relaxed text-xs text-gray-400 font-light">Open</p>
+                                </div>
+                                <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">
+                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.closingPrice}</h2>
+                                  <p className="leading-relaxed text-xs text-gray-400 font-light">Close</p>
+                                </div>
+                                <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">
+                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.numberOfShares}</h2>
+                                  <p className="leading-relaxed text-xs text-gray-400 font-light">Shares</p>
+                                </div>
+                                <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">
+                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.stopLoss}</h2>
+                                  <p className="leading-relaxed text-xs text-gray-400 font-light">Stop Loss</p>
+                                </div>
+                                <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">
+                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.takeProfit}</h2>
+                                  <p className="leading-relaxed text-xs text-gray-400 font-light">Take Profit</p>
+                                </div>
+                                <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">
+                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.vwap}</h2>
+                                  <p className="leading-relaxed text-xs text-gray-400 font-light">VWAP</p>
+                                </div>
+                                <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">
+                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.tradeType}</h2>
+                                  <p className="leading-relaxed text-xs text-gray-400 font-light">Type</p>
+                                </div>
                               </div>
-                              <div className="p-1 sm:w-1/2 lg:w-1/5 w-1/3">
-                                <h2 className="title-font text-sm text-gray-900">{activeTradeLog.closingPrice}</h2>
-                                <p className="leading-relaxed text-xs text-gray-400 font-light">Close</p>
-                              </div>
-                              <div className="p-1 sm:w-1/2 lg:w-1/5 w-1/3">
-                                <h2 className="title-font text-sm text-gray-900">{activeTradeLog.numberOfShares}</h2>
-                                <p className="leading-relaxed text-xs text-gray-400 font-light">Shares</p>
-                              </div>
-                              <div className="p-1 sm:w-1/2 lg:w-1/5 w-1/3">
-                                <h2 className="title-font text-sm text-gray-900">{activeTradeLog.stopLoss}</h2>
-                                <p className="leading-relaxed text-xs text-gray-400 font-light">Stop Loss</p>
-                              </div>
-                              <div className="p-1 sm:w-1/2 lg:w-1/5 w-1/3">
-                                <h2 className="title-font text-sm text-gray-900">{activeTradeLog.takeProfit}</h2>
-                                <p className="leading-relaxed text-xs text-gray-400 font-light">Take Profit</p>
-                              </div>
+                              {activeTradeLog.notes && (
+                                <hr />
+                              )}
+                              {activeTradeLog.notes && (
+                                <div className="text-left p-2">
+                                  <h2 className="title-font text-sm text-gray-900">Notes:</h2>
+                                  <p className="leading-relaxed text-xs text-gray-400 font-light">{activeTradeLog.notes}</p>
+                                </div>
+                              )}
                             </div>
                             <div className="log-actions flex justify-center sm:justify-end">
                               <button className="lg:mt-2 xl:mt-0 btn-small text-white inline bg-yellow-500 border-0 text-xs py-2 px-4 focus:outline-none hover:bg-yellow-600 rounded" onClick={() => onEditTradeLog(activeTradeLog)}>Edit</button>
