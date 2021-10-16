@@ -4,9 +4,11 @@ import {
   signInWithEmailAndPassword, 
   onAuthStateChanged,
   signOut,
+  updateProfile,
 } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
 import saveUserOnLocalStorage from "../../utils/saveUserOnLocalStorage.js";
 import removeUserFromLocalStorage from '../../utils/removeUserFromLocalStorage.js';
+import { getRandomAvatar } from "../../scripts/Nav.js";
 
 const auth = getAuth();
 
@@ -38,9 +40,43 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-export const onSignUpWithEmailAndPassword = ({ email, password }) => {
+export const onUpdateProfile = ({ fullName }) => {
+  return updateProfile(auth.currentUser, {
+    displayName: fullName, 
+    photoURL: getRandomAvatar(),
+  }).then((stuff) => {
+    console.log({ stuff });
+    const { 
+      uid,  
+      email, 
+      displayName, 
+      emailVerified, 
+      phoneNumber, 
+      photoURL, 
+    } = auth.currentUser;
+    saveUserOnLocalStorage({
+      uid,  
+      email, 
+      displayName, 
+      emailVerified, 
+      phoneNumber, 
+      photoURL, 
+    });
+    return { isProfileUpdated: true };
+  }).catch((error) => {
+    const { code, message } = error;
+    return { 
+      error: { code, message } 
+    };
+  });
+}
+
+export const onSignUpWithEmailAndPassword = ({ 
+  email, 
+  password, 
+}) => {
   return createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
       const user = userCredential.user;
       return { user };
     })
@@ -104,5 +140,7 @@ export const onSignout = () => {
     }
   });
 }
+
+// add a function to delete user account
 
 

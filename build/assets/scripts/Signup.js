@@ -1,5 +1,5 @@
 import '../vendors/firebase/firebase.js';
-import { onSignUpWithEmailAndPassword } from "../vendors/firebase/firebase.authentication.js";
+import { onSignUpWithEmailAndPassword, onUpdateProfile } from "../vendors/firebase/firebase.authentication.js";
 
 
 
@@ -236,21 +236,38 @@ async function onSignUpSubmit(e) {
   console.log({ sanitizedFields });
 
   // creates new account for user by taking in email and password
-  const { user, error } = await onSignUpWithEmailAndPassword({ 
+  const { user, error: signUpError } = await onSignUpWithEmailAndPassword({ 
     email: sanitizedFields.email, 
-    password: sanitizedFields.password 
+    password: sanitizedFields.password,
+    // fullName: sanitizedFields.fullName,
   });
-  console.log({ user, error });
+  console.log({ user, signUpError });
 
   // display potential signup error from firebase auth
-  if (error) {
-    return showSignUpFormError(error.message || 'Unable to create account now. Try again later');
+  if (signUpError) {
+    return showSignUpFormError(signUpError.message || 'Unable to create account now. Try again later');
   } 
 
-  // clears the sign up form fields in DOM
-  signUpForm.reset();
-  // navigate user to dashboard
-  window.location.replace('/');
+  const { 
+    isProfileUpdated, 
+    error: updateProfileError 
+  } = await onUpdateProfile({ 
+    fullName: sanitizedFields.fullName, 
+  });
+  console.log({ isProfileUpdated, updateProfileError });
+
+  if (updateProfileError) {
+    return showSignUpFormError(updateProfileError.message || 'Unable to create account now. Try again later');
+  }
+  
+  // setTimeout(() => {
+    // console.log('profile updating... wait...');
+    // clears the sign up form fields in DOM
+    signUpForm.reset();
+    
+    // navigate user to dashboard
+    window.location.replace('/');
+  // }, 3000);
 }
 
 // events
