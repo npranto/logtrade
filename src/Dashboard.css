@@ -10,7 +10,6 @@
   margin-bottom: 0.5em;
 }
 .DayLabels > * {
-  font-size: 0.75rem;
   color: gray;
   text-align: center;
   /* background: lightgray; */
@@ -62,10 +61,23 @@
 
 .MonthlyCalendar {
   padding: 0em 2.5em;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 @media only screen and (min-width: 600px) {
   .DaysGrid {
     grid-auto-rows: minmax(100px, auto);
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .MonthlyCalendarGrid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1em;
+  }
+  .DaysGrid {
+    grid-auto-rows: minmax(130px, auto);
   }
 }

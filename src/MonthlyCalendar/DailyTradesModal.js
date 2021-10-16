@@ -54,7 +54,7 @@ const DailyTradesModal = props => {
                   <div className="w-full flex flex-wrap">
 
                     {!activeDateTradeLogs?.length && (
-                      <div class="w-full flex justify-center item-center p-3">
+                      <div className="w-full flex justify-center item-center p-3">
                         <p className="text-gray-400 italic">No trade transaction</p>
                       </div>
                     )}

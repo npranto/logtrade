@@ -247,7 +247,7 @@ class MonthlyCalendar extends Component {
             onClickOnPrevMonth={this.onClickOnPrevMonth}
             onClickOnNextMonth={this.onClickOnNextMonth}
           />
-          <h1 className="active-date sm:text-2xl text-xl font-medium title-font text-gray-900 text-center mx-3"> {activeMonth} {activeDateDate}, {activeYear} </h1>
+          <h1 className="active-date sm:text-2xl text-xl font-medium title-font text-gray-900 text-center mr-3 py-1"> {activeMonth} {activeDateDate}, {activeYear} </h1>
           <MonthlyStats
             gains={gains}
             losses={losses}

@@ -1,6 +1,6 @@
 const DayLabels = props => {
   return (
-    <div className="DayLabels day-labels">
+    <div className="DayLabels day-labels text-xs md:text-sm">
       <p className="day">
         <span className="long hidden sm:block">Sunday</span> 
         <span className="long sm:hidden block">Su</span>

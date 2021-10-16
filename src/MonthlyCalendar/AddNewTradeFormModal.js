@@ -106,177 +106,177 @@ class AddNewTradeFormModal extends Component {
                     <div className="w-full my-5">
 
                         {newTradeLogError !== null && (
-                          <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-                            <strong class="font-bold">Oops! </strong>
-                            <span class="block sm:inline">{newTradeLogError}</span>
+                          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <strong className="font-bold">Oops! </strong>
+                            <span className="block sm:inline">{newTradeLogError}</span>
                           </div>
                         )}
 
                   
 
-                        {/* <div class="flex flex-col my-3">
-                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="ticker">
+                        {/* <div className="flex flex-col my-3">
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="ticker">
                             Ticker
                           </label>
-                          <div class="relative">
-                            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                          <div className="relative">
+                            <select className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
                               <option defaultChecked>Choose a ticker</option>
                               <option>AAPL: Apple Inc.</option>
                               <option>GOOGL: Google Inc.</option>
                               <option>TSLA: Tesla Inc.</option>
                             </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                              <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                             </div>
                           </div>
                         </div> */}
 
-                        <div class="flex flex-wrap justify-between items-center my-3">
-                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="Ticker">
+                        <div className="flex flex-wrap justify-between items-center my-3">
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="Ticker">
                             Ticker
                           </label>
-                          <div class="mt-1 flex rounded-md shadow-sm">
-                            {/* <span class="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
+                          <div className="mt-1 flex rounded-md shadow-sm">
+                            {/* <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
                               $
                             </span> */}
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.ticker} onChange={this.onInputChange} name="ticker" id="ticker" type="text" placeholder="AAPL" required />
+                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.ticker} onChange={this.onInputChange} name="ticker" id="ticker" type="text" placeholder="AAPL" required />
                           </div>
                         </div>
 
 
-                        <div class="flex flex-wrap justify-between items-center my-3">
-                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="number-of-shares">
+                        <div className="flex flex-wrap justify-between items-center my-3">
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="number-of-shares">
                             Number of Shares
                           </label>
-                          <div class="mt-1 flex rounded-md shadow-sm">
-                            {/* <span class="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
+                          <div className="mt-1 flex rounded-md shadow-sm">
+                            {/* <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
                               $
                             </span> */}
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.numberOfShares} onChange={this.onInputChange} name="numberOfShares" id="number-of-shares" type="number" min="1" step="1" placeholder="2" required />
+                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.numberOfShares} onChange={this.onInputChange} name="numberOfShares" id="number-of-shares" type="number" min="1" step="1" placeholder="2" required />
                           </div>
                         </div>
 
-                        <div class="flex flex-wrap justify-between items-center my-3">
-                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="closing-price">
+                        <div className="flex flex-wrap justify-between items-center my-3">
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="closing-price">
                             Trade Type
                           </label>
-                          <div class="mt-1 flex rounded-md">
+                          <div className="mt-1 flex rounded-md">
 
                             <div className="px-2">
-                              <label class="inline-flex items-center">
+                              <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
                                   value="long" 
                                   onChange={this.onInputChange}  
-                                  class="form-radio" 
+                                  className="form-radio" 
                                   name="tradeType" 
                                   checked={this.state.tradeType === 'long'}
                                 />
-                                <span class="ml-2">Long</span>
+                                <span className="ml-2">Long</span>
                               </label>
                             </div>
                             <div className="px-2">
-                              <label class="inline-flex items-center">
+                              <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
                                   value="short" 
                                   onChange={this.onInputChange}  
-                                  class="form-radio" 
+                                  className="form-radio" 
                                   name="tradeType" 
                                   checked={this.state.tradeType === 'short'}
                                 />
-                                <span class="ml-2">Short</span>
+                                <span className="ml-2">Short</span>
                               </label>
                             </div>
 
                           </div>
                         </div>
 
-                        <div class="flex flex-wrap justify-between items-center my-3">
-                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="opening-price">
+                        <div className="flex flex-wrap justify-between items-center my-3">
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="opening-price">
                             Opening Price
                           </label>
-                          <div class="mt-1 flex rounded-md shadow-sm">
-                            <span class="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
+                          <div className="mt-1 flex rounded-md shadow-sm">
+                            <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
                               $
                             </span>
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.openingPrice} onChange={this.onInputChange} name="openingPrice" id="opening-price" type="number" placeholder="10.95" min="0.01" step="0.01" required />
+                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.openingPrice} onChange={this.onInputChange} name="openingPrice" id="opening-price" type="number" placeholder="10.95" min="0.01" step="0.01" required />
                           </div>
                         </div>
 
-                        <div class="flex flex-wrap justify-between items-center my-3">
-                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="closing-price">
+                        <div className="flex flex-wrap justify-between items-center my-3">
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="closing-price">
                             Closing Price
                           </label>
-                          <div class="mt-1 flex rounded-md shadow-sm">
-                            <span class="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
+                          <div className="mt-1 flex rounded-md shadow-sm">
+                            <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
                               $
                             </span>
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.closingPrice} onChange={this.onInputChange} name="closingPrice" id="closing-price" type="number" placeholder="10.95" min="0.01" step="0.01" required />
+                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.closingPrice} onChange={this.onInputChange} name="closingPrice" id="closing-price" type="number" placeholder="10.95" min="0.01" step="0.01" required />
                           </div>
                         </div>
 
-                        <div class="flex flex-wrap justify-between items-center my-3">
-                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="stop-loss">
+                        <div className="flex flex-wrap justify-between items-center my-3">
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="stop-loss">
                             Stop Loss
                           </label>
-                          <div class="mt-1 flex rounded-md shadow-sm">
-                            <span class="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
+                          <div className="mt-1 flex rounded-md shadow-sm">
+                            <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
                               $
                             </span>
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.stopLoss} onChange={this.onInputChange} name="stopLoss" id="stop-loss" type="number" placeholder="9.95" min="0.01" step="0.01" required />
+                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.stopLoss} onChange={this.onInputChange} name="stopLoss" id="stop-loss" type="number" placeholder="9.95" min="0.01" step="0.01" required />
                           </div>
                         </div>
 
-                        <div class="flex flex-wrap justify-between items-center my-3">
-                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="take-profit">
+                        <div className="flex flex-wrap justify-between items-center my-3">
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="take-profit">
                             Take Profit
                           </label>
-                          <div class="mt-1 flex rounded-md shadow-sm">
-                            <span class="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
+                          <div className="mt-1 flex rounded-md shadow-sm">
+                            <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
                               $
                             </span>
-                            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.takeProfit} onChange={this.onInputChange} name="takeProfit" id="take-profit" type="number" placeholder="15.95" min="0.01" step="0.01" required />
+                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.takeProfit} onChange={this.onInputChange} name="takeProfit" id="take-profit" type="number" placeholder="15.95" min="0.01" step="0.01" required />
                           </div>
                         </div>
 
-                        <div class="flex flex-wrap justify-between items-center my-3">
-                          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="closing-price">
+                        <div className="flex flex-wrap justify-between items-center my-3">
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="closing-price">
                             VWAP
                           </label>
-                          <div class="mt-1 flex rounded-md">
+                          <div className="mt-1 flex rounded-md">
                             <div className="px-2">
-                              <label class="inline-flex items-center">
+                              <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
                                   value="under" 
                                   onChange={this.onInputChange}  
-                                  class="form-radio" 
+                                  className="form-radio" 
                                   name="vwap" 
                                   checked={this.state.vwap === 'under'}
                                 />
-                                <span class="ml-2">Under</span>
+                                <span className="ml-2">Under</span>
                               </label>
                             </div>
                             <div className="px-2">
-                              <label class="inline-flex items-center">
+                              <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
                                   value="over" 
                                   onChange={this.onInputChange}  
-                                  class="form-radio" 
+                                  className="form-radio" 
                                   name="vwap" 
                                   checked={this.state.vwap === 'over'}
                                 />
-                                <span class="ml-2">Over</span>
+                                <span className="ml-2">Over</span>
                               </label>
                             </div>
                           </div>
                         </div>
 
-                        <div class="flex flex-col mt-5 mb-3">
-                          <label for="notes" class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2">Notes</label>
-                          <textarea id="notes" value={this.state.notes} onChange={this.onInputChange} name="notes" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" rows="4"></textarea>
+                        <div className="flex flex-col mt-5 mb-3">
+                          <label for="notes" className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2">Notes</label>
+                          <textarea id="notes" value={this.state.notes} onChange={this.onInputChange} name="notes" className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" rows="4"></textarea>
                         </div>
 
                         
