@@ -4,9 +4,9 @@ import {
   signInWithEmailAndPassword, 
   onAuthStateChanged,
   signOut,
-} from "firebase/auth";
-import saveUserOnLocalStorage from "../../utils/saveUserOnLocalStorage";
-import removeUserFromLocalStorage from '../../utils/removeUserFromLocalStorage';
+} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
+import saveUserOnLocalStorage from "../../utils/saveUserOnLocalStorage.js";
+import removeUserFromLocalStorage from '../../utils/removeUserFromLocalStorage.js';
 
 const auth = getAuth();
 

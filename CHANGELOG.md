@@ -6,8 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2021-10-03
+## [1.0.0] - 2021-10-07
 ### Added
+- Added sign up page inside CRA architecture
+- Added login page inside CRA architecture
+- Added home page inside CRA architecture
+- Added create-react-app for dashboard
 - Added feature to update an existing trade
 - Added feature to display all trades for selected day 
 - Added feature to add new trade through form submission
