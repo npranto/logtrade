@@ -86,7 +86,7 @@ class Dashboard extends Component {
     console.log({ props: this.props, state: this.state });
     return (
       <div className="App Dashboard">
-        <Nav user={this.state.user} isLoggedIn={this.state.user !== null} activePage={getActivePage()} />
+        {/* <Nav user={this.state.user} isLoggedIn={this.state.user !== null} activePage={getActivePage()} /> */}
         <MonthlyCalendar {...this.props} {...this.state} refetchAllTrades={this.fetchAllTrades} />
       </div>
     ); 

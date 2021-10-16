@@ -2,134 +2,105 @@ import '../vendors/firebase/firebase.js';
 import { onSignout } from "../vendors/firebase/firebase.authentication.js";
 import getUserFromLocalStorage from '../utils/getUserFromLocalStorage.js';
 
-const Nav = ({ 
+const AVATARS = [
+  'https://terrigen-cdn-dev.marvel.com/content/prod/1x/242shc_ons_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/397uat_ons_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/katy_ons_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/xialing_ons_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/007blp_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/wenwu_ons_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/012scw_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/013vis_ons_crd_01-1.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/cap_ons_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/015wsb_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/011blw_ons_crd_04.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/017lok_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/433ybv_com_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/435rgd_com_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/173tsk_com_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/242shc_com_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/037smm_com_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/03-knull_com_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/007blp_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/011blw_ons_crd_04.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/003cap_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/111ctt_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/140cvg_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/009drs_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/025drx_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/142ebm_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/022gam_ons_crd_01-1.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/024grt_ons_crd_01-1.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/116hdl_ons_crd_01-1.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/006hbb_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/002irm_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/017lok_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/045mts_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/043neb_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/110oky_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/141prx_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/023rra_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/cap_ons_crd_01.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/012scw_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/107shr_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/005smp_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/021slq_ons_crd_02.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/019tha_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/004tho_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/013vis_ons_crd_01-1.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/042wmr_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/015wsb_ons_crd_03.jpg', 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/079wng_ons_crd_03.jpg'
+];
+
+const getRandomAvatar = () => AVATARS[Math.floor(Math.random() * AVATARS.length)];
+
+
+const Nav = props => {
+  return `
+    <button 
+      type="button" 
+      class="Nav flex justify-center rounded-md p-2 text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm fixed top-0 left-0 z-10 bg-transparent" id="menu-icon"
+    >
+      <i class="fas fa-2x fa-bars"></i>
+    </button>
+
+    ${NavMenu({ ...props })}
+  `;
+}
+
+const NavMenu = ({ 
   isLoggedIn = false, 
   user = null, 
   activePage = 'home',
 } = {}) => {
   console.log({ isLoggedIn, user, activePage });
+
+  const profilePicture = user?.photoURL || getRandomAvatar();
+
   return `
-  <!-- navbar (start) -->
-  <nav class="Nav bg-white">
-    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-      <div class="relative flex items-center justify-between h-16">
-        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
-          <!-- Mobile menu button-->
-          <button type="button" id="nav-menu-icon" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" aria-controls="mobile-menu" aria-expanded="false">
-            <span class="sr-only">Open main menu</span>
-            <!--
-              Icon when menu is closed.
+    <div class="NavMenu hidden fixed z-10 inset-0 overflow-y-auto bg-gray-500 bg-opacity-75 transition-opacity shadow-lg" aria-labelledby="modal-title" role="dialog" aria-modal="true">
 
-              Heroicon name: outline/menu
+      <div 
+        class="relative w-52 bg-white text-black px-4 py-4" 
+        style=" width: 100%; max-width: 300px; height: 100%">
 
-              Menu open: "hidden", Menu closed: "block"
-            -->
-            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <!--
-              Icon when menu is open.
+        <button 
+          type="button" 
+          class="absolute flex justify-center rounded-md px-1 py-1 text-base font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm fixed top-0 right-0 z-10 bg-transparent" id="close-menu-icon"
+        >
+          <i class="fas fa-2x fa-times" style="color: black; font-size: 1.5rem"></i>
+        </button>
 
-              Heroicon name: outline/x
+        <h1 class="text-black text-2xl font-bold text-gray-300 py-2">LogTrade</h1>
 
-              Menu open: "block", Menu closed: "hidden"
-            -->
-            <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+        ${isLoggedIn ? `
+        <div class="flex flex-col py-2">
+          <div class="avatar w-24 sm:w-40">
+            <img src=${profilePicture} alt="Avatar" style="max-width: 100%; height: auto; border-radius: 1em" />
+          </div>
+          <h3 class="name text-xl sm:text-2xl font-bold text-gray-400 mt-2"> ${user?.displayName ? `<span class="text-black">Hey,</span> <br /> ${user.displayName}` : '<span class="text-black">Hey,</span> <br /> Anonymous' } </h3>
         </div>
-        <div class="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-          <div class="flex-shrink-0 flex items-center">
-            <h1>LogTrade</h1>
-          </div>
-          <div class="hidden sm:block sm:ml-6">
-            <div class="flex space-x-4">
-              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <a href="/home" class="${activePage === 'home' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Home</a>
+        ` : ''}
+        
+        
 
-              ${isLoggedIn
-                ? `<a href="/" class="${activePage === 'dashboard' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</a>`
-                : ''
-              }
-                            
-              ${!isLoggedIn
-                ? `<a href="/login" class="${activePage === 'login' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Login</a>`
-                : ''
-              }
-              ${!isLoggedIn
-                ? `<a href="/signup" class="${activePage === 'signup' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sign Up</a>`
-                : ''
-              }
-            </div>
-          </div>
-        </div>
+        <ul class="menu py-2">
+          ${!isLoggedIn ? `
+          <li class="item pt-1">
+            <a href="/home" type="button" class="${activePage === 'home' ? 'text-black' : 'text-gray-400'} hover:text-black hover:font-bold">Home</a>
+          </li>
+          ` : ''}
 
-        ${isLoggedIn
-          ? `
-          <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <!-- Profile dropdown -->
-            <div class="ml-3 relative">
-              <div>
-                <button type="button" id="profile-avatar" class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                  <span class="sr-only">Open user menu</span>
-                  <img class="h-8 w-8 rounded-full bg-white" src="${user?.photoURL || '/assets/img/icons/user.png'}" alt="Avatar">
-                </button>
-              </div>
+          ${!isLoggedIn ? `
+          <li class="item pt-1">
+            <a href="/login" type="button" class="${activePage === 'login' ? 'text-black' : 'text-gray-400'} hover:text-black hover:font-bold">Login</a>
+          </li>
+          ` : ''}
 
-              <!--
-                Dropdown menu, show/hide based on menu state.
+          ${!isLoggedIn ? `
+          <li class="item pt-1">
+            <a href="/signup" type="button" class="${activePage === 'signup' ? 'text-black' : 'text-gray-400'} hover:text-black hover:font-bold">Sign Up</a>
+          </li>
+          ` : ''}
 
-                Entering: "transition ease-out duration-100"
-                  From: "transform opacity-0 scale-95"
-                  To: "transform opacity-100 scale-100"
-                Leaving: "transition ease-in duration-75"
-                  From: "transform opacity-100 scale-100"
-                  To: "transform opacity-0 scale-95"
-              -->
-              <div id="profile-menu-dropdown" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none transition ease-in duration-75 transform opacity-0 scale-95 z-10" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                <!-- Active: "bg-gray-100", Not Active: "" -->
-                <a href="/" id="account-btn" class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-0">Account</a>
-                <a href="#" id="sign-out-btn" class="block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
-              </div>
-            </div>
-          </div>
-          `
-          : ''
-        }
+          ${isLoggedIn ? `
+          <li class="item pt-1">
+            <a href="/" type="button" class="${activePage === 'dashboard' ? 'text-black' : 'text-gray-400'} hover:text-black hover:font-bold">Dashboard</a>
+          </li>
+          `: ''}
+
+          ${isLoggedIn ? `
+          <li class="item pt-1">
+            <a href="/account" type="button" class="${activePage === 'account' ? 'text-black' : 'text-gray-400'} hover:text-black hover:font-bold">Account</a>
+          </li>
+          ` : ''}
+
+          ${isLoggedIn ? `
+          <li class="item pt-1">
+            <a href="#/" type="button" class="${activePage === 'home' ? 'text-black' : 'text-gray-400'} hover:text-black hover:font-bold" id="log-out-btn">Logout</a>
+          </li>
+          ` : ''}
+      </ul>
         
       </div>
     </div>
-
-    <!-- Mobile menu, show/hide based on menu state. -->
-    <!-- use "sm:hidden" to show on mobile, otherwise to hide leave "hidden" -->
-    <div class="hidden" id="nav-mobile-menu">
-      <div class="px-2 pt-2 pb-3 space-y-1">
-        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <a href="/home" class="${activePage === 'home' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
-
-        ${isLoggedIn
-          ? `<a href="/" class="${activePage === 'dashboard' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Dashboard</a>`
-          : ''
-        }        
-
-        ${!isLoggedIn
-          ? `<a href="/login" class="${activePage === 'login' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Login</a>`
-          : ''
-        }
-        ${!isLoggedIn
-          ? `<a href="/signup" class="${activePage === 'signup' ? 'bg-gray-700 text-white' : ''} text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Sign Up</a>`
-          : ''
-        }
-      </div>
-    </div>
-  </nav>
-  <!-- navbar (end) -->
   `
 };
 
-const isLoggedIn = getUserFromLocalStorage() !== null;
-const user = getUserFromLocalStorage();
 const getActivePage = () => {
   const urlPathName = window?.location?.pathname || '';
   if (urlPathName.includes('/home/')) {
@@ -143,6 +114,9 @@ const getActivePage = () => {
   }
   return 'dashboard';
 }
+const isLoggedIn = getUserFromLocalStorage() !== null;
+const user = getUserFromLocalStorage();
+const activePage = getActivePage();
 
 const navElement = document.querySelector('#navbar');
 
@@ -150,84 +124,37 @@ if (navElement) {
   navElement.innerHTML = `${Nav({ 
     isLoggedIn, 
     user,
-    activePage: getActivePage(),
+    activePage,
   })}`;
 }
 
-// elements
-const profileAvatar = document
-  .querySelector(`.Nav #profile-avatar`);
-const profileMenuDropdown = document
-  .querySelector(`.Nav #profile-menu-dropdown`);
+
+const navMenuBlock = document
+  .querySelector(`.NavMenu`);
 const navMenuIcon = document
-  .querySelector(`.Nav #nav-menu-icon`);
-const navMobileMenu = document
-  .querySelector(`.Nav #nav-mobile-menu`);
-const accountBtn = document
-  .querySelector(`.Nav #account-btn`);
-const signOutBtn = document
-  .querySelector(`.Nav #sign-out-btn`);
+  .querySelector(`.Nav#menu-icon`);
+const navMenuCloseIcon = document
+  .querySelector(`.NavMenu #close-menu-icon`);
+const logoutBtn = document
+  .querySelector(`.NavMenu #log-out-btn`);
+  
   
 
-// functions
-const showProfileMenuDropdown = () => {
-  profileMenuDropdown.classList.remove('opacity-0', 'scale-95');
-  profileMenuDropdown.classList.add('opacity-100', 'scale-100');
-}
-const hideProfileMenuDropdown = () => {
-  profileMenuDropdown.classList.remove('opacity-100', 'scale-100');
-  profileMenuDropdown.classList.add('opacity-0', 'scale-95');
-}
-const toggleShowProfileMenuDropdown = () => {
-  const isProfileMenuDropdownHidden = (
-    profileMenuDropdown.classList.contains('transform') 
-    && profileMenuDropdown.classList.contains('opacity-0')
-    && profileMenuDropdown.classList.contains('scale-95')
-  );
-  console.log({ isProfileMenuDropdownHidden });
-
-  if (isProfileMenuDropdownHidden) {
-    showProfileMenuDropdown();
-  } else {
-    hideProfileMenuDropdown();
-  }
-}
-
-const showMobileNavMenu = () => {
-  navMobileMenu.classList.remove('hidden');
-  navMobileMenu.classList.add('sm:hidden');
-}
-const hideMobileNavMenu = () => {
-  navMobileMenu.classList.remove('sm:hidden');
-  navMobileMenu.classList.add('hidden');
-}
-const toggleShowMobileNavMenu = () => {
-  const isMobileNavMenuHidden = (
-    navMobileMenu.classList.contains('hidden')
-  );
-  console.log({ isMobileNavMenuHidden });
-
-  if (isMobileNavMenuHidden) {
-    showMobileNavMenu();
-  } else {
-    hideMobileNavMenu();
-  }
-} 
-
-const redirectToUserAccount = () => {
-  window.location.replace('/');
-}
 const onLogout = async () => {
   const { error } = await onSignout();
   if (error) console.info(error);
   window.location.replace('/home');
 }
 
+const showNavigationMenu = () => {
+  navMenuBlock.classList.remove('hidden');
+}
 
-// events
-profileAvatar !== null && profileAvatar.addEventListener('click', toggleShowProfileMenuDropdown);
-// profileAvatar.addEventListener('focusout', hideProfileMenuDropdown);
-navMenuIcon !== null && navMenuIcon.addEventListener('click', toggleShowMobileNavMenu);
-// navMenuIcon.addEventListener('focusout', hideMobileNavMenu);
-accountBtn !== null && accountBtn.addEventListener('click', redirectToUserAccount)
-accountBtn !== null && signOutBtn.addEventListener('click', onLogout)
+const hideNavigationMenu = () => {
+  navMenuBlock.classList.add('hidden');
+}
+
+
+navMenuIcon !== null && navMenuIcon.addEventListener('click', showNavigationMenu);
+navMenuCloseIcon !== null && navMenuCloseIcon.addEventListener('click', hideNavigationMenu);
+logoutBtn !== null && logoutBtn.addEventListener('click', onLogout);

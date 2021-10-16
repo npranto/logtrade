@@ -1,5 +1,6 @@
 @import url('../vendors/fonts/fonts.css');
 @import url('../vendors/tailwindcss/tailwind.css');
+@import url('../vendors/font-awesome-5.15.4-web/css/all.min.css');
 
 * {
   box-sizing: border-box;

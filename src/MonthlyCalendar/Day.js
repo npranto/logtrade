@@ -36,21 +36,21 @@ const Day = props => {
       <span className="date-label sm:block">{date}</span>
       {numberOfTrades > 0 
         ? (
-          <div className="daily-stat py-1">
+          <div className="daily-stat sm:py-1">
           {!!totalProfit ? (
-            <p className="profit items-center mb-1 hidden sm:block">
+            <p className="profit items-center mb-1 hidden sm:flex sm:justify-between sm:flex-wrap">
               <span className="label text-gray-300 font-light hidden sm:block">P/L</span>
               <span className="text-xs font-bold hidden sm:block">${totalProfit}</span>
             </p>
           ) : ''}
           {!!numberOfTrades ? (
-            <p className="number-of-trades pb-1 hidden sm:block">
+            <p className="number-of-trades pb-1 hidden sm:flex sm:justify-between sm:flex-wrap">
               <span className="label text-gray-300 font-light hidden sm:block">Trades</span>
               <span className="ml-2 font-bold hidden sm:block">{numberOfTrades}</span>
             </p>
           ) : ''}
           {!!tickers ? (
-            <p className="tickers border-opacity-0 sm:border-opacity-100 border-t sm:border-gray-300 text-gray pt-1 hidden sm:block">
+            <p className="tickers border-opacity-0 sm:border-opacity-100 border-t sm:border-gray-300 text-gray pt-1 hidden sm:flex sm:justify-between sm:flex-wrap">
               <span className="text-gray-300 font-light hidden sm:block">{tickers}</span>
             </p>
           ) : ''}
