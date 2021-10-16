@@ -18,63 +18,63 @@ class Dashboard extends Component {
   }
 
   async fetchAllTrades() {
-    // const { user } = this.state;
+    const { user } = this.state;
     
-    // if (!user || user === null) return;
+    if (!user || user === null) return;
 
-    // const { uid: userId } = user || {};
+    const { uid: userId } = user || {};
 
-    // const fetchedTradeLogs = await fetchAllTradesByUserId(userId);
+    const fetchedTradeLogs = await fetchAllTradesByUserId(userId);
     
     this.setState({ 
-      allTradeLogs: [
-        {
-          closingPrice: "8.00",
-          date: "12",
-          month: "October",
-          notes: "",
-          numberOfShares: 2,
-          openingPrice: "10.00",
-          stopLoss: "9.00",
-          takeProfit: "15.00",
-          ticker: "LOL",
-          tradeId: "sd7f7f8d57fd",
-          year: "2021",
-          tradeType: 'long',
-          vwap: 'over',
-        },
-        {
-          closingPrice: "12.00",
-          date: "14",
-          month: "October",
-          notes: "",
-          numberOfShares: 2,
-          openingPrice: "10.00",
-          stopLoss: "9.00",
-          takeProfit: "15.00",
-          ticker: "GOOGL",
-          tradeId: "g76df7dg76fg6",
-          year: "2021",
-          tradeType: 'long',
-          vwap: 'over',
-        },
-        {
-          closingPrice: "8.00",
-          date: "14",
-          month: "October",
-          notes: "No way!",
-          numberOfShares: 2,
-          openingPrice: "10.00",
-          stopLoss: "9.00",
-          takeProfit: "15.00",
-          ticker: "GOOGL",
-          tradeId: "df678d867fg",
-          year: "2021",
-          tradeType: 'long',
-          vwap: 'over',
-        }
-      ],
-      // allTradeLogs: fetchedTradeLogs 
+      // allTradeLogs: [
+      //   {
+      //     closingPrice: "8.00",
+      //     date: "12",
+      //     month: "October",
+      //     notes: "",
+      //     numberOfShares: 2,
+      //     openingPrice: "10.00",
+      //     stopLoss: "9.00",
+      //     takeProfit: "15.00",
+      //     ticker: "LOL",
+      //     tradeId: "sd7f7f8d57fd",
+      //     year: "2021",
+      //     tradeType: 'long',
+      //     vwap: 'over',
+      //   },
+      //   {
+      //     closingPrice: "12.00",
+      //     date: "14",
+      //     month: "October",
+      //     notes: "",
+      //     numberOfShares: 2,
+      //     openingPrice: "10.00",
+      //     stopLoss: "9.00",
+      //     takeProfit: "15.00",
+      //     ticker: "GOOGL",
+      //     tradeId: "g76df7dg76fg6",
+      //     year: "2021",
+      //     tradeType: 'long',
+      //     vwap: 'over',
+      //   },
+      //   {
+      //     closingPrice: "8.00",
+      //     date: "14",
+      //     month: "October",
+      //     notes: "No way!",
+      //     numberOfShares: 2,
+      //     openingPrice: "10.00",
+      //     stopLoss: "9.00",
+      //     takeProfit: "15.00",
+      //     ticker: "GOOGL",
+      //     tradeId: "df678d867fg",
+      //     year: "2021",
+      //     tradeType: 'long',
+      //     vwap: 'over',
+      //   }
+      // ],
+      allTradeLogs: fetchedTradeLogs 
     });
   }
 

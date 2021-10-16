@@ -1,14 +1,13 @@
 import '../vendors/firebase/firebase.js';
-import { onDeleteUserAccount } from '../vendors/firebase/firebase.authentication.js';
+import { onDeleteUserAccount, onSignout } from '../vendors/firebase/firebase.authentication.js';
 import { deleteUserDoc } from '../vendors/firebase/firebase.firestore.js';
 import getUserFromLocalStorage from '../utils/getUserFromLocalStorage.js';
-
 
 const DeleteAccountConfirmModal = (props) => {
   return `
     <div class="DeleteAccountConfirmModal fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="delete-account-confirm-modal">
 
-      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" id="delete-account-error" role="alert">
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative hidden" id="delete-account-error" role="alert">
         <strong class="font-bold">Oops!</strong>
         <span class="block sm:inline">Unable to delete account at the moment. Try again later</span>
       </div>
@@ -79,6 +78,9 @@ const Account = (props) => {
   console.log({ ...props });
   const { user } = props;
   const { photoURL, displayName = '', email } = user;
+
+  // return `Hello`;
+
   return `
     ${DeleteAccountConfirmModal()}  
 
@@ -114,23 +116,16 @@ const Account = (props) => {
 }
 
 // initialize
-const init = () => {
-  const accountElement = document.querySelector('#account');
-  const user = getUserFromLocalStorage();
+const accountElement = document.querySelector('#account');
+const user = getUserFromLocalStorage();
 
-  if (!user || user === null) {
-    return window.location.replace('/login');
-  }
-
-  if (accountElement) {
-    accountElement.innerHTML = `${Account({ 
-      // isLoggedIn: getUserFromLocalStorage() !== null, 
-      user: getUserFromLocalStorage(),
-    })}`;
-  }
+if (!user || user === null) {
+  window.location.replace('/login');
+} else if (accountElement) {
+  accountElement.innerHTML = `${Account({ 
+    user,
+  })}`;
 }
-
-init();
 
 // elements
 const deleteAccountConfirmModalElement = document
@@ -162,30 +157,13 @@ const hideDeleteAccountError = () => {
   deleteAccountError.classList.add('hidden');
 }
 
-
 const onDeleteAccount = () => {
-  // console.log('doing...');
   showDeleteAccountConfirmationModal();
-  // show modal to confirm deletion of user account
-  // if confirmed
-    // get user id
-    // delete trade logs doc for user within firestore
-    // delete user account from firebase auth
-  // if cancelled
-    // close out the delete confirm modal
 }
 
 const onConfirmDeleteAccount = async () => {
-  console.log('ok... deleting account now...');
   const { uid: userId } = getUserFromLocalStorage();
-  const { 
-    error: deleteUserAccountError, 
-    isUserAccountDeleted 
-  } = await onDeleteUserAccount();
-  console.log({ deleteUserAccountError, isUserAccountDeleted });
-  if (deleteUserAccountError) {
-    showDeleteAccountError();
-  }
+  
   const { 
     error: deleteUserDocError, 
     isTradeLogDocDeleted,
@@ -194,6 +172,22 @@ const onConfirmDeleteAccount = async () => {
   if (deleteUserDocError) {
     showDeleteAccountError();
   }
+
+  const { 
+    error: deleteUserAccountError, 
+    isUserAccountDeleted 
+  } = await onDeleteUserAccount();
+  console.log({ deleteUserAccountError, isUserAccountDeleted });
+  if (deleteUserAccountError) {
+    showDeleteAccountError();
+  }
+
+  const { error: signoutError, isSignoutComplete } = await onSignout();
+  if (signoutError) {
+    showDeleteAccountError();
+  }
+  console.log({ signoutError, isSignoutComplete });
+
   hideDeleteAccountConfirmationModal();
   window.location.replace('/home');
 }
@@ -203,7 +197,10 @@ const onCancelDeleteAccount = () => {
 }
 
 // events
-deleteAccountBtn !== null && deleteAccountBtn.addEventListener('click', onDeleteAccount)
-confirmDeleteAccountBtn !== null && confirmDeleteAccountBtn.addEventListener('click', onConfirmDeleteAccount)
-cancelDeleteAccountBtn !== null && cancelDeleteAccountBtn.addEventListener('click', onCancelDeleteAccount);
+deleteAccountBtn !== null && deleteAccountBtn
+  .addEventListener('click', onDeleteAccount);
+confirmDeleteAccountBtn !== null && confirmDeleteAccountBtn
+  .addEventListener('click', onConfirmDeleteAccount);
+cancelDeleteAccountBtn !== null && cancelDeleteAccountBtn
+  .addEventListener('click', onCancelDeleteAccount);
 

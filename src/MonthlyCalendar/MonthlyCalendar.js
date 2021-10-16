@@ -3,15 +3,15 @@ import { filterTradesByMonthAndYear, getDateFromDate, getMonthFromDate, getNextM
 import { createNewTradeLog, deleteTradeLog, updateTradeLog } from "../vendors/firebase/firebase.firestore";
 import AddNewTradeBtn from "./AddNewTradeBtn";
 import AddNewTradeFormModal from "./AddNewTradeFormModal";
-import AddNewTradeSuccessAlert from "./AddNewTradeSuccessAlert";
+// import AddNewTradeSuccessAlert from "./AddNewTradeSuccessAlert";
 import DailyTradesModal from "./DailyTradesModal";
-import DeleteTradeSuccessAlert from "./DeleteTradeSuccessAlert";
+// import DeleteTradeSuccessAlert from "./DeleteTradeSuccessAlert";
 import EditTradeFormModal from "./EditTradeFormModal";
 import MonthlyCalendarGrid from "./MonthCalendarGrid";
 import MonthlyStats from "./MonthlyStats";
 import MonthNavigator from "./MonthNavigator";
 import TradeLogDeleteConfirmModal from "./TradeLogDeleteConfirmModal";
-import UpdateTradeSuccessAlert from "./UpdateTradeSuccessAlert";
+// import UpdateTradeSuccessAlert from "./UpdateTradeSuccessAlert";
 
 class MonthlyCalendar extends Component {
   constructor(props) {
@@ -23,10 +23,10 @@ class MonthlyCalendar extends Component {
       
       showDailyTradesModal: false,
       showAddNewTradeFormModal: false,
-      showAddNewTradeSuccessAlert: false,
+      // showAddNewTradeSuccessAlert: false,
       showEditTradeFormModal: false,
-      showUpdateTradeSuccessAlert: false,
-      showDeleteTradeSuccessAlert: false,
+      // showUpdateTradeSuccessAlert: false,
+      // showDeleteTradeSuccessAlert: false,
       showTradeLogDeleteConfirmModal: false,
 
       newTradeLogError: null,
@@ -45,56 +45,15 @@ class MonthlyCalendar extends Component {
     this.setShowAddNewTradeFormModal = this.setShowAddNewTradeFormModal.bind(this);
     this.onCreateNewTradeLog = this.onCreateNewTradeLog.bind(this);
     this.onOpenAddNewTradeForm = this.onOpenAddNewTradeForm.bind(this);
-    this.setShowAddNewTradeSuccessAlert = this.setShowAddNewTradeSuccessAlert.bind(this);
+    // this.setShowAddNewTradeSuccessAlert = this.setShowAddNewTradeSuccessAlert.bind(this);
     this.onUpdateNewTradeLog = this.onUpdateNewTradeLog.bind(this);
     this.setShowEditTradeFormModal = this.setShowEditTradeFormModal.bind(this);
     this.onDeleteTradeLog = this.onDeleteTradeLog.bind(this);
     this.onEditTradeLog = this.onEditTradeLog.bind(this);
-    this.setShowUpdateTradeSuccessAlert = this.setShowUpdateTradeSuccessAlert.bind(this);
+    // this.setShowUpdateTradeSuccessAlert = this.setShowUpdateTradeSuccessAlert.bind(this);
     this.setShowTradeLogDeleteConfirmModal = this.setShowTradeLogDeleteConfirmModal.bind(this);
     this.onConfirmDeleteTrade = this.onConfirmDeleteTrade.bind(this);
-    this.setShowDeleteTradeSuccessAlert = this.setShowDeleteTradeSuccessAlert.bind(this);
-  }
-
-  // getTradesByMonthAndYear = async (props) => {
-  //   const { user, activeDate } = props;
-  //   const { uid } = user || {};
-  //   const activeMonth = getMonthFromDate(activeDate);  // i.e., "February"
-  //   const activeYear = getYearFromDate(activeDate).toString();    // i.e., 2020
-  
-  //   const fetchedAllTrades = await fetchAllTradesByUserId(uid);
-  //   const filteredTradesByMonthAndYear = filterTradesByMonthAndYear(
-  //     fetchedAllTrades,
-  //     activeMonth,
-  //     activeYear,
-  //   );
-  //   console.log({ fetchedAllTrades, filteredTradesByMonthAndYear });
-  //   props.setState(() => {
-  //     return { tradeLogs: filteredTradesByMonthAndYear }; 
-  //   });
-  // }
-
-  // async fetchActiveMonthTradeLogs() {
-  //   const { activeDate, user } = this.state;
-  //   const userId = user?.uid || {};
-
-  //   const activeMonth = getMonthFromDate(activeDate);  // i.e., "February"
-  //   const activeYear = getYearFromDate(activeDate).toString();    // i.e., 2020
-    
-  //   // const fetchedAllTrades = await fetchAllTradesByUserId(userId);
-  //   // const filteredTradesByMonthAndYear = filterTradesByMonthAndYear(
-  //   //   fetchedAllTrades,
-  //   //   activeMonth,
-  //   //   activeYear,
-  //   // );
-  //   // console.log({ fetchedAllTrades, filteredTradesByMonthAndYear });
-  //   // props.setState(() => {
-  //   //   return { tradeLogs: filteredTradesByMonthAndYear }; 
-  //   // });
-  // }
- 
-  componentDidMount() {
-    // this.fetchActiveMonthTradeLogs();
+    // this.setShowDeleteTradeSuccessAlert = this.setShowDeleteTradeSuccessAlert.bind(this);
   }
 
   onClickOnPrevMonth = () => {
@@ -119,9 +78,9 @@ class MonthlyCalendar extends Component {
     this.setState({ showAddNewTradeFormModal: status })
   }
 
-  setShowAddNewTradeSuccessAlert(status = false) {
-    this.setState({ showAddNewTradeSuccessAlert: status });
-  }
+  // setShowAddNewTradeSuccessAlert(status = false) {
+  //   this.setState({ showAddNewTradeSuccessAlert: status });
+  // }
 
   setShowEditTradeFormModal(status = false) {
     this.setState({ showEditTradeFormModal: status });
@@ -136,9 +95,9 @@ class MonthlyCalendar extends Component {
     this.setState({ showTradeLogDeleteConfirmModal: status })
   }
 
-  setShowDeleteTradeSuccessAlert(status = false) {
-    this.setState({ showDeleteTradeSuccessAlert: status });
-  }
+  // setShowDeleteTradeSuccessAlert(status = false) {
+  //   this.setState({ showDeleteTradeSuccessAlert: status });
+  // }
 
   async onCreateNewTradeLog(newTradeLog) {
     const { uid: userId } = this.props.user || {};
@@ -148,14 +107,14 @@ class MonthlyCalendar extends Component {
     } else {
       console.info(`New Trade created... ${isNewTradeCreated}`);
       this.setShowAddNewTradeFormModal(false);
-      this.setShowAddNewTradeSuccessAlert(true);
+      // this.setShowAddNewTradeSuccessAlert(true);
       this.props.refetchAllTrades();
     }
   } 
 
-  setShowUpdateTradeSuccessAlert(status = false) {
-    this.setState({ showUpdateTradeSuccessAlert: status });
-  }
+  // setShowUpdateTradeSuccessAlert(status = false) {
+  //   this.setState({ showUpdateTradeSuccessAlert: status });
+  // }
   
   async onUpdateNewTradeLog(updatedTradeLog) {
     const { uid: userId } = this.props.user || {};
@@ -165,7 +124,7 @@ class MonthlyCalendar extends Component {
     } else {
       console.info(`Trade updated... ${isTradeLogUpdated}`);
       this.setShowEditTradeFormModal(false);
-      this.setShowUpdateTradeSuccessAlert(true);
+      // this.setShowUpdateTradeSuccessAlert(true);
       this.props.refetchAllTrades();
     }
   }
@@ -202,7 +161,7 @@ class MonthlyCalendar extends Component {
     } else {
       console.info(`Trade deleted... ${isTradeLogDeleted}`);
       this.setShowTradeLogDeleteConfirmModal(false);
-      this.setShowDeleteTradeSuccessAlert(true);
+      // this.setShowDeleteTradeSuccessAlert(true);
       this.props.refetchAllTrades();
     }
   }
@@ -216,12 +175,12 @@ class MonthlyCalendar extends Component {
       showEditTradeFormModal, 
       newTradeLogError, 
       editTradeLogError, 
-      showAddNewTradeSuccessAlert, 
+      // showAddNewTradeSuccessAlert, 
       tradeToEdit,
-      showUpdateTradeSuccessAlert,
+      // showUpdateTradeSuccessAlert,
       tradeToDelete,
       showTradeLogDeleteConfirmModal,
-      showDeleteTradeSuccessAlert,
+      // showDeleteTradeSuccessAlert,
     } = this.state;
 
     const activeDateDate = getDateFromDate(activeDate).toString();  // i.e., "February"
@@ -268,7 +227,7 @@ class MonthlyCalendar extends Component {
 
         <AddNewTradeBtn onClick={() => this.setShowAddNewTradeFormModal(true)} />
 
-        {showAddNewTradeSuccessAlert && (
+        {/* {showAddNewTradeSuccessAlert && (
           <AddNewTradeSuccessAlert />
         )}
 
@@ -278,7 +237,7 @@ class MonthlyCalendar extends Component {
 
         {showDeleteTradeSuccessAlert && (
           <DeleteTradeSuccessAlert />
-        )}
+        )} */}
 
         {showTradeLogDeleteConfirmModal && (
           <TradeLogDeleteConfirmModal

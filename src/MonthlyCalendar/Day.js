@@ -26,9 +26,8 @@ const Day = props => {
         ${numberOfTrades < 0 ? 'bg-white text-black' : ''} 
         ${numberOfTrades && isTotalProfitNegative ? 'bg-red-600 text-white' : ''} 
         ${numberOfTrades && !isTotalProfitNegative ? 'bg-green-700 text-white' : ''} 
-        ${isActiveDay ? 'border-4 border-yellow-500' : ''}
-        ${isActiveDay ? 'border-4 border-yellow-500' : ''}
-        ${isTodayDate ? 'bg-blue-200' : ''}
+        ${isTodayDate ? 'border-4 border-yellow-500' : ''}
+        ${isActiveDay ? 'shadow' : ''}
       `} 
       id={`${month}-${date}-${year}`}
       onClick={() => onSelectDay({ month, date, year, trades })}

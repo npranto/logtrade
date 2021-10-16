@@ -263,10 +263,10 @@ async function onSignUpSubmit(e) {
   // setTimeout(() => {
     // console.log('profile updating... wait...');
     // clears the sign up form fields in DOM
-    signUpForm.reset();
+  signUpForm.reset();
     
     // navigate user to dashboard
-    window.location.replace('/');
+  window.location.replace('/');
   // }, 3000);
 }
 

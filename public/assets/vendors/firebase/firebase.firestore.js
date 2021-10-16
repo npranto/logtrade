@@ -1,4 +1,12 @@
-import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  updateDoc, 
+  arrayUnion, 
+  deleteDoc 
+} from "https://www.gstatic.com/firebasejs/9.1.1/firebase-firestore.js";
 import { getDocFromCache, saveDocInCache } from "./firebase.cache.js";
 
 const db = getFirestore();
