@@ -76,11 +76,15 @@ const DaysGrid = (props) => {
         const isActiveDay = (`${getDateFromDate(activeDate)}` === date) 
           && (`${getMonthFromDate(activeDate)}` === month) 
           && (`${getYearFromDate(activeDate)}` === year);
+        const isTodayDate = (`${getDateFromDate(todayDate)}` === date) 
+         && (`${getMonthFromDate(todayDate)}` === month) 
+          && (`${getYearFromDate(todayDate)}` === year);
         return (
           <Day 
             key={isVoidDay ? `${getUniqueId()}` :`${month}-${date}-${year}`} 
             {...daysInGrid} 
             isActiveDay={isActiveDay}
+            isTodayDate={isTodayDate}
             onSelectDay={onSelectDay}
           />
         )
