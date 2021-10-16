@@ -87,7 +87,7 @@ export const getUserFromLocalStorage = () => {
   return JSON.parse(userStringified);
 }
 
-export const getMonthFromDate = (date) => {
+export const getMonthFromDate = (date, options = {}) => {
   if (!date) {
     throw new Error('Please pass in a date to get month name');
   }
@@ -95,6 +95,10 @@ export const getMonthFromDate = (date) => {
   const MONTHS_FULL= [
     "January","February","March","April","May","June","July",
     "August","September","October","November","December"
+  ];
+  const MONTHS_SHORT= [
+    "Jan","Feb","Mar","Apr","May","Jun","Jul",
+    "Aug","Sep","Oct","Nov","Dec"
   ];
 
   const monthIndex = date.getMonth();
@@ -105,6 +109,9 @@ export const getMonthFromDate = (date) => {
     );
   }
 
+  if (options.short) {
+    return MONTHS_SHORT[monthIndex];
+  }
   return MONTHS_FULL[monthIndex];
 }
 
@@ -200,3 +207,18 @@ export const findMatchingTradesByDate = (trades = [], month, date, year) => {
 }
 
 export const getUniqueId = () => uniqid('logtrade-');
+
+
+export const getActivePage = () => {
+  const urlPathName = window?.location?.pathname || '';
+  if (urlPathName.includes('/home/')) {
+    return 'home'
+  }
+  if (urlPathName.includes('/login/')) {
+    return 'login'
+  }
+  if (urlPathName.includes('/signup/')) {
+    return 'signup'
+  }
+  return 'dashboard';
+}
