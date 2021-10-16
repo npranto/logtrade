@@ -1,6 +1,6 @@
-import { addMinutesToDate } from "../../utils/date";
-import { getItemFromLocalStorage, removeItemFromLocalStorage, saveItemLocalStorage } from "../../utils/localStorage";
-import { jsonify, stringify } from "./firebase.firestore";
+import { addMinutesToDate } from "../../utils/date.js";
+import { getItemFromLocalStorage, removeItemFromLocalStorage, saveItemLocalStorage } from "../../utils/localStorage.js";
+import { jsonify, stringify } from "./firebase.firestore.js";
 
 // const saveDocOnLocalStorage = (docId, content) => 
 //   localStorage.setItem(`logtrade:::doc:::${docId}`, JSON.stringify(content));

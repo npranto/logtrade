@@ -4,9 +4,12 @@ import {
   signInWithEmailAndPassword, 
   onAuthStateChanged,
   signOut,
+  updateProfile,
+  deleteUser,
 } from "https://www.gstatic.com/firebasejs/9.1.1/firebase-auth.js";
 import saveUserOnLocalStorage from "../../utils/saveUserOnLocalStorage.js";
 import removeUserFromLocalStorage from '../../utils/removeUserFromLocalStorage.js';
+import { getRandomAvatar } from "../../scripts/Nav.js";
 
 const auth = getAuth();
 
@@ -38,9 +41,43 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-export const onSignUpWithEmailAndPassword = ({ email, password }) => {
+export const onUpdateProfile = ({ fullName }) => {
+  return updateProfile(auth.currentUser, {
+    displayName: fullName, 
+    photoURL: getRandomAvatar(),
+  }).then((stuff) => {
+    console.log({ stuff });
+    const { 
+      uid,  
+      email, 
+      displayName, 
+      emailVerified, 
+      phoneNumber, 
+      photoURL, 
+    } = auth.currentUser;
+    saveUserOnLocalStorage({
+      uid,  
+      email, 
+      displayName, 
+      emailVerified, 
+      phoneNumber, 
+      photoURL, 
+    });
+    return { isProfileUpdated: true };
+  }).catch((error) => {
+    const { code, message } = error;
+    return { 
+      error: { code, message } 
+    };
+  });
+}
+
+export const onSignUpWithEmailAndPassword = ({ 
+  email, 
+  password, 
+}) => {
   return createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
+    .then(async (userCredential) => {
       const user = userCredential.user;
       return { user };
     })
@@ -86,7 +123,10 @@ export const onSignInWithEmailAndPassword = ({ email, password }) => {
         }
       }
       return { 
-        error: { code, message: 'Unable to login at the moment. Try again later.' } 
+        error: { 
+          code, 
+          message: message || 'Unable to login at the moment. Try again later.' 
+        } 
       };
     });
 }
@@ -103,6 +143,23 @@ export const onSignout = () => {
       error: 'Issue with sign out at the moment'
     }
   });
+}
+
+export const onDeleteUserAccount = () => {
+  return deleteUser(auth.currentUser)
+    .then(() => {
+      return { isUserAccountDeleted: true };
+    })
+    .catch((error) => {
+      console.log({ error });
+      const { code, message } = error;
+      return {
+        error: {
+          code, 
+          message: message || 'Unable to delete account at the moment. Try again later.' 
+        }
+      }
+    });
 }
 
 
