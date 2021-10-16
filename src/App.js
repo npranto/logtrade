@@ -13,7 +13,7 @@ class App extends Component {
 
   componentDidMount() {
     if (getUserFromLocalStorage() === null) {
-      return window.location.replace("/login");
+      return window.location.replace("/home");
     }
     this.setState({ isLoggedIn: true });
   }
