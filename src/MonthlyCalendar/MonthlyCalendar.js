@@ -112,6 +112,19 @@ class MonthlyCalendar extends Component {
     }
   } 
 
+  async onCreateNewTradeLogAndAddMore(newTradeLog) {
+    const { uid: userId } = this.props.user || {};
+    const { error, isNewTradeCreated } = await createNewTradeLog(newTradeLog, userId);
+    if (error) {
+      this.setState({ newTradeLogError: error });
+    } else {
+      console.info(`New Trade created... ${isNewTradeCreated}`);
+      // this.setShowAddNewTradeFormModal(false);
+      // this.setShowAddNewTradeSuccessAlert(true);
+      // this.props.refetchAllTrades();
+    }
+  }
+ 
   // setShowUpdateTradeSuccessAlert(status = false) {
   //   this.setState({ showUpdateTradeSuccessAlert: status });
   // }
@@ -267,6 +280,7 @@ class MonthlyCalendar extends Component {
             activeYear={activeYear}
             newTradeLogError={newTradeLogError}
             onCreateNewTradeLog={(newTradeLog) => this.onCreateNewTradeLog(newTradeLog)}
+            onCreateNewTradeLogAndAddMore={(newTradeLog) => this.onCreateNewTradeLogAndAddMore(newTradeLog)}
             onClose={() => this.setShowAddNewTradeFormModal(false)}
           />
         )}
