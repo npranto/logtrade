@@ -19,6 +19,9 @@ class AddNewTradeFormModal extends Component {
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.onCreateAndAddMore = this.onCreateAndAddMore.bind(this);
+    this.createTradeLog = this.createTradeLog.bind(this);
+    this.resetNewTradeForm = this.resetNewTradeForm.bind(this);
   }
 
   onInputChange(e) {
@@ -33,9 +36,22 @@ class AddNewTradeFormModal extends Component {
       this.setState({ [name]: value });
     }
   }
- 
-  onFormSubmit(e) {
-    e.preventDefault();
+
+  resetNewTradeForm() {
+    this.setState({
+      ticker: '',
+      numberOfShares: 1,
+      openingPrice: '',
+      closingPrice: '',
+      stopLoss: '',
+      takeProfit: '',
+      notes: '',
+      tradeType: 'Long',
+      vwap: 'Under',
+    })
+  }
+
+  createTradeLog() {
     const newTradeLog = {
       ticker: this.state.ticker,
       numberOfShares: this.state.numberOfShares,
@@ -53,9 +69,28 @@ class AddNewTradeFormModal extends Component {
 
       tradeId: getUniqueId(),
     }
+    return newTradeLog;
+  }
+ 
+  async onFormSubmit(e) {
+    e.preventDefault();
+    console.log(e.target);
 
+    // const newTradeLog = this.createTradeLog();
+    // console.log({ newTradeLog });
+    // await this.props.onCreateNewTradeLog(newTradeLog);
+    // this.resetNewTradeForm();
+  }
+
+  onCreateAndAddMore(e) {
+    // create the trade that we submit
+    // and clear out fields
+    // don't close the modal yet
+    e.preventDefault();
+    const newTradeLog = this.createTradeLog();
     console.log({ newTradeLog });
-    this.props.onCreateNewTradeLog(newTradeLog);
+    this.props.onCreateNewTradeLogAndAddMore();
+    
   }
 
   render() {
@@ -289,7 +324,10 @@ class AddNewTradeFormModal extends Component {
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+              <button type="submit" id="create-and-add-more" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+                Create + Add More
+              </button>
+              <button type="submit" id="create" className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                 Create Trade
               </button>
               <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={onClose}>
