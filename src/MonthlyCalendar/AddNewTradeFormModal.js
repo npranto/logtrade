@@ -17,11 +17,26 @@ class AddNewTradeFormModal extends Component {
       vwap: 'Under',
     }
 
-    this.onFormSubmit = this.onFormSubmit.bind(this);
+    // this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.onCreateAndAddMore = this.onCreateAndAddMore.bind(this);
     this.createTradeLog = this.createTradeLog.bind(this);
     this.resetNewTradeForm = this.resetNewTradeForm.bind(this);
+    this.validateFields = this.validateFields.bind(this);
+    this.onCreateTrade = this.onCreateTrade.bind(this);
+    this.scrollToForm = this.scrollToForm.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.newTradeLogError !== prevProps.newTradeLogError) {
+      this.scrollToForm();
+    }
+  }
+
+  scrollToForm() {
+    document
+    .querySelector('#AddNewTradeForm')
+    .scrollIntoView({ behavior: 'smooth' });
   }
 
   onInputChange(e) {
@@ -51,6 +66,44 @@ class AddNewTradeFormModal extends Component {
     })
   }
 
+  validateFields() {
+    const {
+      ticker,
+      numberOfShares,
+      openingPrice,
+      closingPrice,
+    } = this.state;
+
+    if (!ticker || !ticker.length) {
+      return {
+        error: "Ticker is required",
+        isValid: false,
+      }
+    }
+    if (!numberOfShares || typeof numberOfShares !== 'number') {
+      return {
+        error: "Number of shares is required and must be greater than 0",
+        isValid: false,
+      }
+    }
+    if (!openingPrice || !openingPrice.length) {
+      return {
+        error: "Opening price is required and must be greater than 0",
+        isValid: false,
+      }
+    }
+    if (!closingPrice || !closingPrice.length) {
+      return {
+        error: "Closing price is required and must be greater than 0",
+        isValid: false,
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  }
+
   createTradeLog() {
     const newTradeLog = {
       ticker: this.state.ticker,
@@ -72,9 +125,21 @@ class AddNewTradeFormModal extends Component {
     return newTradeLog;
   }
  
-  async onFormSubmit(e) {
+  async onCreateTrade(e) {
     e.preventDefault();
-    console.log(e.target);
+    // console.log(e.target);
+
+    const {
+      error: validateTradeLogError,
+      isValid: isTradeLogValid,
+    } = this.validateFields();
+
+    if (!isTradeLogValid) {
+      this.props.onNewTradeLogError(validateTradeLogError);
+    } else {
+      const newTradeLog = this.createTradeLog();
+      await this.props.onCreateNewTradeLog(newTradeLog);
+    }
 
     // const newTradeLog = this.createTradeLog();
     // console.log({ newTradeLog });
@@ -83,14 +148,21 @@ class AddNewTradeFormModal extends Component {
   }
 
   onCreateAndAddMore(e) {
-    // create the trade that we submit
-    // and clear out fields
-    // don't close the modal yet
     e.preventDefault();
-    const newTradeLog = this.createTradeLog();
-    console.log({ newTradeLog });
-    this.props.onCreateNewTradeLogAndAddMore();
-    
+
+    const { 
+      error: validateTradeError,
+      isValid: isTradeValid,
+    } = this.validateFields();
+
+    if (!isTradeValid) {
+      this.props.onNewTradeLogError(validateTradeError);
+    } else {
+      const newTradeLog = this.createTradeLog();
+      this.scrollToForm();
+      this.props.onCreateNewTradeLogAndAddMore(newTradeLog);
+      this.resetNewTradeForm();
+    }
   }
 
   render() {
@@ -125,8 +197,18 @@ class AddNewTradeFormModal extends Component {
               From: "opacity-100 translate-y-0 sm:scale-100"
               To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           --> */}
-          <form onSubmit={this.onFormSubmit} className={`inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform sm:my-8 sm:align-middle sm:max-w-lg sm:w-full`}>
-            <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+
+          <form className={`inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform sm:my-8 sm:align-middle sm:max-w-lg sm:w-full relative`} id="AddNewTradeForm">
+
+            {this.props.isLoading && (
+              <div className="absolute px-4 pt-5 pb-4 sm:p-6 sm:pb-4 left-0 right-0 z-10" style={{ top: '30%' }}>
+                <h2 className="text-2xl font-bold text-center">Loading...</h2>  
+              </div>
+            )}
+
+            <div className={`${this.props.isLoading ? 'opacity-20' : ''}`}>
+
+            <div className={`px-4 pt-5 pb-4 sm:p-6 sm:pb-4`}>
               <div className="w-full">
                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                   {/* <div className="flex flex-wrap justify-between"> */}
@@ -139,13 +221,12 @@ class AddNewTradeFormModal extends Component {
                     <div className="w-full my-5">
 
                         {newTradeLogError !== null && (
-                          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                          <div className="bg-red-100 border border-red-400 text-red-700 text-xs px-4 py-3 rounded relative" role="alert">
                             <strong className="font-bold">Oops! </strong>
                             <span className="block sm:inline">{newTradeLogError}</span>
                           </div>
                         )}
 
-                  
 
                         {/* <div className="flex flex-col my-3">
                           <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="ticker">
@@ -323,16 +404,17 @@ class AddNewTradeFormModal extends Component {
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button type="submit" id="create-and-add-more" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+            <div className={`bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse`}>
+              <button type="button" onClick={this.onCreateAndAddMore} id="create-and-add-more" className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
                 Create + Add More
               </button>
-              <button type="submit" id="create" className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+              <button type="button" onClick={this.onCreateTrade} id="create" className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                 Create Trade
               </button>
-              <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={onClose}>
+              <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm" onClick={onClose}>
                 Cancel
               </button>
+            </div>
             </div>
           </form>
         </div>
