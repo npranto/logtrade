@@ -4,7 +4,7 @@ import Day from "./Day";
 const DaysGrid = (props) => {
   const { 
     activeDate,  
-    activeDateDate,
+    // activeDateDate,
     activeMonth,
     activeYear,
     activeTradeLogs,

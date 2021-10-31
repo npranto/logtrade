@@ -94,11 +94,11 @@ const DailyTradesModal = props => {
                                   <p className="leading-relaxed text-xs text-gray-400 font-light">Shares</p>
                                 </div>
                                 <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">
-                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.stopLoss}</h2>
+                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.stopLoss || '-'}</h2>
                                   <p className="leading-relaxed text-xs text-gray-400 font-light">Stop Loss</p>
                                 </div>
                                 <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">
-                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.takeProfit}</h2>
+                                  <h2 className="title-font text-sm text-gray-900">{activeTradeLog.takeProfit || '-'}</h2>
                                   <p className="leading-relaxed text-xs text-gray-400 font-light">Take Profit</p>
                                 </div>
                                 <div className="p-2 sm:w-1/3 lg:w-1/4 w-1/2">

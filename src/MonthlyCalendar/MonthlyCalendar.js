@@ -35,6 +35,7 @@ class MonthlyCalendar extends Component {
 
       tradeToEdit: null,
       tradeToDelete: null,
+      isLoading: false,
     }
 
     // this.fetchActiveMonthTradeLogs = this.fetchActiveMonthTradeLogs.bind(this);
@@ -44,6 +45,7 @@ class MonthlyCalendar extends Component {
     this.setShowDailyTradesModal = this.setShowDailyTradesModal.bind(this);
     this.setShowAddNewTradeFormModal = this.setShowAddNewTradeFormModal.bind(this);
     this.onCreateNewTradeLog = this.onCreateNewTradeLog.bind(this);
+    this.onCreateNewTradeLogAndAddMore = this.onCreateNewTradeLogAndAddMore.bind(this);
     this.onOpenAddNewTradeForm = this.onOpenAddNewTradeForm.bind(this);
     // this.setShowAddNewTradeSuccessAlert = this.setShowAddNewTradeSuccessAlert.bind(this);
     this.onUpdateNewTradeLog = this.onUpdateNewTradeLog.bind(this);
@@ -53,6 +55,7 @@ class MonthlyCalendar extends Component {
     // this.setShowUpdateTradeSuccessAlert = this.setShowUpdateTradeSuccessAlert.bind(this);
     this.setShowTradeLogDeleteConfirmModal = this.setShowTradeLogDeleteConfirmModal.bind(this);
     this.onConfirmDeleteTrade = this.onConfirmDeleteTrade.bind(this);
+    this.onNewTradeLogError = this.onNewTradeLogError.bind(this);
     // this.setShowDeleteTradeSuccessAlert = this.setShowDeleteTradeSuccessAlert.bind(this);
   }
 
@@ -100,6 +103,7 @@ class MonthlyCalendar extends Component {
   // }
 
   async onCreateNewTradeLog(newTradeLog) {
+    this.setState({ newTradeLogError: null });
     const { uid: userId } = this.props.user || {};
     const { error, isNewTradeCreated } = await createNewTradeLog(newTradeLog, userId);
     if (error) {
@@ -112,6 +116,29 @@ class MonthlyCalendar extends Component {
     }
   } 
 
+  async onCreateNewTradeLogAndAddMore(newTradeLog) {
+    const self = this;
+
+    this.setState({ newTradeLogError: null });
+    this.setState({ isLoading: true });
+
+    setTimeout(async () => {
+      self.setState({ isLoading: false });
+      const { uid: userId } = self.props.user || {};
+      const { 
+        error: createNewTradeLogError, 
+        isNewTradeCreated 
+      } = await createNewTradeLog(newTradeLog, userId);
+      console.log({ newTradeLog, createNewTradeLogError, isNewTradeCreated,  });
+      if (createNewTradeLogError) {
+        self.setState({ newTradeLogError: createNewTradeLogError });
+      } else {
+        console.info(`New Trade created... ${isNewTradeCreated}`);
+        this.props.refetchAllTrades();
+      }
+    }, 1000);
+  }
+ 
   // setShowUpdateTradeSuccessAlert(status = false) {
   //   this.setState({ showUpdateTradeSuccessAlert: status });
   // }
@@ -164,6 +191,10 @@ class MonthlyCalendar extends Component {
       // this.setShowDeleteTradeSuccessAlert(true);
       this.props.refetchAllTrades();
     }
+  }
+
+  onNewTradeLogError(error) {
+    this.setState({ newTradeLogError: error });
   }
 
   render() {
@@ -266,8 +297,12 @@ class MonthlyCalendar extends Component {
             activeMonth={activeMonth}
             activeYear={activeYear}
             newTradeLogError={newTradeLogError}
+            onNewTradeLogError={this.onNewTradeLogError}
             onCreateNewTradeLog={(newTradeLog) => this.onCreateNewTradeLog(newTradeLog)}
+            onCreateNewTradeLogAndAddMore={(newTradeLog) => 
+              this.onCreateNewTradeLogAndAddMore(newTradeLog)}
             onClose={() => this.setShowAddNewTradeFormModal(false)}
+            isLoading={this.state.isLoading}
           />
         )}
 
