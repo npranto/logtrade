@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 2021-10-30
 ### Updated
+- Adds feature to add more trade along on add new trade log form
+- Price related new trade form fields should no longer have default '0.00' values
 - Updates stop loss and take profit trade input fields to be optional, not required
 
 ## [1.0.0] - 2021-10-07
