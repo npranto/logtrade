@@ -9,13 +9,13 @@ class EditTradeFormModal extends Component {
     this.state = {
       ticker: '',
       numberOfShares: 1,
-      openingPrice: '0.00',
-      closingPrice: '0.00',
-      stopLoss: '0.00',
-      takeProfit: '0.00',
+      openingPrice: '',
+      closingPrice: '',
+      stopLoss: '',
+      takeProfit: '',
       notes: '',
-      tradeType: 'long',
-      vwap: 'under',
+      tradeType: 'Long',
+      vwap: 'Under',
     }
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
@@ -46,11 +46,9 @@ class EditTradeFormModal extends Component {
     const { name, value } = e?.target || {};
 
     if (name === 'ticker') {
-      this.setState({ [name]: value.trim().toUpperCase() })
-    } else if (name === 'tradeType') {
-      this.setState({ [name]: value.trim().toLowerCase() })
+      this.setState({ [name]: value?.trim()?.toUpperCase() || value })
     } else if (name === 'numberOfShares') {
-      this.setState({ [name]: parseInt(value) })
+      this.setState({ [name]: parseInt(value) || value })
     } else {
       this.setState({ [name]: value });
     }
@@ -184,11 +182,11 @@ class EditTradeFormModal extends Component {
                               <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
-                                  value="long" 
+                                  value="Long" 
                                   onChange={this.onInputChange}  
                                   className="form-radio" 
                                   name="tradeType" 
-                                  checked={this.state.tradeType === 'long'}
+                                  checked={this.state.tradeType.toLowerCase() === 'long'}
                                 />
                                 <span className="ml-2">Long</span>
                               </label>
@@ -197,11 +195,11 @@ class EditTradeFormModal extends Component {
                               <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
-                                  value="short" 
+                                  value="Short" 
                                   onChange={this.onInputChange}  
                                   className="form-radio" 
                                   name="tradeType" 
-                                  checked={this.state.tradeType === 'short'}
+                                  checked={this.state.tradeType.toLowerCase() === 'short'}
                                 />
                                 <span className="ml-2">Short</span>
                               </label>
@@ -235,20 +233,22 @@ class EditTradeFormModal extends Component {
                         </div>
 
                         <div className="flex flex-wrap justify-between items-center my-3">
-                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="stop-loss">
-                            Stop Loss
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2 flex flex-col" for="stop-loss">
+                            <span>Stop Loss</span>
+                            <span className="text-gray-300 text-xs font-normal text-left">optional</span>
                           </label>
                           <div className="mt-1 flex rounded-md shadow-sm">
                             <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
                               $
                             </span>
-                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.stopLoss} onChange={this.onInputChange} name="stopLoss" id="stop-loss" type="number" placeholder="9.95" min="0.01" step="0.01" required />
+                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.stopLoss} onChange={this.onInputChange} name="stopLoss" id="stop-loss" type="number" placeholder="9.95" min="0.01" step="0.01" />
                           </div>
                         </div>
 
                         <div className="flex flex-wrap justify-between items-center my-3">
-                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="take-profit">
-                            Take Profit
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2 flex flex-col" for="take-profit">
+                            <span>Take Profit</span>
+                            <span className="text-gray-300 text-xs font-normal text-left">optional</span>
                           </label>
                           <div className="mt-1 flex rounded-md shadow-sm">
                             <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
@@ -267,11 +267,11 @@ class EditTradeFormModal extends Component {
                               <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
-                                  value="under" 
+                                  value="Under" 
                                   onChange={this.onInputChange}  
                                   className="form-radio" 
                                   name="vwap" 
-                                  checked={this.state.vwap === 'under'}
+                                  checked={this.state.vwap.toLowerCase() === 'under'}
                                 />
                                 <span className="ml-2">Under</span>
                               </label>
@@ -280,11 +280,11 @@ class EditTradeFormModal extends Component {
                               <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
-                                  value="over" 
+                                  value="Over" 
                                   onChange={this.onInputChange}  
                                   className="form-radio" 
                                   name="vwap" 
-                                  checked={this.state.vwap === 'over'}
+                                  checked={this.state.vwap.toLowerCase() === 'over'}
                                 />
                                 <span className="ml-2">Over</span>
                               </label>

@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased] - 2021-10-30
+### Updated
+- Adds feature to add more trade along on add new trade log form
+- Price related new trade form fields should no longer have default '0.00' values
+- Updates stop loss and take profit trade input fields to be optional, not required
 
 ## [1.0.0] - 2021-10-07
 ### Added

@@ -8,17 +8,35 @@ class AddNewTradeFormModal extends Component {
     this.state = {
       ticker: '',
       numberOfShares: 1,
-      openingPrice: '0.00',
-      closingPrice: '0.00',
-      stopLoss: '0.00',
-      takeProfit: '0.00',
+      openingPrice: '',
+      closingPrice: '',
+      stopLoss: '',
+      takeProfit: '',
       notes: '',
-      tradeType: 'long',
-      vwap: 'under',
+      tradeType: 'Long',
+      vwap: 'Under',
     }
 
-    this.onFormSubmit = this.onFormSubmit.bind(this);
+    // this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.onCreateAndAddMore = this.onCreateAndAddMore.bind(this);
+    this.createTradeLog = this.createTradeLog.bind(this);
+    this.resetNewTradeForm = this.resetNewTradeForm.bind(this);
+    this.validateFields = this.validateFields.bind(this);
+    this.onCreateTrade = this.onCreateTrade.bind(this);
+    this.scrollToForm = this.scrollToForm.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.newTradeLogError !== prevProps.newTradeLogError) {
+      this.scrollToForm();
+    }
+  }
+
+  scrollToForm() {
+    document
+    .querySelector('#AddNewTradeForm')
+    .scrollIntoView({ behavior: 'smooth' });
   }
 
   onInputChange(e) {
@@ -26,18 +44,67 @@ class AddNewTradeFormModal extends Component {
     const { name, value } = e?.target || {};
 
     if (name === 'ticker') {
-      this.setState({ [name]: value.trim().toUpperCase() })
-    } else if (name === 'tradeType') {
-      this.setState({ [name]: value.trim().toLowerCase() })
+      this.setState({ [name]: value?.trim()?.toUpperCase() || value })
     } else if (name === 'numberOfShares') {
-      this.setState({ [name]: parseInt(value) })
+      this.setState({ [name]: parseInt(value) || value })
     } else {
       this.setState({ [name]: value });
     }
   }
- 
-  onFormSubmit(e) {
-    e.preventDefault();
+
+  resetNewTradeForm() {
+    this.setState({
+      ticker: '',
+      numberOfShares: 1,
+      openingPrice: '',
+      closingPrice: '',
+      stopLoss: '',
+      takeProfit: '',
+      notes: '',
+      tradeType: 'Long',
+      vwap: 'Under',
+    })
+  }
+
+  validateFields() {
+    const {
+      ticker,
+      numberOfShares,
+      openingPrice,
+      closingPrice,
+    } = this.state;
+
+    if (!ticker || !ticker.length) {
+      return {
+        error: "Ticker is required",
+        isValid: false,
+      }
+    }
+    if (!numberOfShares || typeof numberOfShares !== 'number') {
+      return {
+        error: "Number of shares is required and must be greater than 0",
+        isValid: false,
+      }
+    }
+    if (!openingPrice || !openingPrice.length) {
+      return {
+        error: "Opening price is required and must be greater than 0",
+        isValid: false,
+      }
+    }
+    if (!closingPrice || !closingPrice.length) {
+      return {
+        error: "Closing price is required and must be greater than 0",
+        isValid: false,
+      }
+    }
+    return {
+      error: null,
+      isValid: true,
+    }
+  }
+
+  createTradeLog() {
     const newTradeLog = {
       ticker: this.state.ticker,
       numberOfShares: this.state.numberOfShares,
@@ -55,9 +122,47 @@ class AddNewTradeFormModal extends Component {
 
       tradeId: getUniqueId(),
     }
+    return newTradeLog;
+  }
+ 
+  async onCreateTrade(e) {
+    e.preventDefault();
+    // console.log(e.target);
 
-    console.log({ newTradeLog });
-    this.props.onCreateNewTradeLog(newTradeLog);
+    const {
+      error: validateTradeLogError,
+      isValid: isTradeLogValid,
+    } = this.validateFields();
+
+    if (!isTradeLogValid) {
+      this.props.onNewTradeLogError(validateTradeLogError);
+    } else {
+      const newTradeLog = this.createTradeLog();
+      await this.props.onCreateNewTradeLog(newTradeLog);
+    }
+
+    // const newTradeLog = this.createTradeLog();
+    // console.log({ newTradeLog });
+    // await this.props.onCreateNewTradeLog(newTradeLog);
+    // this.resetNewTradeForm();
+  }
+
+  onCreateAndAddMore(e) {
+    e.preventDefault();
+
+    const { 
+      error: validateTradeError,
+      isValid: isTradeValid,
+    } = this.validateFields();
+
+    if (!isTradeValid) {
+      this.props.onNewTradeLogError(validateTradeError);
+    } else {
+      const newTradeLog = this.createTradeLog();
+      this.scrollToForm();
+      this.props.onCreateNewTradeLogAndAddMore(newTradeLog);
+      this.resetNewTradeForm();
+    }
   }
 
   render() {
@@ -92,8 +197,18 @@ class AddNewTradeFormModal extends Component {
               From: "opacity-100 translate-y-0 sm:scale-100"
               To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           --> */}
-          <form onSubmit={this.onFormSubmit} className={`inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform sm:my-8 sm:align-middle sm:max-w-lg sm:w-full`}>
-            <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+
+          <form className={`inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform sm:my-8 sm:align-middle sm:max-w-lg sm:w-full relative`} id="AddNewTradeForm">
+
+            {this.props.isLoading && (
+              <div className="absolute px-4 pt-5 pb-4 sm:p-6 sm:pb-4 left-0 right-0 z-10" style={{ top: '30%' }}>
+                <h2 className="text-2xl font-bold text-center">Loading...</h2>  
+              </div>
+            )}
+
+            <div className={`${this.props.isLoading ? 'opacity-20' : ''}`}>
+
+            <div className={`px-4 pt-5 pb-4 sm:p-6 sm:pb-4`}>
               <div className="w-full">
                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                   {/* <div className="flex flex-wrap justify-between"> */}
@@ -106,13 +221,12 @@ class AddNewTradeFormModal extends Component {
                     <div className="w-full my-5">
 
                         {newTradeLogError !== null && (
-                          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                          <div className="bg-red-100 border border-red-400 text-red-700 text-xs px-4 py-3 rounded relative" role="alert">
                             <strong className="font-bold">Oops! </strong>
                             <span className="block sm:inline">{newTradeLogError}</span>
                           </div>
                         )}
 
-                  
 
                         {/* <div className="flex flex-col my-3">
                           <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="ticker">
@@ -166,11 +280,11 @@ class AddNewTradeFormModal extends Component {
                               <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
-                                  value="long" 
+                                  value="Long" 
                                   onChange={this.onInputChange}  
                                   className="form-radio" 
                                   name="tradeType" 
-                                  checked={this.state.tradeType === 'long'}
+                                  checked={this.state.tradeType.toLowerCase() === 'long'}
                                 />
                                 <span className="ml-2">Long</span>
                               </label>
@@ -179,11 +293,11 @@ class AddNewTradeFormModal extends Component {
                               <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
-                                  value="short" 
+                                  value="Short" 
                                   onChange={this.onInputChange}  
                                   className="form-radio" 
                                   name="tradeType" 
-                                  checked={this.state.tradeType === 'short'}
+                                  checked={this.state.tradeType.toLowerCase() === 'short'}
                                 />
                                 <span className="ml-2">Short</span>
                               </label>
@@ -217,26 +331,28 @@ class AddNewTradeFormModal extends Component {
                         </div>
 
                         <div className="flex flex-wrap justify-between items-center my-3">
-                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="stop-loss">
-                            Stop Loss
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2 flex flex-col" for="stop-loss">
+                            <span>Stop Loss</span>
+                            <span className="text-gray-300 text-xs font-normal text-left">optional</span>
                           </label>
                           <div className="mt-1 flex rounded-md shadow-sm">
                             <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
                               $
                             </span>
-                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.stopLoss} onChange={this.onInputChange} name="stopLoss" id="stop-loss" type="number" placeholder="9.95" min="0.01" step="0.01" required />
+                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.stopLoss} onChange={this.onInputChange} name="stopLoss" id="stop-loss" type="number" placeholder="9.95" min="0.01" step="0.01" />
                           </div>
                         </div>
 
                         <div className="flex flex-wrap justify-between items-center my-3">
-                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2" for="take-profit">
-                            Take Profit
+                          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 mr-2 flex flex-col" for="take-profit">
+                            <span>Take Profit</span>
+                            <span className="text-gray-300 text-xs font-normal text-left">optional</span>
                           </label>
                           <div className="mt-1 flex rounded-md shadow-sm">
                             <span className="inline-flex items-center px-3 rounded-l-md bg-gray-100 text-gray-500 text-sm">
                               $
                             </span>
-                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.takeProfit} onChange={this.onInputChange} name="takeProfit" id="take-profit" type="number" placeholder="15.95" min="0.01" step="0.01" required />
+                            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value={this.state.takeProfit} onChange={this.onInputChange} name="takeProfit" id="take-profit" type="number" placeholder="15.95" min="0.01" step="0.01" />
                           </div>
                         </div>
 
@@ -249,11 +365,11 @@ class AddNewTradeFormModal extends Component {
                               <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
-                                  value="under" 
+                                  value="Under" 
                                   onChange={this.onInputChange}  
                                   className="form-radio" 
                                   name="vwap" 
-                                  checked={this.state.vwap === 'under'}
+                                  checked={this.state.vwap.toLowerCase() === 'under'}
                                 />
                                 <span className="ml-2">Under</span>
                               </label>
@@ -262,11 +378,11 @@ class AddNewTradeFormModal extends Component {
                               <label className="inline-flex items-center">
                                 <input 
                                   type="radio" 
-                                  value="over" 
+                                  value="Over" 
                                   onChange={this.onInputChange}  
                                   className="form-radio" 
                                   name="vwap" 
-                                  checked={this.state.vwap === 'over'}
+                                  checked={this.state.vwap.toLowerCase() === 'over'}
                                 />
                                 <span className="ml-2">Over</span>
                               </label>
@@ -288,13 +404,17 @@ class AddNewTradeFormModal extends Component {
                 </div>
               </div>
             </div>
-            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <button type="submit" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+            <div className={`bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse`}>
+              <button type="button" onClick={this.onCreateAndAddMore} id="create-and-add-more" className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                Create + Add More
+              </button>
+              <button type="button" onClick={this.onCreateTrade} id="create" className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
                 Create Trade
               </button>
-              <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onClick={onClose}>
+              <button type="button" className="mt-3 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-600 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm" onClick={onClose}>
                 Cancel
               </button>
+            </div>
             </div>
           </form>
         </div>

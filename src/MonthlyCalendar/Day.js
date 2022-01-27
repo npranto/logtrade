@@ -50,7 +50,7 @@ const Day = props => {
           ) : ''}
           {!!tickers ? (
             <p className="tickers border-opacity-0 sm:border-opacity-100 border-t sm:border-gray-300 text-gray pt-1 hidden sm:flex sm:justify-between sm:flex-wrap">
-              <span className="text-gray-300 font-light hidden sm:block">{tickers}</span>
+              <span className="flex overflow-auto	text-gray-300 font-light hidden sm:block" style={{ height: '20px' }}>{tickers}</span>
             </p>
           ) : ''}
         </div>
