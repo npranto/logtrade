@@ -1,5 +1,5 @@
 import './firebase';
-import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore"
+import { getFirestore, doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
 // import { getDocFromCache, saveDocInCache } from "./firebase.cache";
 
 const db = getFirestore();
