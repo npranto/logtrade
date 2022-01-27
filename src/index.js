@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { createNewTradeLog, deleteTradeLog, fetchAllTradesByUserId, updateTradeLog } from './vendors/firebase/firebase.firestore';
 // import reportWebVitals from './reportWebVitals';
 
 // const userId = 'H8XTiCvnxOWojohm2DewzlBxrjG2';

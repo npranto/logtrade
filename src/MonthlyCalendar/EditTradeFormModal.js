@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { BiTrendingUp, BiTrendingDown } from 'react-icons/bi';
-import { getTotalProfitFromTrades, getUniqueId } from '../utils';
 
 class EditTradeFormModal extends Component {
   constructor(props) {

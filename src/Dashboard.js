@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import './Dashboard.css';
 import MonthlyCalendar from './MonthlyCalendar/MonthlyCalendar';
-import { getActivePage, getUserFromLocalStorage } from './utils';
+import { getUserFromLocalStorage } from './utils';
 import { fetchAllTradesByUserId } from './vendors/firebase/firebase.firestore';
-import Nav from './Nav';
 
 class Dashboard extends Component {
   constructor(props) {
