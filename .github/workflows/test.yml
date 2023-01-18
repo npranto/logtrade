@@ -7,10 +7,10 @@ on:
 
 jobs:
 	test:
-		runs-on: 'ubuntu-latest'
+		runs-on: ubuntu-latest
 		strategy:
 			matrix:
-				node-versions: [16, latest]
+				node-version: [16, latest]
 		steps:
 			- name: 'Checkout source code'
 				uses: actions/checkout@v3
