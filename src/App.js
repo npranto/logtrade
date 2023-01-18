@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-filename-extension */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable consistent-return */
-import { Component } from 'react';
+import React, { Component } from 'react';
 import Dashboard from './Dashboard';
 import { getUserFromLocalStorage } from './utils';
 
