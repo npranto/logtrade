@@ -1,17 +1,23 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-console */
+/* eslint-disable import/extensions */
 import '../vendors/firebase/firebase.js';
-import { onDeleteUserAccount, onSignout } from '../vendors/firebase/firebase.authentication.js';
+import {
+	onDeleteUserAccount,
+	onSignout,
+} from '../vendors/firebase/firebase.authentication.js';
 import { deleteUserDoc } from '../vendors/firebase/firebase.firestore.js';
 import getUserFromLocalStorage from '../utils/getUserFromLocalStorage.js';
 
-const DeleteAccountConfirmModal = (props) => {
-  return `
+const DeleteAccountConfirmModal = () => `
     <div class="DeleteAccountConfirmModal fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="delete-account-confirm-modal">
 
       <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative hidden" id="delete-account-error" role="alert">
         <strong class="font-bold">Oops!</strong>
         <span class="block sm:inline">Unable to delete account at the moment. Try again later</span>
       </div>
-      
+
 
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <!--
@@ -72,23 +78,24 @@ const DeleteAccountConfirmModal = (props) => {
       </div>
     </div>
   `;
-}
 
 const Account = (props) => {
-  console.log({ ...props });
-  const { user } = props;
-  const { photoURL, displayName = '', email } = user;
+	console.log({ ...props });
+	const { user } = props;
+	const { photoURL, displayName = '', email } = user;
 
-  // return `Hello`;
+	// return `Hello`;
 
-  return `
-    ${DeleteAccountConfirmModal()}  
+	return `
+    ${DeleteAccountConfirmModal()}
 
     <section class="Account px-10 py-12 sm:px-20 sm:py-20">
       <h1 class="text-2xl sm:text-3xl my-2">Account</h1>
 
       <div class="profile my-2">
-        ${photoURL ? `
+        ${
+					photoURL
+						? `
           <div class="relative flex-grow w-full sm:w-1/2 md:w-1/3 lg:w-1/5">
             <div class="flex flex-col py-2">
               <div class="avatar w-24 sm:w-40">
@@ -96,11 +103,15 @@ const Account = (props) => {
               </div>
             </div>
           </div>
-        ` : ''}
-        
+        `
+						: ''
+				}
+
         <div class="relative flex-grow w-full sm:w-1/2 md:w-1/3 lg:w-1/5">
           <label for="full-name" class="leading-7 text-sm text-gray-600">Full Name</label>
-          <input type="text" value="${displayName || ''}" id="full-name" name="full-name" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" disabled />
+          <input type="text" value="${
+						displayName || ''
+					}" id="full-name" name="full-name" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-transparent focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" disabled />
         </div>
         <div class="relative flex-grow w-full sm:w-1/2 md:w-1/3 lg:w-1/5">
           <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
@@ -113,94 +124,91 @@ const Account = (props) => {
       </div>
     </section>
   `;
-}
+};
 
 // initialize
 const accountElement = document.querySelector('#account');
 const user = getUserFromLocalStorage();
 
 if (!user || user === null) {
-  window.location.replace('/login');
+	window.location.replace('/login');
 } else if (accountElement) {
-  accountElement.innerHTML = `${Account({ 
-    user,
-  })}`;
+	accountElement.innerHTML = `${Account({
+		user,
+	})}`;
 }
 
 // elements
-const deleteAccountConfirmModalElement = document
-  .querySelector('#delete-account-confirm-modal');
-const deleteAccountBtn = document
-  .querySelector('.Account #delete-account-btn');
-const confirmDeleteAccountBtn = document
-  .querySelector('.DeleteAccountConfirmModal #confirm-delete-account-btn');
-const cancelDeleteAccountBtn = document
-  .querySelector('.DeleteAccountConfirmModal #cancel-delete-account-btn');
-const deleteAccountError = document
-  .querySelector('.DeleteAccountConfirmModal #delete-account-error');
-  
+const deleteAccountConfirmModalElement = document.querySelector(
+	'#delete-account-confirm-modal'
+);
+const deleteAccountBtn = document.querySelector('.Account #delete-account-btn');
+const confirmDeleteAccountBtn = document.querySelector(
+	'.DeleteAccountConfirmModal #confirm-delete-account-btn'
+);
+const cancelDeleteAccountBtn = document.querySelector(
+	'.DeleteAccountConfirmModal #cancel-delete-account-btn'
+);
+const deleteAccountError = document.querySelector(
+	'.DeleteAccountConfirmModal #delete-account-error'
+);
 
 // functions
 const showDeleteAccountConfirmationModal = () => {
-  deleteAccountConfirmModalElement.classList.remove('hidden');
-}
+	deleteAccountConfirmModalElement.classList.remove('hidden');
+};
 
 const hideDeleteAccountConfirmationModal = () => {
-  deleteAccountConfirmModalElement.classList.add('hidden');
-}
+	deleteAccountConfirmModalElement.classList.add('hidden');
+};
 
 const showDeleteAccountError = () => {
-  deleteAccountError.classList.remove('hidden');
-}
+	deleteAccountError.classList.remove('hidden');
+};
 
 const hideDeleteAccountError = () => {
-  deleteAccountError.classList.add('hidden');
-}
+	deleteAccountError.classList.add('hidden');
+};
 
 const onDeleteAccount = () => {
-  showDeleteAccountConfirmationModal();
-}
+	showDeleteAccountConfirmationModal();
+};
 
 const onConfirmDeleteAccount = async () => {
-  const { uid: userId } = getUserFromLocalStorage();
-  
-  const { 
-    error: deleteUserDocError, 
-    isTradeLogDocDeleted,
-  } = await deleteUserDoc(userId);
-  console.log({ deleteUserDocError, isTradeLogDocDeleted });
-  if (deleteUserDocError) {
-    showDeleteAccountError();
-  }
+	const { uid: userId } = getUserFromLocalStorage();
 
-  const { 
-    error: deleteUserAccountError, 
-    isUserAccountDeleted 
-  } = await onDeleteUserAccount();
-  console.log({ deleteUserAccountError, isUserAccountDeleted });
-  if (deleteUserAccountError) {
-    showDeleteAccountError();
-  }
+	const { error: deleteUserDocError, isTradeLogDocDeleted } =
+		await deleteUserDoc(userId);
+	console.log({ deleteUserDocError, isTradeLogDocDeleted });
+	if (deleteUserDocError) {
+		showDeleteAccountError();
+	}
 
-  const { error: signoutError, isSignoutComplete } = await onSignout();
-  if (signoutError) {
-    showDeleteAccountError();
-  }
-  console.log({ signoutError, isSignoutComplete });
+	const { error: deleteUserAccountError, isUserAccountDeleted } =
+		await onDeleteUserAccount();
+	console.log({ deleteUserAccountError, isUserAccountDeleted });
+	if (deleteUserAccountError) {
+		showDeleteAccountError();
+	}
 
-  hideDeleteAccountConfirmationModal();
-  window.location.replace('/home');
-}
+	const { error: signoutError, isSignoutComplete } = await onSignout();
+	if (signoutError) {
+		showDeleteAccountError();
+	}
+	console.log({ signoutError, isSignoutComplete });
+
+	hideDeleteAccountConfirmationModal();
+	window.location.replace('/home');
+};
 
 const onCancelDeleteAccount = () => {
-  hideDeleteAccountConfirmationModal();
-}
+	hideDeleteAccountConfirmationModal();
+};
 
 // events
-deleteAccountBtn !== null && deleteAccountBtn
-  .addEventListener('click', onDeleteAccount);
-confirmDeleteAccountBtn !== null && confirmDeleteAccountBtn
-  .addEventListener('click', onConfirmDeleteAccount);
-cancelDeleteAccountBtn !== null && cancelDeleteAccountBtn
-  .addEventListener('click', onCancelDeleteAccount);
-
+deleteAccountBtn !== null &&
+	deleteAccountBtn.addEventListener('click', onDeleteAccount);
+confirmDeleteAccountBtn !== null &&
+	confirmDeleteAccountBtn.addEventListener('click', onConfirmDeleteAccount);
+cancelDeleteAccountBtn !== null &&
+	cancelDeleteAccountBtn.addEventListener('click', onCancelDeleteAccount);

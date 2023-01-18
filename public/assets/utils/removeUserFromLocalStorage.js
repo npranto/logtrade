@@ -1,4 +1,4 @@
-const removeUserFromLocalStorage = () => 
-  localStorage.removeItem('logtrade:::user');
+const removeUserFromLocalStorage = () =>
+	localStorage.removeItem('logtrade:::user');
 
 export default removeUserFromLocalStorage;

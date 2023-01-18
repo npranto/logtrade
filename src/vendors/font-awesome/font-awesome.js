@@ -1,2 +1,3 @@
 // ref: https://stackoverflow.com/a/52456022
-import '@fortawesome/fontawesome-free/js/all.js';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import '@fortawesome/fontawesome-free/js/all';

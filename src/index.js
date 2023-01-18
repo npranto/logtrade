@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -33,17 +34,16 @@ import App from './App';
 // };
 // const tradeLogId = 'sd7f7f8d57fd';
 
-
 // fetchAllTradesByUserId('H8XTiCvnxOWojohm2DewzlBxrjG2');
 // createNewTradeLog(newTradeLog, userId);
 // deleteTradeLog(tradeLogId, userId);
 // updateTradeLog(tradeLogId, updatedTradeLog, userId);
 
 ReactDOM.render(
-  // <React.StrictMode>
-  <App />,
-  // </React.StrictMode>,
-  document.getElementById('root')
+	// <React.StrictMode>
+	<App />,
+	// </React.StrictMode>,
+	document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
