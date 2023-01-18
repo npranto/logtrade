@@ -1,3 +1,6 @@
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable default-param-last */
+/* eslint-disable consistent-return */
 // import getUniqueId from "./getUniqueId";
 
 // let DB_STOCK = [];
@@ -20,18 +23,17 @@
 //     userId,
 //     stockId: getUniqueId(),
 //     stock,
-//     month, 
-//     date, 
+//     month,
+//     date,
 //     year,
 //   }
 //   DB_STOCK = [...DB_STOCK, newStock];
 // }
 
 export const findMatchingTradesByDate = (trades = [], month, date, year) => {
-  if (!trades.length || !Array.isArray(trades)) return;
-  return trades.filter(trade => (
-    (trade.month === month) && 
-    (trade.date === date) &&
-    (trade.year === year)
-  ));
-}
+	if (!trades.length || !Array.isArray(trades)) return;
+	return trades.filter(
+		(trade) =>
+			trade.month === month && trade.date === date && trade.year === year
+	);
+};
