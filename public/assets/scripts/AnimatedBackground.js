@@ -1,7 +1,6 @@
 // ref: https://codepen.io/mohaiman/pen/MQqMyo
 
-const styles = () => {
-  return ` 
+const styles = () => ` 
     <style>       
       .area{
         background: #4e54c8;  
@@ -110,10 +109,8 @@ const styles = () => {
       }
     </style>
   `;
-}
 
-const AnimatedBackground = () => {
-  return `
+const AnimatedBackground = () => `
     ${styles()}
     <div class="area" id="pure-css-animated-background">
       <ul class="circles">
@@ -129,12 +126,12 @@ const AnimatedBackground = () => {
         <li></li>
       </ul>
     </div>
-  `
-}
+  `;
 
-const animatedBackgroundElement = document.querySelector('#animated-background');
+const animatedBackgroundElement = document.querySelector(
+	'#animated-background'
+);
 
 if (animatedBackgroundElement && animatedBackgroundElement !== null) {
-  animatedBackgroundElement.innerHTML = `${AnimatedBackground()}`;
+	animatedBackgroundElement.innerHTML = `${AnimatedBackground()}`;
 }
-
