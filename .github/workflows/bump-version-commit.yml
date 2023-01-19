@@ -1,3 +1,11 @@
+# This workflow gets executed when a code change gets merged to
+# `develop branch`. After a merge, the package.json and its
+# corresponding lock file's version gets updated automatically based
+# on semver rules. To determine whether a patch, minor or major
+# version update is to be executed, this workflow checks all the
+# commit messages checks for corresponding "[PATCH]", "[MINOR]"
+# or "[MAJOR]" keywords.
+
 name: 'Bump Version + Create Tag'
 
 on:
@@ -6,7 +14,7 @@ on:
       - 'develop'
 
 jobs:
-  create-tag:
+  bump-version-create-tag:
     name: 'Bump Version + Create Tag'
     runs-on: ubuntu-latest
     steps:
@@ -19,9 +27,9 @@ jobs:
         uses: 'phips28/gh-action-bump-version@master'
         with:
           tag-prefix: 'v'
-          minor-wording:  '[MINOR]'
-          major-wording:  '[MAJOR]'
-          patch-wording:  '[PATCH]'
+          minor-wording: '[MINOR]'
+          major-wording: '[MAJOR]'
+          patch-wording: '[PATCH]'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Output Step'
