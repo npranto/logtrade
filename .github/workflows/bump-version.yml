@@ -1,0 +1,35 @@
+name: Bump Version
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - develop
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Bump version
+      run: |
+        # Get the current version
+        version=$(cat package.json | jq -r '.version')
+        # Get the pull request title
+        title=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
+        # Extract the version update keyword
+        keyword=$(echo $title | grep -o -E '\[(MAJOR|MINOR|PATCH)\]')
+        # Update the version based on the keyword
+        if [ "$keyword" == "[MAJOR]" ]; then
+          version=$(echo $version | awk -F. -v OFS=. 'NF==1{print ++$NF}; NF>1{if(length($NF+1)>length($NF))$(NF-1)++; $NF=sprintf("%0*d", length($NF), ($NF+1)%(10^length($NF))); print}')
+        elif [ "$keyword" == "[MINOR]" ]; then
+          version=$(echo $version | awk -F. -v OFS=. '{$(NF-1)++; $NF=0; print}')
+        elif [ "$keyword" == "[PATCH]" ]; then
+          version=$(echo $version | awk -F. -v OFS=. '{$NF++; print}')
+        fi
+        # Update the version in package.json
+        jq --arg version "$version" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
+        git add package.json
+        git commit -m "Bump version to $version"
+        git push
