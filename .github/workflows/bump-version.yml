@@ -1,0 +1,30 @@
+name: 'Bump Version + Create Tag'
+
+on:
+  push:
+    branches:
+      - 'develop'
+
+jobs:
+  create-tag:
+    name: 'Bump Version + Create Tag'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout source code'
+        uses: 'actions/checkout@v3'
+        with:
+          ref: ${{ github.ref }}
+      - name: 'Automated version bump'
+        id: version-bump
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          tag-prefix: 'v'
+					minor-wording:  '[MINOR]'
+    			major-wording:  '[MAJOR]'
+					patch-wording:  '[PATCH]'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: 'Output Step'
+        env:
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+        run: echo "New tag $NEW_TAG"
