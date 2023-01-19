@@ -19,9 +19,9 @@ jobs:
         uses: 'phips28/gh-action-bump-version@master'
         with:
           tag-prefix: 'v'
-					minor-wording:  '[MINOR]'
-    			major-wording:  '[MAJOR]'
-					patch-wording:  '[PATCH]'
+          minor-wording:  '[MINOR]'
+          major-wording:  '[MAJOR]'
+          patch-wording:  '[PATCH]'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Output Step'
