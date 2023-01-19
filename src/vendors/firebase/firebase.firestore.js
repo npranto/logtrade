@@ -1,5 +1,15 @@
+/* eslint-disable no-console */
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable no-shadow */
+/* eslint-disable max-len */
 import './firebase';
-import { getFirestore, doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
+import {
+	getFirestore,
+	doc,
+	getDoc,
+	setDoc,
+	updateDoc,
+} from 'firebase/firestore';
 // import { getDocFromCache, saveDocInCache } from "./firebase.cache";
 
 const db = getFirestore();
@@ -82,9 +92,9 @@ const db = getFirestore();
 
 //   if (userTrades?.exists()) {
 //     return userTrades?.data()?.trades;
-//   } 
+//   }
 //   return [];
-// } 
+// }
 
 // export const createNewTradeLog = async (newTrade, userId) => {
 //   const tradelogRef = doc(db, "tradelogs", userId)
@@ -98,9 +108,9 @@ const db = getFirestore();
 //       });
 //       return { isNewTradeCreated: true };
 //     } catch (error) {
-//       return { 
-//         error: (error && error.message) || 
-//           'Unable to create new trade at the moment. Try again later.' 
+//       return {
+//         error: (error && error.message) ||
+//           'Unable to create new trade at the moment. Try again later.'
 //       }
 //     }
 //   } else {
@@ -112,9 +122,9 @@ const db = getFirestore();
 //       });
 //       return { isNewTradeCreated: true };
 //     } catch (error) {
-//       return { 
-//         error: (error && error.message) || 
-//           'Unable to create new trade at the moment. Try again later.' 
+//       return {
+//         error: (error && error.message) ||
+//           'Unable to create new trade at the moment. Try again later.'
 //       }
 //     }
 //   }
@@ -122,33 +132,30 @@ const db = getFirestore();
 
 // tradelogs stringified
 
-export const stringify = json => {
-  const isJSONObject = typeof json === 'object' && json !== null;
-  if (!isJSONObject) {
-    throw new Error('Please pass in a valid JSON object to stringify');
-  }
-  return JSON.stringify(json);
-}
+export const stringify = (json) => {
+	const isJSONObject = typeof json === 'object' && json !== null;
+	if (!isJSONObject) {
+		throw new Error('Please pass in a valid JSON object to stringify');
+	}
+	return JSON.stringify(json);
+};
 
-export const jsonify = stringified => {
-  if (!stringified 
-    || !stringified.length 
-    || typeof stringified !== 'string'
-  ) {
-    throw new Error('Please pass in a valid stringified JSON to parse');
-  }
-  try {
-    const jsonified = JSON.parse(stringified);
-    return jsonified;
-  } catch (e) {
-    throw new Error(e);
-  }
-}
+export const jsonify = (stringified) => {
+	if (!stringified || !stringified.length || typeof stringified !== 'string') {
+		throw new Error('Please pass in a valid stringified JSON to parse');
+	}
+	try {
+		const jsonified = JSON.parse(stringified);
+		return jsonified;
+	} catch (e) {
+		throw new Error(e);
+	}
+};
 
 // const getUserDoc = async (
-//   userId, 
-//   options = { 
-//     useCache: false, 
+//   userId,
+//   options = {
+//     useCache: false,
 //     cacheDurationInMinutes: 1,
 //   },
 // ) => {
@@ -163,7 +170,7 @@ export const jsonify = stringified => {
 
 //   const getUserDocFromFirestore = async (userId) => {
 //     const userDoc = await getDoc(doc(db, "tradelogs-stringified", userId));
-//     return { 
+//     return {
 //       exists: userDoc?.exists(),
 //       data: userDoc?.data(),
 //     };
@@ -171,28 +178,28 @@ export const jsonify = stringified => {
 
 //   const getUserDocFromCache = async (userId) => {
 //     const { exists, data, expiration } = await getDocFromCache(userId);
-//     return { 
-//       exists, 
-//       data, 
-//       expiration 
-//     }; 
+//     return {
+//       exists,
+//       data,
+//       expiration
+//     };
 //   }
 
 //   if (!useCache) {
 //     console.log(
 //       `useCache [${useCache}]... getting user doc from firebase DB`
 //     );
-//     const { exists, data } = await getUserDocFromFirestore(userId); 
+//     const { exists, data } = await getUserDocFromFirestore(userId);
 //     if (exists) {
 //       saveDocInCache(
-//         userId, 
-//         stringify(data), 
+//         userId,
+//         stringify(data),
 //         cacheDurationInMinutes
 //       );
 //     }
 //     return { exists, data };
 //   }
-  
+
 //   if (useCache) {
 //     const { exists, data, expiration } = await getUserDocFromCache(userId);
 //     const isCacheExpired = expiration !== null && new Date().getTime() > expiration;
@@ -203,11 +210,11 @@ export const jsonify = stringified => {
 //       console.log(
 //         `useCache [${useCache}], but cache either doesn't have doc OR is expired... getting user doc from firebase DB`
 //       );
-//       const { exists, data } = await getUserDocFromFirestore(userId); 
+//       const { exists, data } = await getUserDocFromFirestore(userId);
 //       if (exists) {
 //         saveDocInCache(
-//           userId, 
-//           stringify(data), 
+//           userId,
+//           stringify(data),
 //           cacheDurationInMinutes
 //         );
 //       }
@@ -222,7 +229,7 @@ export const jsonify = stringified => {
 // }
 
 // export const fetchAllTradesByUserId = async (
-//   userId, 
+//   userId,
 //   options = { useCache: true, cacheDurationInMinutes: 0.15 },
 // ) => {
 //   if (!userId || typeof userId !== 'string') {
@@ -274,7 +281,7 @@ export const jsonify = stringified => {
 //   //   console.log({ trades });
 //   //   return trades;
 //   // }
-// } 
+// }
 
 // export const createNewTradeLog = async (newTrade, userId) => {
 //   const tradelogRef = doc(db, "tradelogs-stringified", userId)
@@ -288,9 +295,9 @@ export const jsonify = stringified => {
 //       });
 //       return { isNewTradeCreated: true };
 //     } catch (error) {
-//       return { 
-//         error: (error && error.message) || 
-//           'Unable to create new trade at the moment. Try again later.' 
+//       return {
+//         error: (error && error.message) ||
+//           'Unable to create new trade at the moment. Try again later.'
 //       }
 //     }
 //   } else {
@@ -302,257 +309,259 @@ export const jsonify = stringified => {
 //       });
 //       return { isNewTradeCreated: true };
 //     } catch (error) {
-//       return { 
-//         error: (error && error.message) || 
-//           'Unable to create new trade at the moment. Try again later.' 
+//       return {
+//         error: (error && error.message) ||
+//           'Unable to create new trade at the moment. Try again later.'
 //       }
 //     }
 //   }
 // }
 
 const getTradeLogsDocById = async (docId) => {
-  if (!docId || typeof docId !== 'string') {
-    throw new Error(
-      'Please pass in a valid doc id to fetch document from Firestore'
-    );
-  }
-  return await getDoc(doc(db, "tradelogs-stringified", docId));
-}
+	if (!docId || typeof docId !== 'string') {
+		throw new Error(
+			'Please pass in a valid doc id to fetch document from Firestore'
+		);
+	}
+	return getDoc(doc(db, 'tradelogs-stringified', docId));
+};
 
 export const fetchAllTradesByUserId = async (userId) => {
-  if (!userId || typeof userId !== 'string') {
-    throw new Error('Please pass in a valid user id to get trade logs');
-  }
+	if (!userId || typeof userId !== 'string') {
+		throw new Error('Please pass in a valid user id to get trade logs');
+	}
 
-  const userTradeLogsDoc = await getTradeLogsDocById(userId);
+	const userTradeLogsDoc = await getTradeLogsDocById(userId);
 
-  if (!userTradeLogsDoc?.exists()) {
-    console.info(
-      `No trade logs found for user id - [${userId}]. Returning empty array set`
-    );
-    return [];
-  } 
+	if (!userTradeLogsDoc?.exists()) {
+		console.info(
+			`No trade logs found for user id - [${userId}]. Returning empty array set`
+		);
+		return [];
+	}
 
-  const userTrades = 
-    jsonify(userTradeLogsDoc?.data()?.content || {}).trades || [];
+	const userTrades =
+		jsonify(userTradeLogsDoc?.data()?.content || {}).trades || [];
 
-  console.log({ userTrades });
+	console.log({ userTrades });
 
-  return userTrades;
-} 
+	return userTrades;
+};
 
 export const createNewTradeLog = async (newTrade, userId) => {
-  if (!userId || typeof userId !== 'string') {
-    throw new Error('Please pass in a valid user id to create a new trade log');
-  }
+	if (!userId || typeof userId !== 'string') {
+		throw new Error('Please pass in a valid user id to create a new trade log');
+	}
 
-  const validateNewTrade = (newTrade) => {
-    if (!newTrade || typeof newTrade !== 'object') {
-      return { 
-        isValid: false, 
-        error: 'Please pass in a valid new trade object', 
-      }
-    }
-    const requiredProperties = [
-      'tradeId',
-      'openingPrice',
-      'closingPrice',
-      'stopLoss',
-      'takeProfit',
-      'date',
-      'month',
-      'year',
-      'notes',
-      'numberOfShares',
-      'ticker',
-      'vwap'
-    ]
-    const missingProperty = requiredProperties.find(property => {
-      return !newTrade.hasOwnProperty(property)
-    });
+	const validateNewTrade = (nt) => {
+		if (!nt || typeof nt !== 'object') {
+			return {
+				isValid: false,
+				error: 'Please pass in a valid new trade object',
+			};
+		}
+		const requiredProperties = [
+			'tradeId',
+			'openingPrice',
+			'closingPrice',
+			'stopLoss',
+			'takeProfit',
+			'date',
+			'month',
+			'year',
+			'notes',
+			'numberOfShares',
+			'ticker',
+			'vwap',
+		];
+		// eslint-disable-next-line no-prototype-builtins
+		const missingProperty = requiredProperties.find(
+			(property) => !nt.hasOwnProperty(property)
+		);
 
-    if (missingProperty) {
-      return { 
-        isValid: false, 
-        error: `[${missingProperty}] property is required to create a new trade` 
-      }
-    }
-    return { isValid: true, error: null };
-  }
+		if (missingProperty) {
+			return {
+				isValid: false,
+				error: `[${missingProperty}] property is required to create a new trade`,
+			};
+		}
+		return { isValid: true, error: null };
+	};
 
-  const { isValid, error } = validateNewTrade(newTrade);
+	const { isValid, error } = validateNewTrade(newTrade);
 
-  if (!isValid) {
-    return { error };
-  }
+	if (!isValid) {
+		return { error };
+	}
 
-  const userTradeLogsRef = doc(db, "tradelogs-stringified", userId)
-  const userTradeLogsSnap = await getDoc(userTradeLogsRef) ;
+	const userTradeLogsRef = doc(db, 'tradelogs-stringified', userId);
+	const userTradeLogsSnap = await getDoc(userTradeLogsRef);
 
-  if (userTradeLogsSnap.exists()) {
-    // update existing document by adding new trade to trades list
-    const { content } = userTradeLogsSnap.data() || {};
-    const existingData = jsonify(content);
-    const { userId, trades = [] } = existingData;
-    const newData = {
-      trades: [
-        ...trades,
-        { ...newTrade },
-      ],
-      userId,
-    }
-    const newDataStringified = stringify(newData);
-    try {
-      await updateDoc(userTradeLogsRef, {
-        content: newDataStringified,
-      });
-      return { isNewTradeLogCreated: true };
-    } catch (error) {
-      return { 
-        error: (error && error.message) || 
-          'Unable to create new trade at the moment. Try again later.' 
-      }
-    }
-  } else {
-    // set up a new document and add new trade to trades list
-    const newData = {
-      trades: [{ ...newTrade }],
-      userId,
-    }
-    const newDataStringified = stringify(newData);
-    try {
-      await setDoc(doc(db, "tradelogs-stringified", userId), {
-        content: newDataStringified,
-      });
-      return { isNewTradeLogCreated: true };
-    } catch (error) {
-      return { 
-        error: (error && error.message) || 
-          'Unable to create new trade at the moment. Try again later.' 
-      }
-    }
-  }
-}
+	if (userTradeLogsSnap.exists()) {
+		// update existing document by adding new trade to trades list
+		const { content } = userTradeLogsSnap.data() || {};
+		const existingData = jsonify(content);
+		// eslint-disable-next-line no-shadow
+		const { userId, trades = [] } = existingData;
+		const newData = {
+			trades: [...trades, { ...newTrade }],
+			userId,
+		};
+		const newDataStringified = stringify(newData);
+		try {
+			await updateDoc(userTradeLogsRef, {
+				content: newDataStringified,
+			});
+			return { isNewTradeLogCreated: true };
+		} catch (e) {
+			return {
+				error:
+					(e && e.message) ||
+					'Unable to create new trade at the moment. Try again later.',
+			};
+		}
+	} else {
+		// set up a new document and add new trade to trades list
+		const newData = {
+			trades: [{ ...newTrade }],
+			userId,
+		};
+		const newDataStringified = stringify(newData);
+		try {
+			await setDoc(doc(db, 'tradelogs-stringified', userId), {
+				content: newDataStringified,
+			});
+			return { isNewTradeLogCreated: true };
+		} catch (e) {
+			return {
+				error:
+					(e && e.message) ||
+					'Unable to create new trade at the moment. Try again later.',
+			};
+		}
+	}
+};
 
+// eslint-disable-next-line consistent-return
 export const deleteTradeLog = async (tradeLogId, userId) => {
-  if (!tradeLogId || typeof tradeLogId !== 'string') {
-    throw new Error('Please pass in a valid trade log id to delete');
-  }
-  if (!userId || typeof userId !== 'string') {
-    throw new Error('Please pass in a valid user id to delete a trade log');
-  }
+	if (!tradeLogId || typeof tradeLogId !== 'string') {
+		throw new Error('Please pass in a valid trade log id to delete');
+	}
+	if (!userId || typeof userId !== 'string') {
+		throw new Error('Please pass in a valid user id to delete a trade log');
+	}
 
-  const userTradeLogsRef = doc(db, "tradelogs-stringified", userId)
-  const userTradeLogsSnap = await getDoc(userTradeLogsRef);
+	const userTradeLogsRef = doc(db, 'tradelogs-stringified', userId);
+	const userTradeLogsSnap = await getDoc(userTradeLogsRef);
 
-  if (userTradeLogsSnap.exists()) {
-    // update existing trade logs list by removing matching trade id
-    const { content } = userTradeLogsSnap.data() || {};
-    const existingData = jsonify(content);
-    const { userId, trades = [] } = existingData;
-    const filteredTrades = trades.filter(trade => trade.tradeId !== tradeLogId);
-    const newData = {
-      trades: [...filteredTrades],
-      userId,
-    }
-    const newDataStringified = stringify(newData);
-    try {
-      await updateDoc(userTradeLogsRef, {
-        content: newDataStringified,
-      });
-      return { isTradeLogDeleted: true, deletedTradeLogId: tradeLogId };
-    } catch (error) {
-      return { 
-        error: (error && error.message) || 
-          'Unable to delete trade log at the moment. Try again later.' 
-      }
-    }
-  }
-}
+	if (userTradeLogsSnap.exists()) {
+		// update existing trade logs list by removing matching trade id
+		const { content } = userTradeLogsSnap.data() || {};
+		const existingData = jsonify(content);
+		const { userId, trades = [] } = existingData;
+		const filteredTrades = trades.filter(
+			(trade) => trade.tradeId !== tradeLogId
+		);
+		const newData = {
+			trades: [...filteredTrades],
+			userId,
+		};
+		const newDataStringified = stringify(newData);
+		try {
+			await updateDoc(userTradeLogsRef, {
+				content: newDataStringified,
+			});
+			return { isTradeLogDeleted: true, deletedTradeLogId: tradeLogId };
+		} catch (error) {
+			return {
+				error:
+					(error && error.message) ||
+					'Unable to delete trade log at the moment. Try again later.',
+			};
+		}
+	}
+};
 
+// eslint-disable-next-line consistent-return
 export const updateTradeLog = async (tradeLogId, updatedTradeLog, userId) => {
-  if (!tradeLogId || typeof tradeLogId !== 'string') {
-    throw new Error('Please pass in a valid trade log id to delete');
-  }
-  if (!userId || typeof userId !== 'string') {
-    throw new Error('Please pass in a valid user id to delete a trade log');
-  }
+	if (!tradeLogId || typeof tradeLogId !== 'string') {
+		throw new Error('Please pass in a valid trade log id to delete');
+	}
+	if (!userId || typeof userId !== 'string') {
+		throw new Error('Please pass in a valid user id to delete a trade log');
+	}
 
-  
-  const validateNewTrade = (updatedTrade) => {
-    if (!updatedTrade || typeof updatedTrade !== 'object') {
-      return {
-        isValid: false,
-        error: 'Please pass in a valid updated trade object',
-      }
-    }
-    const requiredProperties = [
-      'tradeId',
-      'openingPrice',
-      'closingPrice',
-      'stopLoss',
-      'takeProfit',
-      'date',
-      'month',
-      'year',
-      'notes',
-      'numberOfShares',
-      'ticker',
-    ]
-    const missingProperty = requiredProperties.find(property => {
-      return !updatedTrade.hasOwnProperty(property)
-    });
+	const validateNewTrade = (updatedTrade) => {
+		if (!updatedTrade || typeof updatedTrade !== 'object') {
+			return {
+				isValid: false,
+				error: 'Please pass in a valid updated trade object',
+			};
+		}
+		const requiredProperties = [
+			'tradeId',
+			'openingPrice',
+			'closingPrice',
+			'stopLoss',
+			'takeProfit',
+			'date',
+			'month',
+			'year',
+			'notes',
+			'numberOfShares',
+			'ticker',
+		];
+		const missingProperty = requiredProperties.find(
+			(property) => !updatedTrade.hasOwnProperty(property)
+		);
 
-    if (missingProperty) {
-      return { 
-        isValid: false, 
-        error: `[${missingProperty}] property is required to update a trade` 
-      }
-    }
-    return { isValid: true, error: null };
-  }
+		if (missingProperty) {
+			return {
+				isValid: false,
+				error: `[${missingProperty}] property is required to update a trade`,
+			};
+		}
+		return { isValid: true, error: null };
+	};
 
-  const { isValid, error } = validateNewTrade(updatedTradeLog);
+	const { isValid, error } = validateNewTrade(updatedTradeLog);
 
-  if (!isValid) {
-    return {
-      error,
-    };
-  }
+	if (!isValid) {
+		return {
+			error,
+		};
+	}
 
-  const userTradeLogsRef = doc(db, "tradelogs-stringified", userId)
-  const userTradeLogsSnap = await getDoc(userTradeLogsRef);
+	const userTradeLogsRef = doc(db, 'tradelogs-stringified', userId);
+	const userTradeLogsSnap = await getDoc(userTradeLogsRef);
 
-  if (userTradeLogsSnap.exists()) {
-    // update existing trade logs list by removing matching trade id
-    const { content } = userTradeLogsSnap.data() || {};
-    const existingData = jsonify(content);
-    const { userId, trades = [] } = existingData;
-    const updatedTrades = trades.map((trade) => {
-      if (trade.tradeId === tradeLogId) {
-        return { ...updatedTradeLog };
-      }
-      return trade;
-    });
-    const newData = {
-      trades: [...updatedTrades],
-      userId,
-    }
-    const newDataStringified = stringify(newData);
-    try {
-      await updateDoc(userTradeLogsRef, {
-        content: newDataStringified,
-      });
-      return { isTradeLogUpdated: true, updatedTradeLogId: tradeLogId };
-    } catch (error) {
-      return { 
-        error: (error && error.message) || 
-          'Unable to delete trade log at the moment. Try again later.' 
-      }
-    }
-  }
-}
-
-
-
-
+	if (userTradeLogsSnap.exists()) {
+		// update existing trade logs list by removing matching trade id
+		const { content } = userTradeLogsSnap.data() || {};
+		const existingData = jsonify(content);
+		const { userId, trades = [] } = existingData;
+		const updatedTrades = trades.map((trade) => {
+			if (trade.tradeId === tradeLogId) {
+				return { ...updatedTradeLog };
+			}
+			return trade;
+		});
+		const newData = {
+			trades: [...updatedTrades],
+			userId,
+		};
+		const newDataStringified = stringify(newData);
+		try {
+			await updateDoc(userTradeLogsRef, {
+				content: newDataStringified,
+			});
+			return { isTradeLogUpdated: true, updatedTradeLogId: tradeLogId };
+		} catch (error) {
+			return {
+				error:
+					(error && error.message) ||
+					'Unable to delete trade log at the moment. Try again later.',
+			};
+		}
+	}
+};

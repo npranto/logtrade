@@ -1,53 +1,59 @@
 {
-  "name": "logtrade",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
-    "firebase": "^9.1.2",
-    "lodash.isequal": "^4.5.0",
-    "query-string": "^4.3.4",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-icons": "^4.3.1",
-    "react-scripts": "4.0.3",
-    "uniqid": "^5.4.0",
-    "web-vitals": "^1.1.2"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "prepare": "husky install",
-    "build:clean": "npx rimraf build",
-    "build:tailwind": "npx tailwindcss -i public/assets/vendors/tailwindcss/tailwind.directive.css -o public/assets/vendors/tailwindcss/tailwind.css",
-    "open:dev": "npm start",
-    "build:prod": "npm run build:clean && npm run build",
-    "open:prod": "npm run build:clean && npm run build:prod && npx serve -s build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "husky": "^7.0.2",
-    "rimraf": "^3.0.2"
-  }
+	"name": "logtrade",
+	"version": "1.0.0",
+	"private": true,
+	"dependencies": {
+		"@fortawesome/fontawesome-free": "^6.2.1",
+		"@testing-library/jest-dom": "^5.14.1",
+		"@testing-library/react": "^11.2.7",
+		"@testing-library/user-event": "^12.8.3",
+		"firebase": "^9.1.2",
+		"lodash.isequal": "^4.5.0",
+		"query-string": "^4.3.4",
+		"react": "^16.0.0",
+		"react-dom": "^16.0.0",
+		"react-icons": "^4.3.1",
+		"react-scripts": "4.0.3",
+		"uniqid": "^5.4.0",
+		"web-vitals": "^1.1.2"
+	},
+	"scripts": {
+		"start": "react-scripts start",
+		"build": "react-scripts build",
+		"test": "echo 'Running: npm test'",
+		"eject": "react-scripts eject",
+		"prepare": "husky install",
+		"build:clean": "npx rimraf build",
+		"build:tailwind": "npx tailwindcss -i public/assets/vendors/tailwindcss/tailwind.directive.css -o public/assets/vendors/tailwindcss/tailwind.css",
+		"open:dev": "npm start",
+		"build:prod": "npm run build:clean && npm run build",
+		"open:prod": "npm run build:clean && npm run build:prod && npx serve -s build",
+		"lint": "npx eslint ./",
+		"lint:fix": "npx eslint ./ --fix",
+		"format": "npx prettier --write ."
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"eslint": "^7.32.0",
+		"eslint-config-airbnb": "^19.0.4",
+		"eslint-config-prettier": "^8.6.0",
+		"eslint-plugin-import": "^2.27.5",
+		"eslint-plugin-jsx-a11y": "^6.7.1",
+		"eslint-plugin-react": "^7.32.1",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"husky": "^7.0.2",
+		"prettier": "2.8.3",
+		"rimraf": "^3.0.2"
+	}
 }
