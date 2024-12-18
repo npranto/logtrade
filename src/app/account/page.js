@@ -1,8 +1,8 @@
 const AccountPage = () => {
   return (
-    <div className="flex flex-col min-h-screen px-4">
-      <main className="flex flex-col gap-8 flex-grow">Account Page</main>
-    </div>
+    <main className="flex flex-col min-h-screen px-4">
+      <div className="flex flex-col gap-8 flex-grow">Account Page</div>
+    </main>
   );
 };
 
