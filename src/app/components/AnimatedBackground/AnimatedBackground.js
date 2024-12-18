@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './AB.module.css';
+import styles from './AnimatedBackground.module.css';
 
 const AnimatedBackground = () => {
   return (
