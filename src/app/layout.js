@@ -1,7 +1,8 @@
 import { Inter } from 'next/font/google';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
-import { ClerkProvider, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { ClerkProvider } from '@clerk/nextjs';
+import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -16,35 +17,9 @@ export default function RootLayout({ children }) {
     <ClerkProvider appearance={{}}>
       <html lang="en">
         <body className={`${inter.className} antialiased`}>
-          <ul className="p-4 mb-4 flex space-x-2">
-            <li>
-              <UserButton />
-            </li>
-            <li>
-              <Link href={'/'}>Home</Link>
-            </li>
-            <SignedOut>
-              <li>
-                <Link href={'/login'}>Login</Link>
-              </li>
-            </SignedOut>
-            <SignedOut>
-              <li>
-                <Link href={'/signup'}>Signup</Link>
-              </li>
-            </SignedOut>
-            <SignedIn>
-              <li>
-                <Link href={'/dashboard'}>Dashboard</Link>
-              </li>
-            </SignedIn>
-            <SignedIn>
-              <li>
-                <Link href={'/account'}>Account</Link>
-              </li>
-            </SignedIn>
-          </ul>
+          <Navigation />
           {children}
+          <Footer />
         </body>
       </html>
     </ClerkProvider>
