@@ -13,7 +13,7 @@ const Navigation = () => {
   return (
     <header className="bg-indigo-600 text-white py-4 px-8">
       <div className="flex items-center justify-between">
-        {/* Logo or App Name */}
+        {/* Logo */}
         <div className="text-2xl font-extrabold">
           <Link href="/" className="flex gap-2 hover:text-yellow-400 transition duration-300">
             <Image src="/logtrade-logo.png" width={50} height={50} alt="LogTrade Logo" />
