@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <ul className="bg-green-200 p-4 mb-4 flex space-x-2">
+        <ul className="p-4 mb-4 flex space-x-2">
           <li>
             <Link href={'/'}>Home</Link>
           </li>

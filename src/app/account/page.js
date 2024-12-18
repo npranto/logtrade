@@ -1,7 +1,7 @@
 const AccountPage = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="min-h-[415px] p-8 rounded-lg">Account Page</div>
+    <div className="flex flex-col min-h-screen px-4">
+      <main className="flex flex-col gap-8 flex-grow">Account Page</main>
     </div>
   );
 };
