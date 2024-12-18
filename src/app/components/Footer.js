@@ -4,13 +4,10 @@ import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa';
 const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white py-4">
-      <div className="container mx-auto flex justify-between items-center px-2">
-        {/* Left side: App Info */}
+      <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center px-2 gap-2">
         <p className="text-sm">Note your investments</p>
 
-        {/* Right side: Links and Social Media */}
         <div className="flex items-center gap-4">
-          {/* Links Section */}
           <div className="flex gap-6 text-sm">
             <a href="/terms" className="text-gray-400 hover:text-white transition duration-300">
               Terms of Service
@@ -20,7 +17,6 @@ const Footer = () => {
             </a>
           </div>
 
-          {/* Social Media Icons */}
           <div className="flex gap-4">
             {/* Twitter */}
             <a
@@ -58,7 +54,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright Section */}
       <div className="border-t border-gray-700 mt-4 pt-4 text-center">
         <p className="text-xs text-gray-400">
           &copy; {new Date().getFullYear()} LogTrade. All rights reserved.

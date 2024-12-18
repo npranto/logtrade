@@ -62,7 +62,7 @@ const Navigation = () => {
             <Link
               onClick={() => setIsMenuOpen((ps) => !ps)}
               href="/login"
-              className="block text-lg hover:text-yellow-400 transition duration-300"
+              className="bg-transparent border-2 border-white text-white px-4 py-2 rounded font-semibold text-lg hover:bg-white hover:text-black transition duration-300"
             >
               Login
             </Link>
@@ -71,7 +71,7 @@ const Navigation = () => {
             <Link
               onClick={() => setIsMenuOpen((ps) => !ps)}
               href="/signup"
-              className="block text-lg hover:text-yellow-400 transition duration-300"
+              className="bg-yellow-500 text-black px-4 py-2 rounded font-semibold text-lg hover:bg-yellow-400 transition duration-300"
             >
               Create New Account
             </Link>
