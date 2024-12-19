@@ -53,13 +53,16 @@ const DashboardPage = () => {
       </div>
 
       {/* Add the floating Add Trade button */}
-      <AddNewTradeBtn onClick={handleAddTrade} />
+      <AddNewTradeBtn onAddTrade={handleAddTrade} />
 
       {/* Conditionally render the modal */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <AddNewTradeFormModal onClose={handleCloseModal} />
+            <AddNewTradeFormModal
+              onClose={handleCloseModal}
+              onSubmit={(formData) => console.log({ formData })}
+            />
           </div>
         </div>
       )}

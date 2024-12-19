@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -9,18 +9,31 @@ import { FaInfoCircle } from 'react-icons/fa';
 
 const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => {
   const [formData, setFormData] = useState({
-    ticker: '',
+    ticker: 'AAPL', // Default ticker
+    tradeType: 'long', // Default trade type
+    tradeDate: new Date(), // Default trade date (current date)
     shares: '',
-    tradeType: 'long',
     priceOpened: '',
     priceClosed: '',
     stopLoss: '',
     takeProfit: '',
     notes: '',
-    tradeDate: new Date(),
   });
 
   const [errors, setErrors] = useState({});
+
+  // Refs for error scrolling
+  const refs = {
+    ticker: useRef(null),
+    tradeType: useRef(null),
+    tradeDate: useRef(null),
+    shares: useRef(null),
+    priceOpened: useRef(null),
+    priceClosed: useRef(null),
+    stopLoss: useRef(null),
+    takeProfit: useRef(null),
+    notes: useRef(null),
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,8 +54,13 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
     e.preventDefault();
     const newErrors = validateForm(formData);
     setErrors(newErrors);
+
     if (Object.keys(newErrors).length === 0) {
       onSubmit(formData);
+    } else {
+      // Scroll to the first field with an error
+      const firstErrorKey = Object.keys(newErrors)[0];
+      refs[firstErrorKey]?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
 
@@ -89,7 +107,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
 
         <form onSubmit={handleSubmit}>
           {/* Ticker Field */}
-          <div className="mb-5">
+          <div className="mb-5" ref={refs.ticker}>
             <label htmlFor="ticker" className="flex items-center text-sm font-bold text-gray-700">
               Ticker
               <span
@@ -117,7 +135,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
           </div>
 
           {/* Shares Field */}
-          <div className="mb-5">
+          <div className="mb-5" ref={refs.shares}>
             <label htmlFor="shares" className="flex items-center text-sm font-bold text-gray-700">
               Number of Shares
               <span
@@ -148,8 +166,50 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
             )}
           </div>
 
+          {/* Trade Type */}
+          <div className="mb-5" ref={refs.tradeType}>
+            <label className="flex items-center text-sm font-bold text-gray-700">
+              Trade Type
+              <span
+                className="ml-1 text-gray-500"
+                data-tooltip-id="tradeType-tooltip"
+                data-tooltip-content="Select 'Long' if buying the stock or 'Short' if selling."
+              >
+                <FaInfoCircle />
+              </span>
+              <Tooltip id="tradeType-tooltip" place="top" effect="solid" />
+            </label>
+            <div className="flex items-center gap-6">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="tradeType"
+                  value="long"
+                  checked={formData.tradeType === 'long'}
+                  onChange={handleInputChange}
+                  className="mr-2"
+                />
+                Long
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="tradeType"
+                  value="short"
+                  checked={formData.tradeType === 'short'}
+                  onChange={handleInputChange}
+                  className="mr-2"
+                />
+                Short
+              </label>
+            </div>
+            <p id="tradeType-description" className="text-gray-400 text-xs">
+              Select &quot;Long&quot; if buying the stock or &quot;Short&quot; if selling
+            </p>
+          </div>
+
           {/* Price Opened */}
-          <div className="mb-5">
+          <div className="mb-5" ref={refs.priceOpened}>
             <label
               htmlFor="priceOpened"
               className="flex items-center text-sm font-bold text-gray-700"
@@ -184,7 +244,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
           </div>
 
           {/* Price Closed */}
-          <div className="mb-5">
+          <div className="mb-5" ref={refs.priceClosed}>
             <label
               htmlFor="priceClosed"
               className="flex items-center text-sm font-bold text-gray-700"
@@ -219,7 +279,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
           </div>
 
           {/* Stop Loss */}
-          <div className="mb-5">
+          <div className="mb-5" ref={refs.stopLoss}>
             <label htmlFor="stopLoss" className="flex items-center text-sm font-bold text-gray-700">
               Stop Loss
               <span
@@ -251,7 +311,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
           </div>
 
           {/* Take Profit */}
-          <div className="mb-5">
+          <div className="mb-5" ref={refs.takeProfit}>
             <label
               htmlFor="takeProfit"
               className="flex items-center text-sm font-bold text-gray-700"
@@ -286,7 +346,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
           </div>
 
           {/* Notes */}
-          <div className="mb-5">
+          <div className="mb-5" ref={refs.notes}>
             <label htmlFor="notes" className="flex items-center text-sm font-bold text-gray-700">
               Notes
               <span
@@ -313,7 +373,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
           </div>
 
           {/* Trade Date */}
-          <div className="mb-5">
+          <div className="mb-5" ref={refs.tradeDate}>
             <label
               htmlFor="tradeDate"
               className="flex items-center text-sm font-bold text-gray-700"

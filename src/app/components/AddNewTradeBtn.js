@@ -1,14 +1,14 @@
 import { FaPlus } from 'react-icons/fa'; // Importing a plus icon from react-icons
 import PropTypes from 'prop-types';
 
-const AddNewTradeBtn = ({ onClick }) => {
+const AddNewTradeBtn = ({ onAddTrade }) => {
   return (
     <div className="fixed bottom-5 right-5">
       {/* Container for button and label */}
       <div className="relative group">
         {/* The button itself */}
         <button
-          onClick={onClick}
+          onClick={onAddTrade}
           className="flex items-center justify-center w-16 h-16 rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 hover:opacity-90 transition ease-in-out duration-300"
         >
           {/* Plus icon with rotating animation on hover */}
@@ -25,7 +25,7 @@ const AddNewTradeBtn = ({ onClick }) => {
 };
 
 AddNewTradeBtn.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onAddTrade: PropTypes.func.isRequired,
 };
 
 export default AddNewTradeBtn;
