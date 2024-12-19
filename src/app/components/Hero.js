@@ -37,7 +37,7 @@ const Hero = () => {
             {/* Login Button */}
             <Link
               href="/login"
-              className="bg-transparent border-2 border-white text-white px-6 py-3 rounded font-semibold text-lg hover:bg-white hover:text-black transition duration-300 dark:border-gray-500 dark:text-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="bg-transparent border-2 border-foreground text-foreground px-6 py-3 rounded font-semibold text-lg hover:bg-foreground hover:text-background transition duration-300"
             >
               Login
             </Link>
