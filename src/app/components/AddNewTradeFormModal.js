@@ -4,19 +4,18 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import PropTypes from 'prop-types';
 import { MOCK_TICKERS } from '../data/mock-tickers';
-import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { FaInfoCircle } from 'react-icons/fa';
 
 const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => {
   const [formData, setFormData] = useState({
-    ticker: 'AAPL',
-    shares: '100',
+    ticker: '',
+    shares: '',
     tradeType: 'long',
-    priceOpened: '150',
-    priceClosed: '160',
-    vwap: 'above',
-    stopLoss: '140',
-    takeProfit: '170',
+    priceOpened: '',
+    priceClosed: '',
+    stopLoss: '',
+    takeProfit: '',
     notes: '',
     tradeDate: new Date(),
   });
@@ -63,50 +62,70 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 transition-opacity ease-in-out duration-300">
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full overflow-y-auto h-[90%] transform transition-transform ease-in-out duration-300">
+    <div
+      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 transition-opacity ease-in-out duration-300"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="add-trade-modal-title"
+    >
+      <div
+        className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full overflow-y-auto h-[90%] transform transition-transform ease-in-out duration-300"
+        role="document"
+        aria-describedby="add-trade-modal-description"
+      >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+          aria-label="Close modal"
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none"
         >
           ✕
         </button>
-        <h2 className="text-2xl font-semibold mb-4 text-blue-600">Add New Trade</h2>
-        <p className="text-sm text-gray-600 mb-6">
-          Please complete the form below to add a trade record.
+        <h2 id="add-trade-modal-title" className="text-2xl font-semibold mb-4 text-indigo-600">
+          Add New Trade
+        </h2>
+        <p id="add-trade-modal-description" className="text-sm text-gray-600 mb-6">
+          Fill out the form below to record your trade details.
         </p>
 
         <form onSubmit={handleSubmit}>
+          {/* Ticker Field */}
           <div className="mb-5">
             <label htmlFor="ticker" className="flex items-center text-sm font-bold text-gray-700">
               Ticker
               <span
-                className="ml-1 text-gray-500"
+                className="ml-2 text-gray-500 cursor-pointer"
                 data-tooltip-id="ticker-tooltip"
-                data-tooltip-content="The stock symbol, e.g., AAPL for Apple."
+                data-tooltip-content="Select the stock ticker (e.g., AAPL for Apple)."
               >
                 <FaInfoCircle />
               </span>
             </label>
             <Select
               id="ticker"
+              aria-label="Select a stock ticker"
               options={tickers}
               onChange={handleTickerChange}
               value={formData.ticker ? { label: formData.ticker, value: formData.ticker } : null}
-              placeholder="Select a ticker"
-              className="mt-2"
+              placeholder="Select a ticker, i.e., AAPL"
+              className="mt-1"
             />
-            {errors.ticker && <span className="text-red-500 text-sm">{errors.ticker}</span>}
+            {errors.ticker && (
+              <span id="ticker-error" className="text-red-600 text-sm" aria-live="polite">
+                {errors.ticker}
+              </span>
+            )}
           </div>
 
+          {/* Shares Field */}
           <div className="mb-5">
-            <label htmlFor="shares" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="shares" className="flex items-center text-sm font-bold text-gray-700">
               Number of Shares
               <span
-                className="ml-1 text-gray-500"
-                data-tip="Enter the number of shares for the trade."
+                className="ml-2 text-gray-500 cursor-pointer"
+                data-tooltip-id="shares-tooltip"
+                data-tooltip-content="Enter the total number of shares for the trade."
               >
-                &#8505;
+                <FaInfoCircle />
               </span>
             </label>
             <input
@@ -115,43 +134,34 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
               type="number"
               value={formData.shares}
               onChange={handleInputChange}
-              placeholder="100"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="5"
+              className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-describedby="shares-description shares-error"
             />
-            {errors.shares && <span className="text-red-500 text-sm">{errors.shares}</span>}
+            <p id="shares-description" className="text-gray-400 text-xs">
+              Specify the total number of shares
+            </p>
+            {errors.shares && (
+              <span id="shares-error" className="text-red-600 text-sm" aria-live="polite">
+                {errors.shares}
+              </span>
+            )}
           </div>
 
+          {/* Price Opened */}
           <div className="mb-5">
-            <label className="block text-sm font-medium text-gray-700">Trade Type</label>
-            <div className="flex items-center gap-6">
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="tradeType"
-                  value="long"
-                  checked={formData.tradeType === 'long'}
-                  onChange={handleInputChange}
-                  className="mr-2"
-                />
-                Long
-              </label>
-              <label className="inline-flex items-center">
-                <input
-                  type="radio"
-                  name="tradeType"
-                  value="short"
-                  checked={formData.tradeType === 'short'}
-                  onChange={handleInputChange}
-                  className="mr-2"
-                />
-                Short
-              </label>
-            </div>
-          </div>
-
-          <div className="mb-5">
-            <label htmlFor="priceOpened" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="priceOpened"
+              className="flex items-center text-sm font-bold text-gray-700"
+            >
               Price Opened
+              <span
+                className="ml-2 text-gray-500 cursor-pointer"
+                data-tooltip-id="priceOpened-tooltip"
+                data-tooltip-content="Enter the price at which the trade was opened."
+              >
+                <FaInfoCircle />
+              </span>
             </label>
             <input
               id="priceOpened"
@@ -159,17 +169,34 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
               type="number"
               value={formData.priceOpened}
               onChange={handleInputChange}
-              placeholder="150"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="10.50"
+              className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-describedby="priceOpened-description priceOpened-error"
             />
+            <p id="priceOpened-description" className="text-gray-400 text-xs">
+              Specify the price at which the trade was initiated
+            </p>
             {errors.priceOpened && (
-              <span className="text-red-500 text-sm">{errors.priceOpened}</span>
+              <span id="priceOpened-error" className="text-red-600 text-sm" aria-live="polite">
+                {errors.priceOpened}
+              </span>
             )}
           </div>
 
+          {/* Price Closed */}
           <div className="mb-5">
-            <label htmlFor="priceClosed" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="priceClosed"
+              className="flex items-center text-sm font-bold text-gray-700"
+            >
               Price Closed
+              <span
+                className="ml-2 text-gray-500 cursor-pointer"
+                data-tooltip-id="priceClosed-tooltip"
+                data-tooltip-content="Enter the price at which the trade was closed."
+              >
+                <FaInfoCircle />
+              </span>
             </label>
             <input
               id="priceClosed"
@@ -177,50 +204,161 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
               type="number"
               value={formData.priceClosed}
               onChange={handleInputChange}
-              placeholder="160"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="12.50"
+              className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-describedby="priceClosed-description priceClosed-error"
             />
+            <p id="priceClosed-description" className="text-gray-400 text-xs">
+              Specify the price at which the trade was exited
+            </p>
             {errors.priceClosed && (
-              <span className="text-red-500 text-sm">{errors.priceClosed}</span>
+              <span id="priceClosed-error" className="text-red-600 text-sm" aria-live="polite">
+                {errors.priceClosed}
+              </span>
             )}
           </div>
 
+          {/* Stop Loss */}
           <div className="mb-5">
-            <label htmlFor="notes" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="stopLoss" className="flex items-center text-sm font-bold text-gray-700">
+              Stop Loss
+              <span
+                className="ml-2 text-gray-500 cursor-pointer"
+                data-tooltip-id="stopLoss-tooltip"
+                data-tooltip-content="Enter the stop-loss price to manage your trade risk."
+              >
+                <FaInfoCircle />
+              </span>
+            </label>
+            <input
+              id="stopLoss"
+              name="stopLoss"
+              type="number"
+              value={formData.stopLoss}
+              onChange={handleInputChange}
+              placeholder="9.50"
+              className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-describedby="stopLoss-description stopLoss-error"
+            />
+            <p id="stopLoss-description" className="text-gray-400 text-xs">
+              Specify the price to automatically exit the trade to minimize loss
+            </p>
+            {errors.stopLoss && (
+              <span id="stopLoss-error" className="text-red-600 text-sm" aria-live="polite">
+                {errors.stopLoss}
+              </span>
+            )}
+          </div>
+
+          {/* Take Profit */}
+          <div className="mb-5">
+            <label
+              htmlFor="takeProfit"
+              className="flex items-center text-sm font-bold text-gray-700"
+            >
+              Take Profit
+              <span
+                className="ml-2 text-gray-500 cursor-pointer"
+                data-tooltip-id="takeProfit-tooltip"
+                data-tooltip-content="Enter the take-profit price to lock in your gains."
+              >
+                <FaInfoCircle />
+              </span>
+            </label>
+            <input
+              id="takeProfit"
+              name="takeProfit"
+              type="number"
+              value={formData.takeProfit}
+              onChange={handleInputChange}
+              placeholder="12.50"
+              className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-describedby="takeProfit-description takeProfit-error"
+            />
+            <p id="takeProfit-description" className="text-gray-400 text-xs">
+              Specify the price to exit the trade for profit
+            </p>
+            {errors.takeProfit && (
+              <span id="takeProfit-error" className="text-red-600 text-sm" aria-live="polite">
+                {errors.takeProfit}
+              </span>
+            )}
+          </div>
+
+          {/* Notes */}
+          <div className="mb-5">
+            <label htmlFor="notes" className="flex items-center text-sm font-bold text-gray-700">
               Notes
+              <span
+                className="ml-2 text-gray-500 cursor-pointer"
+                data-tooltip-id="notes-tooltip"
+                data-tooltip-content="Add any additional notes or details about the trade."
+              >
+                <FaInfoCircle />
+              </span>
             </label>
             <textarea
               id="notes"
               name="notes"
               value={formData.notes}
               onChange={handleInputChange}
-              placeholder="Add any notes about the trade"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Add any additional details about the trade"
+              className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              rows="3"
+              aria-describedby="notes-description"
             />
+            <p id="notes-description" className="text-gray-400 text-xs">
+              Provide any extra context or information about this trade
+            </p>
           </div>
 
+          {/* Trade Date */}
           <div className="mb-5">
-            <label htmlFor="tradeDate" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="tradeDate"
+              className="flex items-center text-sm font-bold text-gray-700"
+            >
               Trade Date
+              <span
+                className="ml-2 text-gray-500 cursor-pointer"
+                data-tooltip-id="tradeDate-tooltip"
+                data-tooltip-content="Select the date the trade occurred."
+              >
+                <FaInfoCircle />
+              </span>
             </label>
             <DatePicker
+              id="tradeDate"
               selected={formData.tradeDate}
               onChange={(date) => setFormData({ ...formData, tradeDate: date })}
               dateFormat="MMMM d, yyyy"
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              aria-describedby="tradeDate-description"
             />
+            <p id="tradeDate-description" className="text-gray-400 text-xs">
+              Choose the date the trade was executed
+            </p>
           </div>
 
-          <div className="flex mt-6">
+          {/* Submit Button */}
+          <div className="mt-6 flex justify-end">
             <button
               type="submit"
-              className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-all duration-300"
+              className="bg-indigo-600 text-white px-5 py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              Submit Trade
+              Add Trade
             </button>
           </div>
         </form>
-        <ReactTooltip id="ticker-tooltip" place="right" effect="solid" />
+        {/* all tooltips for each field info */}
+        <Tooltip id="ticker-tooltip" className="max-w-96" place="top" effect="solid" />
+        <Tooltip id="shares-tooltip" place="top" effect="solid" />
+        <Tooltip id="priceOpened-tooltip" place="top" effect="solid" />
+        <Tooltip id="priceClosed-tooltip" place="top" effect="solid" />
+        <Tooltip id="stopLoss-tooltip" place="top" effect="solid" />
+        <Tooltip id="takeProfit-tooltip" place="top" effect="solid" />
+        <Tooltip id="notes-tooltip" place="top" effect="solid" />
+        <Tooltip id="tradeDate-tooltip" place="top" effect="solid" />
       </div>
     </div>
   );
