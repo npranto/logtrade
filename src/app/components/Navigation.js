@@ -1,31 +1,45 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Image from 'next/image';
+import ThemeToggler from './ThemeToggler';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [theme, setTheme] = useState('light');
+
+  useEffect(() => {
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    setTheme(currentTheme);
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <header className="bg-indigo-600 text-white py-4 px-8">
+    <header
+      className={`py-4 px-8 transition-all ${
+        theme === 'dark'
+          ? 'bg-gray-800 text-gray-300 border-b border-gray-700'
+          : 'bg-white text-gray-900 border-b border-gray-300'
+      }`}
+    >
       <div className="flex items-center justify-between">
         {/* Logo */}
         <div className="text-2xl font-extrabold">
-          <Link href="/" className="flex gap-2 hover:text-yellow-400 transition duration-300">
-            <Image src="/logtrade-logo.png" width={50} height={50} alt="LogTrade Logo" />
+          <Link href="/" className="flex gap-2 hover:text-indigo-500 transition duration-300">
+            <Image src="/logtrade-logo.png" width={40} height={40} alt="LogTrade Logo" />
           </Link>
         </div>
 
-        {/* Toggle Button for Small Screens */}
-        <div className="sm:hidden">
-          <button
-            className="text-white hover:text-yellow-400 focus:outline-none"
-            onClick={toggleMenu}
-          >
+        {/* Small Screen Menu Toggle + Theme Toggler */}
+        <div className="sm:hidden flex items-center gap-4">
+          <ThemeToggler />
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          <button className="hover:text-indigo-500 focus:outline-none" onClick={toggleMenu}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -43,35 +57,34 @@ const Navigation = () => {
           </button>
         </div>
 
-        {/* Navigation Links (for larger screens) */}
-        <nav className="hidden sm:flex space-x-8">
+        {/* Navigation Links for Larger Screens */}
+        <nav className="hidden sm:flex items-center space-x-8">
+          <ThemeToggler />
           <SignedIn>
             <Link
-              onClick={() => setIsMenuOpen((ps) => !ps)}
               href="/dashboard"
-              className="text-lg hover:text-yellow-400 transition duration-300"
+              className={`text-lg transition duration-300 ${
+                theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
+              }`}
             >
               Dashboard
             </Link>
           </SignedIn>
-
           <SignedIn>
             <UserButton />
           </SignedIn>
           <SignedOut>
             <Link
-              onClick={() => setIsMenuOpen((ps) => !ps)}
               href="/login"
-              className="bg-transparent border-2 border-white text-white px-4 py-2 rounded font-semibold text-lg hover:bg-white hover:text-black transition duration-300"
+              className="bg-transparent border-2 border-white text-white px-4 py-2 rounded font-semibold text-lg hover:bg-white hover:text-black transition duration-300 dark:border-gray-500 dark:text-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               Login
             </Link>
           </SignedOut>
           <SignedOut>
             <Link
-              onClick={() => setIsMenuOpen((ps) => !ps)}
               href="/signup"
-              className="bg-yellow-500 text-black px-4 py-2 rounded font-semibold text-lg hover:bg-yellow-400 transition duration-300"
+              className="bg-yellow-500 text-black px-4 py-2 rounded font-semibold text-lg hover:bg-yellow-400 transition duration-300 dark:bg-yellow-600 dark:text-gray-800 dark:hover:bg-yellow-500"
             >
               Create New Account
             </Link>
@@ -79,38 +92,44 @@ const Navigation = () => {
         </nav>
       </div>
 
-      {/* Collapsible Menu (for small screens) */}
+      {/* Collapsible Menu for Small Screens */}
       <div
         className={`${
-          isMenuOpen ? 'max-h-screen opacity-100 py-4 px-8' : 'max-h-0 opacity-0 py-0 px-0'
-        } sm:hidden overflow-hidden bg-indigo-700 text-white space-y-4 transition-all duration-500 ease-in-out transform text-right`}
+          isMenuOpen ? 'max-h-screen opacity-100 py-4' : 'max-h-0 opacity-0 py-0 px-0'
+        } sm:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+          theme === 'dark' ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-900'
+        }`}
       >
         <SignedIn>
-          <UserButton />
-        </SignedIn>
-        <SignedIn>
           <Link
+            onClick={toggleMenu}
             href="/dashboard"
-            className="block text-lg hover:text-yellow-400 transition duration-300"
+            className={`block text-lg transition duration-300 border-b-2 border-gray-200 py-2 ${
+              theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
+            }`}
           >
+            {' '}
             Dashboard
           </Link>
         </SignedIn>
-
         <SignedOut>
           <Link
-            onClick={() => setIsMenuOpen((ps) => !ps)}
+            onClick={toggleMenu}
             href="/login"
-            className="block text-lg hover:text-yellow-400 transition duration-300"
+            className={`block text-lg transition duration-300 border-b-2 border-gray-200 py-2 ${
+              theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
+            }`}
           >
             Login
           </Link>
         </SignedOut>
         <SignedOut>
           <Link
-            onClick={() => setIsMenuOpen((ps) => !ps)}
+            onClick={toggleMenu}
             href="/signup"
-            className="block text-lg hover:text-yellow-400 transition duration-300"
+            className={`block text-lg transition duration-300 border-b-2 border-gray-200 py-2 ${
+              theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
+            }`}
           >
             Create New Account
           </Link>

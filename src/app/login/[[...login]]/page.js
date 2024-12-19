@@ -2,9 +2,28 @@ import { SignIn } from '@clerk/nextjs';
 
 const LoginPage = () => {
   return (
-    <main className="flex items-center justify-center min-h-screen">
-      <div className="min-h-[415px] p-8 rounded-lg">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-center mb-12">LogTrade</h1>
+    <main
+      className="flex items-center justify-center min-h-screen"
+      style={{
+        background: 'var(--background)',
+        color: 'var(--foreground)',
+      }}
+    >
+      <div
+        className="min-h-[415px] p-8 rounded-lg"
+        style={{
+          background: 'var(--background)',
+          color: 'var(--foreground)',
+        }}
+      >
+        <h1
+          className="text-3xl sm:text-4xl font-extrabold text-center mb-12"
+          style={{
+            color: 'var(--foreground)',
+          }}
+        >
+          LogTrade
+        </h1>
 
         <div className="min-h-[485px]">
           <SignIn
