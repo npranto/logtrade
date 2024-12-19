@@ -36,6 +36,9 @@ const Navigation = () => {
         {/* Small Screen Menu Toggle + Theme Toggler */}
         <div className="sm:hidden flex items-center gap-4">
           <ThemeToggler />
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
           <button className="hover:text-indigo-500 focus:outline-none" onClick={toggleMenu}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -92,36 +95,41 @@ const Navigation = () => {
       {/* Collapsible Menu for Small Screens */}
       <div
         className={`${
-          isMenuOpen ? 'max-h-screen opacity-100 py-4 px-8' : 'max-h-0 opacity-0 py-0 px-0'
+          isMenuOpen ? 'max-h-screen opacity-100 py-4' : 'max-h-0 opacity-0 py-0 px-0'
         } sm:hidden overflow-hidden transition-all duration-500 ease-in-out ${
           theme === 'dark' ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-900'
         }`}
       >
         <SignedIn>
-          <UserButton />
-        </SignedIn>
-        <SignedIn>
           <Link
+            onClick={toggleMenu}
             href="/dashboard"
-            className={`block text-lg transition duration-300 ${
+            className={`block text-lg transition duration-300 border-b-2 border-gray-200 py-2 ${
               theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
             }`}
           >
+            {' '}
             Dashboard
           </Link>
         </SignedIn>
         <SignedOut>
           <Link
+            onClick={toggleMenu}
             href="/login"
-            className="block text-lg hover:text-indigo-500 transition duration-300"
+            className={`block text-lg transition duration-300 border-b-2 border-gray-200 py-2 ${
+              theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
+            }`}
           >
             Login
           </Link>
         </SignedOut>
         <SignedOut>
           <Link
+            onClick={toggleMenu}
             href="/signup"
-            className="block text-lg hover:text-indigo-500 transition duration-300"
+            className={`block text-lg transition duration-300 border-b-2 border-gray-200 py-2 ${
+              theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
+            }`}
           >
             Create New Account
           </Link>
