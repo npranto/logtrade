@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, isToday } from 'date-fns';
 import { FaArrowUp, FaArrowDown, FaBalanceScale } from 'react-icons/fa';
+import { AiFillLeftCircle, AiFillRightCircle } from 'react-icons/ai';
 
 const TradingCalendarViewMobile = ({ trades }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -12,7 +13,6 @@ const TradingCalendarViewMobile = ({ trades }) => {
   const start = startOfMonth(currentMonth);
   const end = endOfMonth(currentMonth);
 
-  // Aggregate the daily gains/losses
   const totalsByDate = trades.reduce((acc, trade) => {
     const date = trade.date;
     if (!acc[date]) acc[date] = 0;
@@ -20,7 +20,6 @@ const TradingCalendarViewMobile = ({ trades }) => {
     return acc;
   }, {});
 
-  // Calculate Monthly Stats
   const monthlyStats = trades.reduce(
     (acc, trade) => {
       const tradeDate = new Date(trade.date);
@@ -44,35 +43,59 @@ const TradingCalendarViewMobile = ({ trades }) => {
   });
 
   return (
-    <div className="p-4 sm:p-6 max-w-full mx-auto">
+    <div
+      className="p-4 sm:p-6 max-w-full mx-auto"
+      style={{
+        backgroundColor: 'var(--background-light)',
+        color: 'var(--foreground-light)',
+      }}
+    >
       {/* Header Section */}
       <div className="flex flex-col mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 text-center">Trading Calendar</h1>
-        <p className="text-gray-500 text-sm text-center">
+        <h1 className="text-2xl font-bold" style={{ color: 'var(--foreground-light)' }}>
+          Trading Calendar
+        </h1>
+        <p className="text-sm" style={{ color: 'var(--foreground-light)', opacity: 0.7 }}>
           View your trading performance for the selected month
         </p>
 
-        {/* Monthly Stats - Horizontal Layout for Compactness */}
+        {/* Monthly Stats */}
         <div className="flex-col justify-between space-y-4 mt-4">
-          <div className="flex flex-row items-center justify-between gap-2 bg-green-100 p-3 rounded-lg shadow">
+          <div
+            className="flex flex-row items-center justify-between gap-2 p-3 rounded-lg shadow"
+            style={{ background: 'rgba(0, 128, 0, 0.1)' }}
+          >
             <FaArrowUp className="text-green-600 mb-1 text-sm" />
-            <p className="text-gray-500 text-xs">Gains</p>
-            <p className="text-green-600 font-bold flex-grow text-right">
+            <p className="text-xs" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+              Gains
+            </p>
+            <p className="font-bold flex-grow text-right text-green-600">
               +${monthlyStats.totalGains.toLocaleString()}
             </p>
           </div>
-          <div className="flex flex-row items-center justify-between gap-2 bg-red-100 p-3 rounded-lg shadow">
+          <div
+            className="flex flex-row items-center justify-between gap-2 p-3 rounded-lg shadow"
+            style={{ background: 'rgba(255, 0, 0, 0.1)' }}
+          >
             <FaArrowDown className="text-red-600 mb-1 text-sm" />
-            <p className="text-gray-500 text-xs">Losses</p>
-            <p className="text-red-600 font-bold flex-grow text-right">
+            <p className="text-xs" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+              Losses
+            </p>
+            <p className="font-bold flex-grow text-right text-red-600">
               -${Math.abs(monthlyStats.totalLosses).toLocaleString()}
             </p>
           </div>
-          <div className="flex flex-row items-center justify-between gap-2 bg-gray-100 p-3 rounded-lg shadow">
+          <div
+            className="flex flex-row items-center justify-between gap-2 p-3 rounded-lg shadow"
+            style={{ background: 'var(--background)' }}
+          >
             <FaBalanceScale
-              className={`mb-1 text-sm ${monthlyStats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}
+              className={`mb-1 text-sm `}
+              style={{ color: monthlyStats.netProfit >= 0 ? 'green' : 'red' }}
             />
-            <p className="text-gray-500 text-xs">Net</p>
+            <p className="text-xs" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+              Net
+            </p>
             <p
               className={`font-bold flex-grow text-right ${
                 monthlyStats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
@@ -86,14 +109,18 @@ const TradingCalendarViewMobile = ({ trades }) => {
 
       {/* Header Navigation */}
       <div className="flex flex-col gap-2 mb-6">
-        <h2 className="text-2xl font-bold">{format(currentMonth, 'MMMM yyyy')}</h2>
+        <h2 className="text-2xl font-bold" style={{ color: 'var(--foreground-light)' }}>
+          {format(currentMonth, 'MMMM yyyy')}
+        </h2>
 
         <div className="flex justify-between items-center space-x-2">
           <button
             onClick={handlePrevMonth}
-            className="bg-gray-200 px-4 py-2 rounded-lg shadow hover:bg-gray-300 transition flex items-center"
+            className="flex items-center px-4 py-2 rounded-lg shadow hover:opacity-90 transition"
+            style={{ background: 'var(--background)', color: 'var(--foreground)' }}
           >
-            <span className="text-xl">{format(subMonths(currentMonth, 1), 'MMM')}</span>
+            <AiFillLeftCircle className="mr-2" size={20} style={{ color: 'var(--foreground)' }} />
+            {format(subMonths(currentMonth, 1), 'MMM')}
           </button>
 
           <button
@@ -104,9 +131,11 @@ const TradingCalendarViewMobile = ({ trades }) => {
           </button>
           <button
             onClick={handleNextMonth}
-            className="bg-gray-200 px-4 py-2 rounded-lg shadow hover:bg-gray-300 transition flex items-center"
+            className="flex items-center px-4 py-2 rounded-lg shadow hover:opacity-90 transition"
+            style={{ background: 'var(--background)', color: 'var(--foreground)' }}
           >
-            <span className="text-xl">{format(addMonths(currentMonth, 1), 'MMM')}</span>
+            {format(addMonths(currentMonth, 1), 'MMM')}
+            <AiFillRightCircle className="ml-2" size={20} style={{ color: 'var(--foreground)' }} />
           </button>
         </div>
       </div>
@@ -122,13 +151,24 @@ const TradingCalendarViewMobile = ({ trades }) => {
           return (
             <div
               key={day.date}
-              className={`flex items-center justify-between p-3 rounded-lg shadow-sm bg-gray-50 ${highlightToday}`}
+              className={`flex items-center justify-between p-3 rounded-lg shadow-sm ${highlightToday}`}
+              style={{
+                background:
+                  day.total > 0
+                    ? 'rgba(0, 128, 0, 0.1)'
+                    : day.total < 0
+                      ? 'rgba(255, 0, 0, 0.1)'
+                      : 'var(--background)',
+                color: 'var(--foreground)',
+              }}
             >
               <div className="flex flex-col items-start">
-                <div className={`font-bold ${isWeekend ? 'text-gray-400' : ''}`}>
+                <div className={`font-bold ${isWeekend ? 'text-gray-400' : 'text-gray-800'}`}>
                   {format(day.date, 'd')}
                 </div>
-                <div className="text-xs text-gray-500">{format(day.date, 'EEE')}</div>
+                <div className="text-xs" style={{ color: 'var(--foreground-light)' }}>
+                  {format(day.date, 'EEE')}
+                </div>
               </div>
               <div className={`text-sm font-medium ${textColor}`}>
                 {day.total > 0

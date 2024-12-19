@@ -51,46 +51,61 @@ const TradingCalendarView = ({ trades }) => {
   const firstDayOfMonth = getDay(start);
 
   return (
-    <div className="p-6 max-w-5xl mx-auto w-full">
+    <div className="p-6 max-w-5xl mx-auto w-full" style={{ color: 'var(--foreground)' }}>
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Trading Calendar</h1>
-          <p className="text-gray-500 text-sm">
+          <h1 className="text-3xl font-bold">Trading Calendar</h1>
+          <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
             View your trading performance for the selected month
           </p>
         </div>
 
         {/* Monthly Stats */}
         <div className="flex sm:space-x-4 space-x-2 mt-4 sm:mt-0 text-sm">
-          <div className="flex items-center bg-green-100 p-2 rounded-lg shadow">
-            <FaArrowUp className="text-green-600 mr-2 text-xl" />
+          <div
+            className="flex items-center p-2 rounded-lg shadow"
+            style={{ background: 'rgba(0, 128, 0, 0.1)' }}
+          >
+            <FaArrowUp className="mr-2 text-xl" style={{ color: 'green' }} />
             <div>
-              <p className="text-gray-500 text-xs">Total Gains</p>
-              <p className="text-green-600 font-bold">
+              <p style={{ color: 'var(--foreground)', opacity: 0.7 }} className="text-xs">
+                Total Gains
+              </p>
+              <p className="font-bold" style={{ color: 'green' }}>
                 +${monthlyStats.totalGains.toLocaleString()}
               </p>
             </div>
           </div>
-          <div className="flex items-center bg-red-100 p-2 rounded-lg shadow">
-            <FaArrowDown className="text-red-600 mr-2 text-xl" />
+          <div
+            className="flex items-center p-2 rounded-lg shadow"
+            style={{ background: 'rgba(255, 0, 0, 0.1)' }}
+          >
+            <FaArrowDown className="mr-2 text-xl" style={{ color: 'red' }} />
             <div>
-              <p className="text-gray-500 text-xs">Total Losses</p>
-              <p className="text-red-600 font-bold">
+              <p style={{ color: 'var(--foreground)', opacity: 0.7 }} className="text-xs">
+                Total Losses
+              </p>
+              <p className="font-bold" style={{ color: 'red' }}>
                 -${Math.abs(monthlyStats.totalLosses).toLocaleString()}
               </p>
             </div>
           </div>
-          <div className="flex items-center bg-gray-100 p-2 rounded-lg shadow">
+          <div
+            className="flex items-center p-2 rounded-lg shadow"
+            style={{ background: 'var(--background)' }}
+          >
             <FaBalanceScale
-              className={`mr-2 text-xl ${monthlyStats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}
+              className="mr-2 text-xl"
+              style={{ color: monthlyStats.netProfit >= 0 ? 'green' : 'red' }}
             />
             <div>
-              <p className="text-gray-500 text-xs">Net Profit</p>
+              <p style={{ color: 'var(--foreground)', opacity: 0.7 }} className="text-xs">
+                Net Profit
+              </p>
               <p
-                className={`text-xl font-bold ${
-                  monthlyStats.netProfit >= 0 ? 'text-green-600' : 'text-red-600'
-                }`}
+                className="font-bold"
+                style={{ color: monthlyStats.netProfit >= 0 ? 'green' : 'red' }}
               >
                 ${monthlyStats.netProfit.toLocaleString()}
               </p>
@@ -101,38 +116,42 @@ const TradingCalendarView = ({ trades }) => {
 
       {/* Header Navigation */}
       <div className="flex justify-between items-center mb-6">
-        {/* Current Month and Today Button (left-aligned) */}
         <div className="flex items-center space-x-4">
           <button
             onClick={handleToday}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
+            className="px-4 py-2 rounded-lg shadow hover:opacity-90 transition text-white bg-indigo-600 hover:bg-indigo-700"
+            // style={{ background: 'var(--foreground)', color: 'var(--background)' }}
           >
             Today
           </button>
           <h2 className="text-2xl font-bold">{format(currentMonth, 'MMMM yyyy')}</h2>
         </div>
 
-        {/* Navigation Buttons (right-aligned) */}
         <div className="flex items-center space-x-2">
           <button
             onClick={handlePrevMonth}
-            className="flex items-center bg-gray-200 px-4 py-2 rounded-lg shadow hover:bg-gray-300 transition"
+            className="flex items-center px-4 py-2 rounded-lg shadow hover:opacity-90 transition"
+            style={{ background: 'var(--background)', color: 'var(--foreground)' }}
           >
-            <AiFillLeftCircle className="mr-2 text-indigo-600" size={20} />
+            <AiFillLeftCircle className="mr-2" size={20} style={{ color: 'var(--foreground)' }} />
             {format(subMonths(currentMonth, 1), 'MMMM')}
           </button>
           <button
             onClick={handleNextMonth}
-            className="flex items-center bg-gray-200 px-4 py-2 rounded-lg shadow hover:bg-gray-300 transition"
+            className="flex items-center px-4 py-2 rounded-lg shadow hover:opacity-90 transition"
+            style={{ background: 'var(--background)', color: 'var(--foreground)' }}
           >
             {format(addMonths(currentMonth, 1), 'MMMM')}
-            <AiFillRightCircle className="ml-2 text-indigo-600" size={20} />
+            <AiFillRightCircle className="ml-2" size={20} style={{ color: 'var(--foreground)' }} />
           </button>
         </div>
       </div>
 
       {/* Days of the Week */}
-      <div className="grid grid-cols-7 gap-2 text-center text-gray-500 font-medium mb-4">
+      <div
+        className="grid grid-cols-7 gap-2 text-center font-medium mb-4"
+        style={{ color: 'var(--foreground)' }}
+      >
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
           <div key={day} className="uppercase">
             {day}
@@ -142,7 +161,6 @@ const TradingCalendarView = ({ trades }) => {
 
       {/* Calendar Grid */}
       <div className="grid grid-cols-7 gap-2">
-        {/* Empty placeholders for alignment */}
         {Array(firstDayOfMonth)
           .fill(null)
           .map((_, index) => (
@@ -153,26 +171,29 @@ const TradingCalendarView = ({ trades }) => {
           const dateKey = format(day, 'yyyy-MM-dd');
           const total = totalsByDate[dateKey] || 0;
           const isWeekend = [0, 6].includes(getDay(day));
-          const bgColor = isWeekend
-            ? 'bg-gray-200'
-            : total > 0
-              ? 'bg-green-100'
-              : total < 0
-                ? 'bg-red-100'
-                : 'bg-gray-50';
-          const textColor =
-            total > 0 ? 'text-green-600' : total < 0 ? 'text-red-600' : 'text-gray-800';
           const highlightToday = isToday(day) ? 'ring-2 ring-indigo-600' : '';
 
           return (
-            <div key={day} className={`p-4 rounded-lg shadow-sm ${bgColor} ${highlightToday}`}>
+            <div
+              key={day}
+              className={`p-4 rounded-lg shadow-sm ${highlightToday}`}
+              style={{
+                background:
+                  total > 0
+                    ? 'rgba(0, 128, 0, 0.1)'
+                    : total < 0
+                      ? 'rgba(255, 0, 0, 0.1)'
+                      : 'var(--background)',
+                color: 'var(--foreground)',
+              }}
+            >
               <div className="font-bold">{format(day, 'd')}</div>
               {!isWeekend && (
-                <div className={`text-sm font-medium ${textColor}`}>
+                <div className="text-sm font-medium">
                   {total > 0 ? `+$${total}` : total < 0 ? `-$${Math.abs(total)}` : ''}
                 </div>
               )}
-              {isWeekend && <div className="text-xs text-gray-400">No Trades</div>}
+              {isWeekend && <div className="text-xs opacity-70">No Trades</div>}
             </div>
           );
         })}

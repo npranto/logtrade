@@ -1,11 +1,16 @@
 .area {
-  background: #4e54c8;
-  background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);
+  background: var(--background);
+  background: -webkit-linear-gradient(to left, var(--foreground), var(--background));
   width: 100%;
   height: 100vh;
   position: fixed;
   z-index: -1;
   opacity: 0.9;
+}
+
+:root[data-theme='light'] .area {
+  background: var(--foreground);
+  background: -webkit-linear-gradient(to left, var(--background), var(--foreground));
 }
 
 .circles {
@@ -23,9 +28,17 @@
   list-style: none;
   width: 20px;
   height: 20px;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--circle-color); /* Default circle color */
   animation: animate 25s linear infinite;
   bottom: -150px;
+}
+
+:root[data-theme='light'] .circles li {
+  background: rgba(0, 0, 0, 0.1); /* Lighter circles for light mode */
+}
+
+:root[data-theme='dark'] .circles li {
+  background: rgba(255, 255, 255, 0.2); /* Darker circles for dark mode */
 }
 
 .circles li:nth-child(1) {
