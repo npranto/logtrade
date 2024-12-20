@@ -454,14 +454,14 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
               </div>
 
               {/* all tooltips for each field info */}
-              <Tooltip id="ticker-tooltip" className="max-w-96" place="top" effect="solid" />
-              <Tooltip id="shares-tooltip" place="top" effect="solid" />
-              <Tooltip id="priceOpened-tooltip" place="top" effect="solid" />
-              <Tooltip id="priceClosed-tooltip" place="top" effect="solid" />
-              <Tooltip id="stopLoss-tooltip" place="top" effect="solid" />
-              <Tooltip id="takeProfit-tooltip" place="top" effect="solid" />
-              <Tooltip id="notes-tooltip" place="top" effect="solid" />
-              <Tooltip id="tradeDate-tooltip" place="top" effect="solid" />
+              <Tooltip id="ticker-tooltip" className="max-w-full" place="top" effect="solid" />
+              <Tooltip id="shares-tooltip" className="max-w-full" place="top" effect="solid" />
+              <Tooltip id="priceOpened-tooltip" className="max-w-full" place="top" effect="solid" />
+              <Tooltip id="priceClosed-tooltip" className="max-w-full" place="top" effect="solid" />
+              <Tooltip id="stopLoss-tooltip" className="max-w-full" place="top" effect="solid" />
+              <Tooltip id="takeProfit-tooltip" className="max-w-full" place="top" effect="solid" />
+              <Tooltip id="notes-tooltip" className="max-w-full" place="top" effect="solid" />
+              <Tooltip id="tradeDate-tooltip" className="max-w-full" place="top" effect="solid" />
             </form>
           </>
         )}
