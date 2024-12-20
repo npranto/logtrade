@@ -93,7 +93,6 @@ const EditTradeFormModal = ({
     if (Object.keys(newErrors).length === 0) {
       onSubmit(formData);
       setIsSubmitted(true);
-      refs.closeButton?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
       const firstErrorKey = Object.keys(newErrors)[0];
       refs[firstErrorKey]?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
