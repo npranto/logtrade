@@ -76,7 +76,7 @@ const Navigation = () => {
           <SignedOut>
             <Link
               href="/login"
-              className="bg-transparent border-2 border-white text-white px-4 py-2 rounded font-semibold text-lg hover:bg-white hover:text-black transition duration-300 dark:border-gray-500 dark:text-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="bg-transparent border-2 border-black text-black px-4 py-2 rounded font-semibold text-lg hover:bg-black hover:text-white transition duration-300 dark:border-gray-500 dark:text-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               Login
             </Link>
