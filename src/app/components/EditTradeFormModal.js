@@ -204,7 +204,7 @@ const EditTradeFormModal = ({
                   value={formData.shares}
                   onChange={handleInputChange}
                   placeholder="5"
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
                   aria-describedby="shares-description shares-error"
                 />
                 <p id="shares-description" className="text-gray-400 text-xs">
@@ -231,7 +231,7 @@ const EditTradeFormModal = ({
                   <Tooltip id="tradeType-tooltip" place="top" effect="solid" />
                 </label>
                 <div className="flex items-center gap-6">
-                  <label className="inline-flex items-center">
+                  <label className="inline-flex items-center text-black">
                     <input
                       type="radio"
                       name="tradeType"
@@ -242,7 +242,7 @@ const EditTradeFormModal = ({
                     />
                     Long
                   </label>
-                  <label className="inline-flex items-center">
+                  <label className="inline-flex items-center text-black">
                     <input
                       type="radio"
                       name="tradeType"
@@ -281,7 +281,7 @@ const EditTradeFormModal = ({
                   value={formData.priceOpened}
                   onChange={handleInputChange}
                   placeholder="10.50"
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
                   aria-describedby="priceOpened-description priceOpened-error"
                 />
                 <p id="priceOpened-description" className="text-gray-400 text-xs">
@@ -316,7 +316,7 @@ const EditTradeFormModal = ({
                   value={formData.priceClosed}
                   onChange={handleInputChange}
                   placeholder="12.50"
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
                   aria-describedby="priceClosed-description priceClosed-error"
                 />
                 <p id="priceClosed-description" className="text-gray-400 text-xs">
@@ -351,7 +351,7 @@ const EditTradeFormModal = ({
                   value={formData.stopLoss}
                   onChange={handleInputChange}
                   placeholder="9.50"
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
                   aria-describedby="stopLoss-description stopLoss-error"
                 />
                 <p id="stopLoss-description" className="text-gray-400 text-xs">
@@ -386,7 +386,7 @@ const EditTradeFormModal = ({
                   value={formData.takeProfit}
                   onChange={handleInputChange}
                   placeholder="12.50"
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
                   aria-describedby="takeProfit-description takeProfit-error"
                 />
                 <p id="takeProfit-description" className="text-gray-400 text-xs">
@@ -420,7 +420,7 @@ const EditTradeFormModal = ({
                   value={formData.notes}
                   onChange={handleInputChange}
                   placeholder="Add any additional details about the trade"
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
                   rows="3"
                   aria-describedby="notes-description"
                 />
@@ -449,7 +449,7 @@ const EditTradeFormModal = ({
                   selected={formData.tradeDate}
                   onChange={(date) => setFormData({ ...formData, tradeDate: date })}
                   dateFormat="MMMM d, yyyy"
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="mt-1 w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black"
                   aria-describedby="tradeDate-description"
                 />
                 <p id="tradeDate-description" className="text-gray-400 text-xs">
