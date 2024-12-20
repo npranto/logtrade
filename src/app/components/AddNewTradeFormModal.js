@@ -25,6 +25,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
   const [summaryData, setSummaryData] = useState(null);
 
   const refs = {
+    closeButton: useRef(null),
     ticker: useRef(null),
     tradeType: useRef(null),
     tradeDate: useRef(null),
@@ -90,6 +91,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
       setSummaryData(formData);
       setIsSubmitted(true);
       resetForm();
+      refs.closeButton?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
       const firstErrorKey = Object.keys(newErrors)[0];
       refs[firstErrorKey]?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -119,6 +121,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
         aria-describedby="add-trade-modal-description"
       >
         <button
+          ref={refs.closeButton}
           onClick={handleClose}
           aria-label="Close modal"
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none"
