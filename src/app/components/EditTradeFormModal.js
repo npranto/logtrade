@@ -491,6 +491,17 @@ const EditTradeFormModal = ({
 };
 
 EditTradeFormModal.propTypes = {
+  tradeToEdit: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    ticker: PropTypes.string.isRequired,
+    shares: PropTypes.number.isRequired,
+    priceOpened: PropTypes.number.isRequired,
+    priceClosed: PropTypes.number.isRequired,
+    stopLoss: PropTypes.number.isRequired,
+    takeProfit: PropTypes.number.isRequired,
+    notes: PropTypes.string.isRequired,
+    tradeDate: PropTypes.instanceOf(Date).isRequired,
+  }).isRequired,
   tickers: PropTypes.arrayOf(PropTypes.string).isRequired,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,

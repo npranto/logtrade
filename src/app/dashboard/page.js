@@ -6,7 +6,6 @@ import TradingCalendarViewMobile from '../components/CustomCalendarMobile';
 import AddNewTradeBtn from '../components/AddNewTradeBtn';
 import AddNewTradeFormModal from '../components/AddNewTradeFormModal';
 import { MOCK_TRADES_SIMPLE } from '../data/mock-trades';
-import EditTradeFormModal from '../components/EditTradeFormModal';
 
 const DashboardPage = () => {
   // State to track window width

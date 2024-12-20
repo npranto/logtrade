@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { FaUserAlt, FaChartLine, FaCalendarAlt, FaSearch } from 'react-icons/fa';
 
@@ -135,7 +134,7 @@ const FeatureChecklist = () => {
             <div
               className="rounded-full p-6 mb-4"
               style={{
-                background: '#333333', // Dark background for better icon contrast
+                background: '#333333',
                 color: 'white',
               }}
             >
