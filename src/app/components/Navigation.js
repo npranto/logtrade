@@ -69,6 +69,14 @@ const Navigation = () => {
             >
               Dashboard
             </Link>
+            <Link
+              href="/settings"
+              className={`text-lg transition duration-300 ${
+                theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
+              }`}
+            >
+              Settings
+            </Link>
           </SignedIn>
           <SignedIn>
             <UserButton />
@@ -108,8 +116,16 @@ const Navigation = () => {
               theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
             }`}
           >
-            {' '}
             Dashboard
+          </Link>
+          <Link
+            onClick={toggleMenu}
+            href="/settings"
+            className={`block text-lg transition duration-300 border-b-2 border-gray-200 py-2 ${
+              theme === 'dark' ? 'hover:text-indigo-400' : 'hover:text-indigo-500'
+            }`}
+          >
+            Settings
           </Link>
         </SignedIn>
         <SignedOut>
