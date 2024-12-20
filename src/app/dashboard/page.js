@@ -8,38 +8,30 @@ import AddNewTradeFormModal from '../components/AddNewTradeFormModal';
 import { MOCK_TRADES_SIMPLE } from '../data/mock-trades';
 
 const DashboardPage = () => {
-  // State to track window width
   const [isMobile, setIsMobile] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
-    // Check screen size on mount
     const checkScreenSize = () => {
       if (window.innerWidth <= 768) {
-        setIsMobile(true); // Set to mobile view if screen width is <= 768px
+        setIsMobile(true);
       } else {
-        setIsMobile(false); // Set to desktop view if screen width is > 768px
+        setIsMobile(false);
       }
     };
 
-    // Add event listener to track window resize
     window.addEventListener('resize', checkScreenSize);
 
-    // Initial check on component mount
     checkScreenSize();
 
-    // Cleanup event listener on component unmount
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Handle "Add Trade" button click
   const handleAddTrade = () => {
-    setIsModalOpen(true); // Open the modal when the button is clicked
+    setIsModalOpen(true);
   };
 
-  // Close the modal
   const handleCloseModal = () => {
-    setIsModalOpen(false); // Close the modal
+    setIsModalOpen(false);
   };
 
   return (
@@ -52,10 +44,8 @@ const DashboardPage = () => {
         )}
       </div>
 
-      {/* Add the floating Add Trade button */}
       <AddNewTradeBtn onAddTrade={handleAddTrade} />
 
-      {/* Conditionally render the modal */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
