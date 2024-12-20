@@ -1,28 +1,33 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Select from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import PropTypes from 'prop-types';
-import { MOCK_TICKERS } from '../data/mock-tickers';
 import { Tooltip } from 'react-tooltip';
 import { FaInfoCircle } from 'react-icons/fa';
+import { MOCK_TICKERS } from '../data/mock-tickers';
+import { MOCK_TRADE_SUBMISSION } from '../data/mock-trades';
 
-const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => {
+const EditTradeFormModal = ({
+  tradeToEdit = MOCK_TRADE_SUBMISSION,
+  tickers = MOCK_TICKERS,
+  onSubmit,
+  onClose,
+}) => {
   const [formData, setFormData] = useState({
-    ticker: 'AAPL',
-    tradeType: 'long',
-    tradeDate: new Date(),
-    shares: '',
-    priceOpened: '',
-    priceClosed: '',
-    stopLoss: '',
-    takeProfit: '',
-    notes: '',
+    ticker: tradeToEdit.ticker || '',
+    tradeType: tradeToEdit.tradeType || 'long',
+    tradeDate: tradeToEdit.tradeDate || new Date(),
+    shares: tradeToEdit.shares || '',
+    priceOpened: tradeToEdit.priceOpened || '',
+    priceClosed: tradeToEdit.priceClosed || '',
+    stopLoss: tradeToEdit.stopLoss || '',
+    takeProfit: tradeToEdit.takeProfit || '',
+    notes: tradeToEdit.notes || '',
   });
 
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [summaryData, setSummaryData] = useState(null);
 
   const refs = {
     ticker: useRef(null),
@@ -35,6 +40,20 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
     takeProfit: useRef(null),
     notes: useRef(null),
   };
+
+  useEffect(() => {
+    setFormData({
+      ticker: tradeToEdit.ticker || '',
+      tradeType: tradeToEdit.tradeType || 'long',
+      tradeDate: tradeToEdit.tradeDate || new Date(),
+      shares: tradeToEdit.shares || '',
+      priceOpened: tradeToEdit.priceOpened || '',
+      priceClosed: tradeToEdit.priceClosed || '',
+      stopLoss: tradeToEdit.stopLoss || '',
+      takeProfit: tradeToEdit.takeProfit || '',
+      notes: tradeToEdit.notes || '',
+    });
+  }, [tradeToEdit]);
 
   const validateForm = (data) => {
     const newErrors = {};
@@ -49,20 +68,6 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
     if (data.takeProfit && isNaN(data.takeProfit))
       newErrors.takeProfit = 'Take profit must be a number';
     return newErrors;
-  };
-
-  const resetForm = () => {
-    setFormData({
-      ticker: 'AAPL',
-      tradeType: 'long',
-      tradeDate: new Date(),
-      shares: '',
-      priceOpened: '',
-      priceClosed: '',
-      stopLoss: '',
-      takeProfit: '',
-      notes: '',
-    });
   };
 
   const handleInputChange = (e) => {
@@ -87,9 +92,7 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
 
     if (Object.keys(newErrors).length === 0) {
       onSubmit(formData);
-      setSummaryData(formData);
       setIsSubmitted(true);
-      resetForm();
     } else {
       const firstErrorKey = Object.keys(newErrors)[0];
       refs[firstErrorKey]?.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -101,22 +104,33 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
     onClose();
   };
 
-  const handleAddAnotherTrade = () => {
-    setIsSubmitted(false);
-    resetForm();
+  const handleReset = () => {
+    setFormData({
+      ticker: tradeToEdit.ticker || '',
+      tradeType: tradeToEdit.tradeType || 'long',
+      tradeDate: tradeToEdit.tradeDate || new Date(),
+      shares: tradeToEdit.shares || '',
+      priceOpened: tradeToEdit.priceOpened || '',
+      priceClosed: tradeToEdit.priceClosed || '',
+      stopLoss: tradeToEdit.stopLoss || '',
+      takeProfit: tradeToEdit.takeProfit || '',
+      notes: tradeToEdit.notes || '',
+    });
   };
+
+  const isFormUpdated = Object.keys(formData).some((key) => formData[key] !== tradeToEdit[key]);
 
   return (
     <div
       className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 transition-opacity ease-in-out duration-300"
       role="dialog"
       aria-modal="true"
-      aria-labelledby="add-trade-modal-title"
+      aria-labelledby="edit-trade-modal-title"
     >
       <div
         className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full overflow-y-auto h-[90%] transform transition-transform ease-in-out duration-300"
         role="document"
-        aria-describedby="add-trade-modal-description"
+        aria-describedby="edit-trade-modal-description"
       >
         <button
           onClick={handleClose}
@@ -127,11 +141,11 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
         </button>
         {!isSubmitted && (
           <>
-            <h2 id="add-trade-modal-title" className="text-2xl font-semibold mb-4 text-indigo-600">
-              Add New Trade
+            <h2 id="edit-trade-modal-title" className="text-2xl font-semibold mb-4 text-indigo-600">
+              Edit Trade Details
             </h2>
-            <p id="add-trade-modal-description" className="text-sm text-gray-600 mb-6">
-              Fill out the form below to record your trade details.
+            <p id="edit-trade-modal-description" className="text-sm text-gray-600 mb-6">
+              Update the form below to edit your trade details.
             </p>
 
             <form onSubmit={handleSubmit}>
@@ -443,17 +457,23 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
                 </p>
               </div>
 
-              {/* Submit Button */}
-              <div className="mt-6 flex justify-end">
+              <div className="mt-6 flex flex-col sm:flex-row justify-between gap-2">
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="bg-gray-500 text-white px-5 py-3 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  Reset Changes
+                </button>
                 <button
                   type="submit"
-                  className="bg-indigo-600 text-white px-5 py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  disabled={!isFormUpdated}
+                  className={`bg-indigo-600 text-white px-5 py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${!isFormUpdated && 'opacity-50 cursor-not-allowed'}`}
                 >
-                  Add Trade
+                  Update Trade
                 </button>
               </div>
 
-              {/* all tooltips for each field info */}
               <Tooltip id="ticker-tooltip" className="max-w-96" place="top" effect="solid" />
               <Tooltip id="shares-tooltip" place="top" effect="solid" />
               <Tooltip id="priceOpened-tooltip" place="top" effect="solid" />
@@ -465,104 +485,15 @@ const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => 
             </form>
           </>
         )}
-
-        {isSubmitted && summaryData && (
-          <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-green-600">Trade Submitted Successfully!</h3>
-            <p className="text-base text-gray-600">Here is a summary of your submission:</p>
-
-            <div className="bg-gradient-to-r from-indigo-50 to-indigo-100 p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
-              <h3 className="text-2xl font-semibold text-gray-800 text-left mb-4">Trade Summary</h3>
-
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Ticker</span>
-                  <span className="text-sm font-semibold text-indigo-700">
-                    {summaryData.ticker}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Trade Type</span>
-                  <span className="text-sm font-semibold text-green-600">
-                    {summaryData.tradeType}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Shares</span>
-                  <span className="text-sm font-semibold text-blue-600">{summaryData.shares}</span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Price Opened</span>
-                  <span className="text-sm font-semibold text-green-600">
-                    {summaryData.priceOpened}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Price Closed</span>
-                  <span className="text-sm font-semibold text-red-600">
-                    {summaryData.priceClosed}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Stop Loss</span>
-                  <span className="text-sm font-semibold text-yellow-600">
-                    {summaryData.stopLoss || 'N/A'}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Take Profit</span>
-                  <span className="text-sm font-semibold text-yellow-600">
-                    {summaryData.takeProfit || 'N/A'}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Notes</span>
-                  <span className="text-sm font-semibold text-gray-600">
-                    {summaryData.notes || 'N/A'}
-                  </span>
-                </div>
-
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-600">Trade Date</span>
-                  <span className="text-sm font-semibold text-gray-600">
-                    {new Date(summaryData.tradeDate).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 flex justify-end space-x-4">
-              <button
-                onClick={handleClose}
-                className="bg-gray-500 text-white px-5 py-3 rounded-md hover:bg-gray-600 transition duration-200"
-              >
-                Close
-              </button>
-              <button
-                onClick={handleAddAnotherTrade}
-                className="bg-indigo-600 text-white px-5 py-3 rounded-md hover:bg-indigo-700 transition duration-200"
-              >
-                Create Another Trade
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-AddNewTradeFormModal.propTypes = {
+EditTradeFormModal.propTypes = {
   tickers: PropTypes.arrayOf(PropTypes.string).isRequired,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
-export default AddNewTradeFormModal;
+export default EditTradeFormModal;

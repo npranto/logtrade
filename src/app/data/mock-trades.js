@@ -60,7 +60,20 @@ export const MOCK_TRADES_SIMPLE = [
   { date: '2024-09-22', stock: 'AAPL', shares: 6, outcome: 100 },
   { date: '2024-09-25', stock: 'TSLA', shares: 2, outcome: 50 },
 ];
-export const MOCK_TRADES = [
+
+export const MOCK_TRADE_SUBMISSION = {
+  ticker: 'AAPL',
+  tradeType: 'long',
+  tradeDate: '2024-12-19T23:43:43.681Z',
+  shares: '5',
+  priceOpened: '10',
+  priceClosed: '12',
+  stopLoss: '',
+  takeProfit: '',
+  notes: '',
+};
+
+export const MOCK_TRADES_FULL = [
   // December 2024
   {
     date: '2024-12-01',
