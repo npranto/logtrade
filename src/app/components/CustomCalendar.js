@@ -54,12 +54,12 @@ const TradingCalendarView = ({ trades }) => {
     <div className="p-6 max-w-5xl mx-auto w-full" style={{ color: 'var(--foreground)' }}>
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-        <div>
+        <header className="space-y-2">
           <h1 className="text-3xl font-bold">Trading Calendar</h1>
-          <p className="text-sm" style={{ color: 'var(--foreground)', opacity: 0.7 }}>
+          <p className="text-sm" style={{ color: 'var(--foreground-light)', opacity: 0.7 }}>
             View your trading performance for the selected month
           </p>
-        </div>
+        </header>
 
         {/* Monthly Stats */}
         <div className="flex sm:space-x-4 space-x-2 mt-4 sm:mt-0 text-sm">
