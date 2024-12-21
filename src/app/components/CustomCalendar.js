@@ -120,7 +120,6 @@ const TradingCalendarView = ({ trades }) => {
           <button
             onClick={handleToday}
             className="px-4 py-2 rounded-lg shadow hover:opacity-90 transition text-white bg-indigo-600 hover:bg-indigo-700"
-            // style={{ background: 'var(--foreground)', color: 'var(--background)' }}
           >
             Today
           </button>

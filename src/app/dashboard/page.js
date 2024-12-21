@@ -5,11 +5,18 @@ import TradingCalendarView from '../components/CustomCalendar';
 import TradingCalendarViewMobile from '../components/CustomCalendarMobile';
 import AddNewTradeBtn from '../components/AddNewTradeBtn';
 import AddNewTradeFormModal from '../components/AddNewTradeFormModal';
-import { MOCK_TRADES_SIMPLE } from '../data/mock-trades';
+import { MOCK_TRADE_SUBMISSION, MOCK_TRADES_SIMPLE } from '../data/mock-trades';
+import SidebarModal from '../components/SidebarModal';
+import EditTradeBtn from '../components/EditTradeBtn';
+import EditTradeFormModal from '../components/EditTradeFormModal';
 
 const DashboardPage = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddNewTradeFormModalOpen, setIsAddNewTradeFormModalOpen] = useState(false);
+  const [isEditTradeFormModalOpen, setIsEditTradeFormModalOpen] = useState(false);
+  // const [userSelectedDate, setUserSelectedDate] = useState(null);
+  const [isTradesSidebarOpen, setIsTradesSidebarOpen] = useState(false);
+
   useEffect(() => {
     const checkScreenSize = () => {
       if (window.innerWidth <= 768) {
@@ -26,12 +33,29 @@ const DashboardPage = () => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  const handleAddTrade = () => {
-    setIsModalOpen(true);
+  const handleAddNewTrade = () => {
+    setIsAddNewTradeFormModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseAddNewTradeFormModal = () => {
+    setIsAddNewTradeFormModalOpen(false);
+  };
+
+  const handleUpdateTrade = () => {
+    setIsEditTradeFormModalOpen(true);
+  };
+
+  const handleCloseEditTradeFormModal = () => {
+    setIsEditTradeFormModalOpen(false);
+  };
+
+  // const handleUserSelectedDate = (date) => {
+  //   setUserSelectedDate(date);
+  //   setIsTradesSidebarOpen(true);
+  // };
+
+  const handleCloseTradesSidebar = () => {
+    setIsTradesSidebarOpen(false);
   };
 
   return (
@@ -44,21 +68,38 @@ const DashboardPage = () => {
         )}
       </div>
 
-      <AddNewTradeBtn onAddTrade={handleAddTrade} />
+      <AddNewTradeBtn onAddTrade={handleAddNewTrade} />
+      <EditTradeBtn onEditTrade={handleUpdateTrade} />
 
-      {isModalOpen && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
+      {isAddNewTradeFormModalOpen && (
+        <div className="modal-overlay" onClick={handleCloseAddNewTradeFormModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <AddNewTradeFormModal
-              onClose={handleCloseModal}
+              onClose={handleCloseAddNewTradeFormModal}
               onSubmit={(formData) => console.log({ formData })}
             />
-            {/* <EditTradeFormModal
-              onClose={handleCloseModal}
-              onSubmit={(formData) => console.log({ formData })}
-            /> */}
           </div>
         </div>
+      )}
+
+      {isEditTradeFormModalOpen && (
+        <div className="modal-overlay" onClick={handleCloseEditTradeFormModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <EditTradeFormModal
+              tradeToEdit={MOCK_TRADE_SUBMISSION}
+              onClose={handleCloseEditTradeFormModal}
+              onSubmit={(formData) => console.log({ formData })}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Sidebar Modal */}
+      {isTradesSidebarOpen && (
+        <SidebarModal
+          // date={userSelectedDate}
+          onClose={handleCloseTradesSidebar}
+        />
       )}
     </main>
   );
