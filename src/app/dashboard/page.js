@@ -9,6 +9,7 @@ import { MOCK_TRADE_SUBMISSION, MOCK_TRADES_SIMPLE } from '../data/mock-trades';
 import SidebarModal from '../components/SidebarModal';
 import EditTradeBtn from '../components/EditTradeBtn';
 import EditTradeFormModal from '../components/EditTradeFormModal';
+import AllTradesBtn from '../components/AllTradesBtn';
 
 const DashboardPage = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -49,10 +50,10 @@ const DashboardPage = () => {
     setIsEditTradeFormModalOpen(false);
   };
 
-  // const handleUserSelectedDate = (date) => {
-  //   setUserSelectedDate(date);
-  //   setIsTradesSidebarOpen(true);
-  // };
+  const handleSeeAllTrades = () => {
+    // setUserSelectedDate(date);
+    setIsTradesSidebarOpen(true);
+  };
 
   const handleCloseTradesSidebar = () => {
     setIsTradesSidebarOpen(false);
@@ -70,6 +71,7 @@ const DashboardPage = () => {
 
       <AddNewTradeBtn onAddTrade={handleAddNewTrade} />
       <EditTradeBtn onEditTrade={handleUpdateTrade} />
+      <AllTradesBtn onSeeAllTrades={handleSeeAllTrades} />
 
       {isAddNewTradeFormModalOpen && (
         <div className="modal-overlay" onClick={handleCloseAddNewTradeFormModal}>
@@ -96,10 +98,7 @@ const DashboardPage = () => {
 
       {/* Sidebar Modal */}
       {isTradesSidebarOpen && (
-        <SidebarModal
-          // date={userSelectedDate}
-          onClose={handleCloseTradesSidebar}
-        />
+        <SidebarModal date={'2024-12-21'} onClose={handleCloseTradesSidebar} />
       )}
     </main>
   );
