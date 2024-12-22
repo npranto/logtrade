@@ -6,27 +6,35 @@ import { format, addMonths, subMonths, startOfMonth, endOfMonth, isToday } from 
 import { FaArrowUp, FaArrowDown, FaBalanceScale } from 'react-icons/fa';
 import { AiFillLeftCircle, AiFillRightCircle } from 'react-icons/ai';
 
-const TradingCalendarViewMobile = ({ trades }) => {
+const TradingCalendarViewMobile = ({ trades, onUserSelectedDate }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const today = new Date();
 
   const start = startOfMonth(currentMonth);
   const end = endOfMonth(currentMonth);
 
+  // Aggregate trades by date
   const totalsByDate = trades.reduce((acc, trade) => {
-    const date = trade.date;
-    if (!acc[date]) acc[date] = 0;
-    acc[date] += trade.outcome;
+    const tradeDate = format(new Date(trade.tradeDate), 'yyyy-MM-dd');
+    const outcome = parseFloat(trade.priceClosed) - parseFloat(trade.priceOpened);
+
+    if (!acc[tradeDate]) acc[tradeDate] = 0;
+    acc[tradeDate] += outcome * parseFloat(trade.shares);
     return acc;
   }, {});
 
+  // Monthly stats calculations
   const monthlyStats = trades.reduce(
     (acc, trade) => {
-      const tradeDate = new Date(trade.date);
+      const tradeDate = new Date(trade.tradeDate);
       if (tradeDate >= start && tradeDate <= end) {
-        acc.totalGains += trade.outcome > 0 ? trade.outcome : 0;
-        acc.totalLosses += trade.outcome < 0 ? trade.outcome : 0;
-        acc.netProfit += trade.outcome;
+        const outcome =
+          (parseFloat(trade.priceClosed) - parseFloat(trade.priceOpened)) *
+          parseFloat(trade.shares);
+
+        acc.totalGains += outcome > 0 ? outcome : 0;
+        acc.totalLosses += outcome < 0 ? outcome : 0;
+        acc.netProfit += outcome;
       }
       return acc;
     },
@@ -41,6 +49,16 @@ const TradingCalendarViewMobile = ({ trades }) => {
     const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), index + 1);
     return { date, total: totalsByDate[format(date, 'yyyy-MM-dd')] || 0 };
   });
+
+  const handleDayClick = (day) => {
+    console.log(day);
+    const dateKey = format(day, 'yyyy-MM-dd');
+    console.log(dateKey);
+
+    if (totalsByDate[dateKey]) {
+      onUserSelectedDate(dateKey); // Call the prop with the clicked date if it has trades data
+    }
+  };
 
   return (
     <div
@@ -140,12 +158,16 @@ const TradingCalendarViewMobile = ({ trades }) => {
         </div>
       </div>
 
-      {/* Days List (Compact View) */}
+      {/* Days List */}
       <div className="space-y-2">
         {days.map((day) => {
-          const isWeekend = [0, 6].includes(day.date.getDay());
+          const isWeekend = [0, 6].includes(day.date.getDay()); // Check if it's a weekend
           const textColor =
-            day.total > 0 ? 'text-green-600' : day.total < 0 ? 'text-red-600' : 'text-gray-800';
+            !isWeekend && day.total > 0
+              ? 'text-green-600'
+              : !isWeekend && day.total < 0
+                ? 'text-red-600'
+                : 'text-gray-400'; // Grayed-out for weekends and no trades
           const highlightToday = isToday(day.date) ? 'ring-2 ring-indigo-600' : '';
 
           return (
@@ -153,14 +175,16 @@ const TradingCalendarViewMobile = ({ trades }) => {
               key={day.date}
               className={`flex items-center justify-between p-3 rounded-lg shadow-sm ${highlightToday}`}
               style={{
-                background:
-                  day.total > 0
-                    ? 'rgba(0, 128, 0, 0.1)'
+                background: isWeekend
+                  ? 'rgba(169, 169, 169, 0.3)' // Light gray for weekends
+                  : day.total > 0
+                    ? 'rgba(0, 128, 0, 0.1)' // Green for positive trades
                     : day.total < 0
-                      ? 'rgba(255, 0, 0, 0.1)'
-                      : 'var(--background)',
+                      ? 'rgba(255, 0, 0, 0.1)' // Red for negative trades
+                      : 'var(--background)', // Default background for no trades
                 color: 'var(--foreground)',
               }}
+              onClick={() => !isWeekend && handleDayClick(day.date)}
             >
               <div className="flex flex-col items-start">
                 <div className={`font-bold ${isWeekend ? 'text-gray-400' : 'text-gray-800'}`}>
@@ -171,11 +195,13 @@ const TradingCalendarViewMobile = ({ trades }) => {
                 </div>
               </div>
               <div className={`text-sm font-medium ${textColor}`}>
-                {day.total > 0
-                  ? `+${day.total}`
-                  : day.total < 0
-                    ? `-${Math.abs(day.total)}`
-                    : 'No Trades'}
+                {isWeekend
+                  ? 'No Trades' // Always "No Trades" for weekends
+                  : day.total > 0
+                    ? `+${day.total}`
+                    : day.total < 0
+                      ? `-${Math.abs(day.total)}`
+                      : 'No Trades'}
               </div>
             </div>
           );
@@ -188,10 +214,19 @@ const TradingCalendarViewMobile = ({ trades }) => {
 TradingCalendarViewMobile.propTypes = {
   trades: PropTypes.arrayOf(
     PropTypes.shape({
-      date: PropTypes.string.isRequired,
-      outcome: PropTypes.number.isRequired,
+      id: PropTypes.number.isRequired,
+      ticker: PropTypes.string.isRequired,
+      tradeType: PropTypes.string.isRequired,
+      tradeDate: PropTypes.string.isRequired,
+      shares: PropTypes.string.isRequired,
+      priceOpened: PropTypes.string.isRequired,
+      priceClosed: PropTypes.string.isRequired,
+      stopLoss: PropTypes.string.isRequired,
+      takeProfit: PropTypes.string.isRequired,
+      notes: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  onUserSelectedDate: PropTypes.func.isRequired,
 };
 
 export default TradingCalendarViewMobile;
