@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.9.5",
     "date-fns": "^4.1.0",
+    "firebase": "^11.1.0",
     "lodash.debounce": "^4.0.8",
     "next": "15.1.1",
     "prop-types": "^15.8.1",
