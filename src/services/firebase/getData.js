@@ -6,7 +6,7 @@ import { FIREBASE_DB } from './config'; // Adjust the path as needed
  * @param {string} collectionName - The name of the collection.
  * @param {string} documentId - The ID of the document to fetch.
  * @returns {Promise<{ success: boolean, data?: object, error?: string }>}
- *          - Returns an object with `success: true` and `data` if successful, or `success: false` and `error` if not.
+ * Returns an object with `success: true` and `data` if successful, or `success: false` and `error` if not.
  */
 export async function getData(collectionName, documentId) {
   try {

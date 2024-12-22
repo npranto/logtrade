@@ -7,7 +7,7 @@ import { FIREBASE_DB } from './config'; // Adjust the path as needed
  * @param {string} documentId - The ID of the document to save or update.
  * @param {object} data - The data to save.
  * @returns {Promise<{ success: boolean, message?: string, error?: string }>}
- *          - Returns an object with `success: true` if successful, or `success: false` and `error` if not.
+ * Returns an object with `success: true` if successful, or `success: false` and `error` if not.
  */
 export async function addData(collectionName, documentId, data) {
   try {
