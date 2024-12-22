@@ -9,6 +9,12 @@ import { MOCK_TRADE_SUBMISSION, MOCK_TRADES_SIMPLE } from '../data/mock-trades';
 import EditTradeBtn from '../components/EditTradeBtn';
 import EditTradeFormModal from '../components/EditTradeFormModal';
 import TradesSidebar from '../components/TradesSidebar';
+import { useUser } from '@clerk/nextjs';
+// import { doc, getDoc, setDoc } from 'firebase/firestore';
+// import { FIREBASE_DB } from '../../services/firebase/config';
+// import { getData } from '@/services/firebase/getData';
+import { fetchUserById, saveNewUser } from '@/utils/users';
+// import { useAuth, useUser } from '@clerk/nextjs';
 
 const DashboardPage = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -16,6 +22,60 @@ const DashboardPage = () => {
   const [isEditTradeFormModalOpen, setIsEditTradeFormModalOpen] = useState(false);
   const [isTradesSidebarOpen, setIsTradesSidebarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null); // Track the selected date
+  const [userProfile, setUserProfile] = useState(null);
+
+  const { user } = useUser() || {};
+
+  console.log({ user });
+
+  useEffect(() => {
+    async function setupUserProfile() {
+      // check if user exists and logged in
+      if (!user) return;
+
+      // get user id of logged in user from clerk auth hook
+      const userId = user?.id;
+
+      if (!userId || typeof userId !== 'string' || !userId?.length) return;
+
+      // fetch user by user id from firebase DB
+      const [fetchUserError, fetchedUser] = await fetchUserById(userId);
+
+      if (fetchUserError) return;
+
+      // if user exists, save the data to local userProfile state
+      if (fetchedUser !== null) {
+        console.log('saved user profile to local state');
+        setUserProfile(fetchedUser);
+      } else {
+        console.log('ready to create new user to DB');
+
+        // if user does not exist, create a new user document
+        const newUser = {
+          userId: user?.id,
+          fullName: user?.fullName || '',
+          email: user?.emailAddresses[0]?.emailAddress || '',
+          profilePicture: user?.imageUrl || '',
+          joinedAt: new Date().toISOString(),
+        };
+        const [saveNewUserError, newUserId] = await saveNewUser(userId, newUser);
+
+        if (saveNewUserError) return;
+
+        // refetch user id from firebase DB and save the data to local userProfile state
+        const [fetchNewUserError, fetchedNewUser] = await fetchUserById(newUserId);
+
+        if (fetchNewUserError) return;
+
+        // if user exists, save the data to local userProfile state
+        if (fetchedNewUser !== null) {
+          console.log('saved user profile to local state');
+          setUserProfile(fetchedNewUser);
+        }
+      }
+    }
+    setupUserProfile();
+  }, [user]);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -58,6 +118,8 @@ const DashboardPage = () => {
     setSelectedDate(date);
     setIsTradesSidebarOpen(true); // Open sidebar when a date is selected
   };
+
+  console.log({ userProfile });
 
   return (
     <main className="flex flex-col min-h-screen">
