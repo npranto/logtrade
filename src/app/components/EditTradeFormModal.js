@@ -7,8 +7,9 @@ import { Tooltip } from 'react-tooltip';
 import { FaInfoCircle } from 'react-icons/fa';
 import { MOCK_TICKERS } from '../data/mock-tickers';
 import { MOCK_TRADE_SUBMISSION } from '../data/mock-trades';
+import TransitionOverlay from './TransitionOverlay';
 
-const EditTradeFormModal = ({
+const Content = ({
   tradeToEdit = MOCK_TRADE_SUBMISSION,
   tickers = MOCK_TICKERS,
   onSubmit,
@@ -121,17 +122,8 @@ const EditTradeFormModal = ({
   const isFormUpdated = Object.keys(formData).some((key) => formData[key] !== tradeToEdit[key]);
 
   return (
-    <div
-      className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 transition-opacity ease-in-out duration-300"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="edit-trade-modal-title"
-    >
-      <div
-        className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full overflow-y-auto h-[90%] transform transition-transform ease-in-out duration-300"
-        role="document"
-        aria-describedby="edit-trade-modal-description"
-      >
+    <TransitionOverlay>
+      <div className="edit-trade-form-modal-content">
         <button
           onClick={handleClose}
           aria-label="Close modal"
@@ -486,11 +478,11 @@ const EditTradeFormModal = ({
           </>
         )}
       </div>
-    </div>
+    </TransitionOverlay>
   );
 };
 
-EditTradeFormModal.propTypes = {
+Content.propTypes = {
   tradeToEdit: PropTypes.shape({
     id: PropTypes.string.isRequired,
     ticker: PropTypes.string.isRequired,
@@ -503,6 +495,26 @@ EditTradeFormModal.propTypes = {
     tradeDate: PropTypes.instanceOf(Date).isRequired,
   }).isRequired,
   tickers: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+const EditTradeFormModal = ({
+  tradeToEdit = MOCK_TRADE_SUBMISSION,
+  tickers = MOCK_TICKERS,
+  onSubmit,
+  onClose,
+}) => {
+  return (
+    <TransitionOverlay onClose={onClose}>
+      <Content tradeToEdit={tradeToEdit} tickers={tickers} onSubmit={onSubmit} />
+    </TransitionOverlay>
+  );
+};
+
+EditTradeFormModal.propTypes = {
+  tradeToEdit: PropTypes.object,
+  tickers: PropTypes.array,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };

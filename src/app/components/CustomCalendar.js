@@ -15,7 +15,7 @@ import {
 import { AiFillLeftCircle, AiFillRightCircle } from 'react-icons/ai';
 import { FaArrowUp, FaArrowDown, FaBalanceScale } from 'react-icons/fa';
 
-const TradingCalendarView = ({ trades }) => {
+const TradingCalendarView = ({ trades, onUserSelectedDate }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const today = new Date();
 
@@ -23,21 +23,28 @@ const TradingCalendarView = ({ trades }) => {
   const end = endOfMonth(currentMonth);
   const days = eachDayOfInterval({ start, end });
 
+  // Aggregate trades by date
   const totalsByDate = trades.reduce((acc, trade) => {
-    const date = trade.date;
-    if (!acc[date]) acc[date] = 0;
-    acc[date] += trade.outcome;
+    const tradeDate = format(new Date(trade.tradeDate), 'yyyy-MM-dd');
+    const outcome = parseFloat(trade.priceClosed) - parseFloat(trade.priceOpened);
+
+    if (!acc[tradeDate]) acc[tradeDate] = 0;
+    acc[tradeDate] += outcome * parseFloat(trade.shares);
     return acc;
   }, {});
 
-  // Calculate Monthly Stats
+  // Monthly stats calculations
   const monthlyStats = trades.reduce(
     (acc, trade) => {
-      const tradeDate = new Date(trade.date);
+      const tradeDate = new Date(trade.tradeDate);
       if (tradeDate >= start && tradeDate <= end) {
-        acc.totalGains += trade.outcome > 0 ? trade.outcome : 0;
-        acc.totalLosses += trade.outcome < 0 ? trade.outcome : 0;
-        acc.netProfit += trade.outcome;
+        const outcome =
+          (parseFloat(trade.priceClosed) - parseFloat(trade.priceOpened)) *
+          parseFloat(trade.shares);
+
+        acc.totalGains += outcome > 0 ? outcome : 0;
+        acc.totalLosses += outcome < 0 ? outcome : 0;
+        acc.netProfit += outcome;
       }
       return acc;
     },
@@ -47,6 +54,16 @@ const TradingCalendarView = ({ trades }) => {
   const handlePrevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
   const handleNextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
   const handleToday = () => setCurrentMonth(today);
+
+  const handleDayClick = (day) => {
+    console.log(day);
+    const dateKey = format(day, 'yyyy-MM-dd');
+    console.log(dateKey);
+
+    if (totalsByDate[dateKey]) {
+      onUserSelectedDate(dateKey); // Call the prop with the clicked date if it has trades data
+    }
+  };
 
   const firstDayOfMonth = getDay(start);
 
@@ -120,7 +137,6 @@ const TradingCalendarView = ({ trades }) => {
           <button
             onClick={handleToday}
             className="px-4 py-2 rounded-lg shadow hover:opacity-90 transition text-white bg-indigo-600 hover:bg-indigo-700"
-            // style={{ background: 'var(--foreground)', color: 'var(--background)' }}
           >
             Today
           </button>
@@ -170,20 +186,23 @@ const TradingCalendarView = ({ trades }) => {
         {days.map((day) => {
           const dateKey = format(day, 'yyyy-MM-dd');
           const total = totalsByDate[dateKey] || 0;
-          const isWeekend = [0, 6].includes(getDay(day));
+          const isWeekend = [0, 6].includes(getDay(day)); // Check if it's Saturday or Sunday
           const highlightToday = isToday(day) ? 'ring-2 ring-indigo-600' : '';
+          const isClickable = totalsByDate[dateKey] !== undefined; // Check if the day has trade data
 
           return (
             <div
               key={day}
-              className={`p-4 rounded-lg shadow-sm ${highlightToday}`}
+              onClick={() => isClickable && handleDayClick(day)} // Only call handleDayClick if clickable
+              className={`p-4 rounded-lg shadow-sm ${highlightToday} ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
               style={{
-                background:
-                  total > 0
-                    ? 'rgba(0, 128, 0, 0.1)'
+                background: isWeekend
+                  ? 'rgba(169, 169, 169, 0.3)' // Light gray for weekends in light mode
+                  : total > 0
+                    ? 'rgba(0, 128, 0, 0.1)' // Green for positive trades
                     : total < 0
-                      ? 'rgba(255, 0, 0, 0.1)'
-                      : 'var(--background)',
+                      ? 'rgba(255, 0, 0, 0.1)' // Red for negative trades
+                      : 'var(--background)', // Default background for days with no trades
                 color: 'var(--foreground)',
               }}
             >
@@ -205,10 +224,12 @@ const TradingCalendarView = ({ trades }) => {
 TradingCalendarView.propTypes = {
   trades: PropTypes.arrayOf(
     PropTypes.shape({
-      date: PropTypes.string.isRequired,
-      outcome: PropTypes.number.isRequired,
+      tradeDate: PropTypes.string.isRequired,
+      priceOpened: PropTypes.string.isRequired,
+      priceClosed: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  onUserSelectedDate: PropTypes.func.isRequired, // Ensure this prop is required
 };
 
 export default TradingCalendarView;
