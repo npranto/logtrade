@@ -123,20 +123,23 @@ const Content = ({
 
   return (
     <TransitionOverlay>
-      <div className="edit-trade-form-modal-content">
+      <div className="edit-trade-form-sidebar-content">
         <button
           onClick={handleClose}
-          aria-label="Close modal"
+          aria-label="Close sidebar"
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none"
         >
           ✕
         </button>
         {!isSubmitted && (
           <>
-            <h2 id="edit-trade-modal-title" className="text-2xl font-semibold mb-4 text-indigo-600">
+            <h2
+              id="edit-trade-sidebar-title"
+              className="text-2xl font-semibold mb-4 text-indigo-600"
+            >
               Edit Trade Details
             </h2>
-            <p id="edit-trade-modal-description" className="text-sm text-gray-600 mb-6">
+            <p id="edit-trade-sidebar-description" className="text-sm text-gray-600 mb-6">
               Update the form below to edit your trade details.
             </p>
 
@@ -499,7 +502,7 @@ Content.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const EditTradeFormModal = ({
+const EditTradeFormSidebar = ({
   tradeToEdit = MOCK_TRADE_SUBMISSION,
   tickers = MOCK_TICKERS,
   onSubmit,
@@ -512,11 +515,11 @@ const EditTradeFormModal = ({
   );
 };
 
-EditTradeFormModal.propTypes = {
+EditTradeFormSidebar.propTypes = {
   tradeToEdit: PropTypes.object,
   tickers: PropTypes.array,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
-export default EditTradeFormModal;
+export default EditTradeFormSidebar;
