@@ -4,10 +4,13 @@ import { useState, useEffect } from 'react';
 import { useUserDetails } from '../hooks/useUserDetails';
 import Image from 'next/image';
 import DeleteAccountSidebar from '../components/DeleteAccountSidebar';
-import { updateUserById } from '@/utils/users';
+import { deleteUserById, updateUserById } from '@/utils/users';
 import PostAccountUpdateSidebar from '../components/PostAccountUpdateSidebar';
+import { useUser } from '@clerk/nextjs';
 
 const AccountPage = () => {
+  const { user } = useUser();
+
   const {
     userDetails,
     isLoading: isLoadingUserDetails,
@@ -30,18 +33,28 @@ const AccountPage = () => {
   const [isUpdatingUserDetails, setIsUpdatingUserDetails] = useState(false);
   const [updatingUserDetailsError, setUpdatingUserDetailsError] = useState(null);
 
+  const [isDeletingUserDetails, setIsDeletingUserDetails] = useState(false);
+
   useEffect(() => {
     if (userDetails) {
-      console.log({ userDetails });
       setSettingsData((prev) => ({
         ...prev,
         fullName: userDetails?.fullName || '',
-        theme: userDetails?.theme || 'light',
+        theme: typeof userDetails?.theme === 'string' ? userDetails?.theme : 'light',
         dashboardViews: {
           ...prev.dashboardViews,
-          monthly: userDetails?.dashboardViews?.monthly,
-          weekly: userDetails?.dashboardViews?.weekly,
-          daily: userDetails?.dashboardViews?.daily,
+          monthly:
+            typeof userDetails?.dashboardViews?.monthly === 'boolean'
+              ? userDetails?.dashboardViews?.monthly
+              : true,
+          weekly:
+            typeof userDetails?.dashboardViews?.weekly === 'boolean'
+              ? userDetails?.dashboardViews?.weekly
+              : true,
+          daily:
+            typeof userDetails?.dashboardViews?.daily === 'boolean'
+              ? userDetails?.dashboardViews?.daily
+              : true,
         },
       }));
     }
@@ -63,8 +76,12 @@ const AccountPage = () => {
   };
 
   const handleDeleteAccount = () => {
-    alert('Your account has been deleted!');
-    setDeleteAccountSidebarOpen(false);
+    setIsDeletingUserDetails(true);
+    setTimeout(async () => {
+      await deleteUserById(userDetails?.userId);
+      await user.delete();
+      window.location.href = '/';
+    }, 1500);
   };
 
   const openDeleteAccountSidebar = () => {
@@ -104,14 +121,12 @@ const AccountPage = () => {
           daily: settingsData.dashboardViews.daily,
         },
       };
-      console.log('onSaveChanges()', userDetails?.userId, updatedUser);
-      const [updateUserError, _updatedUser] = await updateUserById(
+      const [updateUserError, fetchedUpdatedUser] = await updateUserById(
         userDetails?.userId,
         updatedUser,
       );
-      console.log({ updateUserError, _updatedUser });
 
-      if (updateUserError) {
+      if (updateUserError || !fetchedUpdatedUser) {
         console.error(updateUserError);
         throw new Error(
           'Oops! Unable to save new changes to your account at the moment. Try again later.',
@@ -165,8 +180,8 @@ const AccountPage = () => {
                   priority
                   src={userDetails?.profilePicture}
                   alt="Profile Picture"
-                  width={128} // 32rem * 2
-                  height={128} // 32rem * 2
+                  width={128}
+                  height={128}
                   className="rounded-full object-cover"
                 />
               ) : null}
@@ -229,27 +244,24 @@ const AccountPage = () => {
         <section className="bg-white shadow-sm rounded-lg p-6">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Dashboard Views</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {Object.entries(settingsData.dashboardViews).map(
-              ([view, isVisible]) =>
-                console.log(view, isVisible) || (
-                  <div
-                    key={view}
-                    className="flex justify-between items-center bg-gray-100 rounded-lg px-4 py-3 shadow-sm"
-                  >
-                    <span className="capitalize text-gray-700 font-medium">{view} trade view</span>
-                    <button
-                      onClick={() => handleViewToggle(view)}
-                      className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
-                        isVisible
-                          ? 'bg-green-600 text-white hover:bg-green-700'
-                          : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-                      }`}
-                    >
-                      {isVisible ? 'Hide' : 'Show'}
-                    </button>
-                  </div>
-                ),
-            )}
+            {Object.entries(settingsData.dashboardViews).map(([view, isVisible]) => (
+              <div
+                key={view}
+                className="flex justify-between items-center bg-gray-100 rounded-lg px-4 py-3 shadow-sm"
+              >
+                <span className="capitalize text-gray-700 font-medium">{view} trade view</span>
+                <button
+                  onClick={() => handleViewToggle(view)}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${
+                    isVisible
+                      ? 'bg-green-600 text-white hover:bg-green-700'
+                      : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+                  }`}
+                >
+                  {isVisible ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -287,6 +299,7 @@ const AccountPage = () => {
       {/* Delete Confirmation Sidebar */}
       {isDeleteAccountSidebarOpen && (
         <DeleteAccountSidebar
+          isDeletingUserDetails={isDeletingUserDetails}
           handleDeleteAccount={handleDeleteAccount}
           onClose={closeDeleteAccountSidebar}
         />

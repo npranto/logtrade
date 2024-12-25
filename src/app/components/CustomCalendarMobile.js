@@ -13,7 +13,7 @@ const TradingCalendarViewMobile = ({ trades, onUserSelectedDate }) => {
   const start = startOfMonth(currentMonth);
   const end = endOfMonth(currentMonth);
 
-  // Aggregate trades by date
+  // aggregate trades by date
   const totalsByDate = trades.reduce((acc, trade) => {
     const tradeDate = format(new Date(trade.tradeDate), 'yyyy-MM-dd');
     const outcome = parseFloat(trade.priceClosed) - parseFloat(trade.priceOpened);
@@ -23,7 +23,7 @@ const TradingCalendarViewMobile = ({ trades, onUserSelectedDate }) => {
     return acc;
   }, {});
 
-  // Monthly stats calculations
+  // monthly stats calculations
   const monthlyStats = trades.reduce(
     (acc, trade) => {
       const tradeDate = new Date(trade.tradeDate);
@@ -51,12 +51,9 @@ const TradingCalendarViewMobile = ({ trades, onUserSelectedDate }) => {
   });
 
   const handleDayClick = (day) => {
-    console.log(day);
     const dateKey = format(day, 'yyyy-MM-dd');
-    console.log(dateKey);
-
     if (totalsByDate[dateKey]) {
-      onUserSelectedDate(dateKey); // Call the prop with the clicked date if it has trades data
+      onUserSelectedDate(dateKey);
     }
   };
 
@@ -161,13 +158,13 @@ const TradingCalendarViewMobile = ({ trades, onUserSelectedDate }) => {
       {/* Days List */}
       <div className="space-y-2">
         {days.map((day) => {
-          const isWeekend = [0, 6].includes(day.date.getDay()); // Check if it's a weekend
+          const isWeekend = [0, 6].includes(day.date.getDay());
           const textColor =
             !isWeekend && day.total > 0
               ? 'text-green-600'
               : !isWeekend && day.total < 0
                 ? 'text-red-600'
-                : 'text-gray-400'; // Grayed-out for weekends and no trades
+                : 'text-gray-400';
           const highlightToday = isToday(day.date) ? 'ring-2 ring-indigo-600' : '';
 
           return (
@@ -176,12 +173,12 @@ const TradingCalendarViewMobile = ({ trades, onUserSelectedDate }) => {
               className={`flex items-center justify-between p-3 rounded-lg shadow-sm ${highlightToday}`}
               style={{
                 background: isWeekend
-                  ? 'rgba(169, 169, 169, 0.3)' // Light gray for weekends
+                  ? 'rgba(169, 169, 169, 0.3)'
                   : day.total > 0
-                    ? 'rgba(0, 128, 0, 0.1)' // Green for positive trades
+                    ? 'rgba(0, 128, 0, 0.1)'
                     : day.total < 0
-                      ? 'rgba(255, 0, 0, 0.1)' // Red for negative trades
-                      : 'var(--background)', // Default background for no trades
+                      ? 'rgba(255, 0, 0, 0.1)'
+                      : 'var(--background)',
                 color: 'var(--foreground)',
               }}
               onClick={() => !isWeekend && handleDayClick(day.date)}
@@ -196,7 +193,7 @@ const TradingCalendarViewMobile = ({ trades, onUserSelectedDate }) => {
               </div>
               <div className={`text-sm font-medium ${textColor}`}>
                 {isWeekend
-                  ? 'No Trades' // Always "No Trades" for weekends
+                  ? 'No Trades' // always "No Trades" for weekends
                   : day.total > 0
                     ? `+${day.total}`
                     : day.total < 0

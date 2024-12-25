@@ -65,8 +65,6 @@ const DashboardPage = () => {
     console.log({ newTrade });
   };
 
-  console.log({ isLoadingUserDetails });
-
   if (isLoadingUserDetails) {
     return (
       <main className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -106,10 +104,7 @@ const DashboardPage = () => {
       {isAddNewTradeFormSidebarOpen && (
         <AddNewTradeFormSidebar
           onClose={handleCloseAddNewTradeFormSidebar}
-          onSubmit={(formData) => {
-            console.log({ formData });
-            handleNewTradeSubmission(formData);
-          }}
+          onSubmit={(formData) => handleNewTradeSubmission(formData)}
         />
       )}
 

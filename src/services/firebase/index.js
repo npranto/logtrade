@@ -1,5 +1,5 @@
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { FIREBASE_DB } from './config'; // Adjust the path as needed
+import { deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+import { FIREBASE_DB } from './config';
 
 export async function addData(collectionName, documentId, data) {
   try {
@@ -37,20 +37,29 @@ export async function updateData(collectionName, documentId, updatedData) {
     const docRef = doc(FIREBASE_DB, collectionName, documentId);
     const docSnap = await getDoc(docRef);
     const existingData = (docSnap.exists() && docSnap.data()) || {};
-    console.log('updateData() >>> existingData', existingData);
-
     const mergedData = {
       ...existingData,
       ...updatedData,
     };
-    console.log('updateData() >>> mergedData', mergedData);
-
     await setDoc(docRef, mergedData);
     return { data: mergedData };
   } catch (error) {
     console.error(`Error updating document in "${collectionName}/${documentId}":`, error);
     return {
       error: `Error updating document in "${collectionName}/${documentId}"`,
+    };
+  }
+}
+
+export async function deleteData(collectionName, documentId) {
+  try {
+    const docRef = doc(FIREBASE_DB, collectionName, documentId);
+    await deleteDoc(docRef);
+    return { data: documentId };
+  } catch (error) {
+    console.error(`Error deleting document from "${collectionName}/${documentId}":`, error);
+    return {
+      error: `Error deleting document from "${collectionName}/${documentId}"`,
     };
   }
 }

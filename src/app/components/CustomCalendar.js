@@ -23,7 +23,7 @@ const TradingCalendarView = ({ trades, onUserSelectedDate }) => {
   const end = endOfMonth(currentMonth);
   const days = eachDayOfInterval({ start, end });
 
-  // Aggregate trades by date
+  // aggregate trades by date
   const totalsByDate = trades.reduce((acc, trade) => {
     const tradeDate = format(new Date(trade.tradeDate), 'yyyy-MM-dd');
     const outcome = parseFloat(trade.priceClosed) - parseFloat(trade.priceOpened);
@@ -33,7 +33,7 @@ const TradingCalendarView = ({ trades, onUserSelectedDate }) => {
     return acc;
   }, {});
 
-  // Monthly stats calculations
+  // monthly stats calculations
   const monthlyStats = trades.reduce(
     (acc, trade) => {
       const tradeDate = new Date(trade.tradeDate);
@@ -56,12 +56,9 @@ const TradingCalendarView = ({ trades, onUserSelectedDate }) => {
   const handleToday = () => setCurrentMonth(today);
 
   const handleDayClick = (day) => {
-    console.log(day);
     const dateKey = format(day, 'yyyy-MM-dd');
-    console.log(dateKey);
-
     if (totalsByDate[dateKey]) {
-      onUserSelectedDate(dateKey); // Call the prop with the clicked date if it has trades data
+      onUserSelectedDate(dateKey);
     }
   };
 
@@ -186,23 +183,23 @@ const TradingCalendarView = ({ trades, onUserSelectedDate }) => {
         {days.map((day) => {
           const dateKey = format(day, 'yyyy-MM-dd');
           const total = totalsByDate[dateKey] || 0;
-          const isWeekend = [0, 6].includes(getDay(day)); // Check if it's Saturday or Sunday
+          const isWeekend = [0, 6].includes(getDay(day));
           const highlightToday = isToday(day) ? 'ring-2 ring-indigo-600' : '';
-          const isClickable = totalsByDate[dateKey] !== undefined; // Check if the day has trade data
+          const isClickable = totalsByDate[dateKey] !== undefined;
 
           return (
             <div
               key={day}
-              onClick={() => isClickable && handleDayClick(day)} // Only call handleDayClick if clickable
+              onClick={() => isClickable && handleDayClick(day)}
               className={`p-4 rounded-lg shadow-sm ${highlightToday} ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
               style={{
                 background: isWeekend
-                  ? 'rgba(169, 169, 169, 0.3)' // Light gray for weekends in light mode
+                  ? 'rgba(169, 169, 169, 0.3)'
                   : total > 0
-                    ? 'rgba(0, 128, 0, 0.1)' // Green for positive trades
+                    ? 'rgba(0, 128, 0, 0.1)'
                     : total < 0
-                      ? 'rgba(255, 0, 0, 0.1)' // Red for negative trades
-                      : 'var(--background)', // Default background for days with no trades
+                      ? 'rgba(255, 0, 0, 0.1)'
+                      : 'var(--background)',
                 color: 'var(--foreground)',
               }}
             >

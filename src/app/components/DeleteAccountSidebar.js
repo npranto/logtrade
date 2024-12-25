@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import TransitionOverlay from './TransitionOverlay';
 
-function Content({ handleDeleteAccount, onClose }) {
+function Content({ handleDeleteAccount, onClose, isDeletingUserDetails }) {
   return (
     <>
       <h3 className="text-xl font-semibold text-gray-800 mb-4">
@@ -15,9 +15,10 @@ function Content({ handleDeleteAccount, onClose }) {
       <div className="mt-6 flex flex-col justify-end gap-4">
         <button
           onClick={handleDeleteAccount}
-          className="bg-red-600 text-white px-5 py-3 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
+          disabled={isDeletingUserDetails}
+          className={`bg-red-600 text-white px-5 py-3 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition ${isDeletingUserDetails ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-          Yes, Delete Account
+          {isDeletingUserDetails ? 'Deleting...' : 'Yes, Delete Account'}
         </button>
         <button
           onClick={onClose}
@@ -32,13 +33,19 @@ function Content({ handleDeleteAccount, onClose }) {
 
 Content.propTypes = {
   handleDeleteAccount: PropTypes.func.isRequired,
+  isDeletingUserDetails: PropTypes.bool,
+  deletingUserDetailsError: PropTypes.string,
   onClose: PropTypes.func.isRequired,
 };
 
-const DeleteAccountSidebar = ({ handleDeleteAccount, onClose }) => {
+const DeleteAccountSidebar = ({ isDeletingUserDetails, handleDeleteAccount, onClose }) => {
   return createPortal(
     <TransitionOverlay onClose={onClose}>
-      <Content handleDeleteAccount={handleDeleteAccount} onClose={onClose} />
+      <Content
+        isDeletingUserDetails={isDeletingUserDetails}
+        handleDeleteAccount={handleDeleteAccount}
+        onClose={onClose}
+      />
     </TransitionOverlay>,
     document.body,
   );

@@ -8,7 +8,7 @@ const FeatureChecklist = () => {
         <h2
           className="text-3xl sm:text-4xl font-extrabold mb-12"
           style={{
-            color: 'var(--foreground)', // Title color based on theme
+            color: 'var(--foreground)',
           }}
         >
           What We Offer
@@ -19,15 +19,15 @@ const FeatureChecklist = () => {
           <div
             className="flex flex-col items-center rounded-md p-4"
             style={{
-              background: 'var(--background)', // Background color based on theme
-              color: 'var(--foreground)', // Text color based on theme
+              background: 'var(--background)',
+              color: 'var(--foreground)',
             }}
           >
             <div
               className="rounded-full p-6 mb-4"
               style={{
-                background: '#333333', // Dark background for better icon contrast
-                color: 'white', // White color for the icon
+                background: '#333333',
+                color: 'white',
               }}
             >
               <FaUserAlt size={36} />
@@ -35,7 +35,7 @@ const FeatureChecklist = () => {
             <h3
               className="text-xl font-semibold mb-2"
               style={{
-                color: 'var(--foreground)', // Text color for heading
+                color: 'var(--foreground)',
               }}
             >
               Personalized Account
@@ -43,7 +43,7 @@ const FeatureChecklist = () => {
             <p
               className="text-base"
               style={{
-                color: 'var(--foreground)', // Text color for paragraph
+                color: 'var(--foreground)',
                 opacity: 0.7,
               }}
             >
@@ -62,7 +62,7 @@ const FeatureChecklist = () => {
             <div
               className="rounded-full p-6 mb-4"
               style={{
-                background: '#333333', // Dark background for better icon contrast
+                background: '#333333',
                 color: 'white',
               }}
             >
@@ -98,7 +98,7 @@ const FeatureChecklist = () => {
             <div
               className="rounded-full p-6 mb-4"
               style={{
-                background: '#333333', // Dark background for better icon contrast
+                background: '#333333',
                 color: 'white',
               }}
             >

@@ -1,4 +1,4 @@
-import { addData, getData, updateData } from '@/services/firebase';
+import { addData, deleteData, getData, updateData } from '@/services/firebase';
 
 export async function fetchUserById(userId) {
   if (!userId || typeof userId !== 'string' || !userId.length) {
@@ -11,7 +11,7 @@ export async function fetchUserById(userId) {
 export async function saveNewUser(newUser) {
   const { userId } = newUser || {};
   if (!userId || typeof userId !== 'string' || !userId.length) {
-    return ['Please provide a valid `userId` to fetch user', null];
+    return ['Please provide a valid `userId` to save new user', null];
   }
   if (!isNewUserValid(newUser)) {
     return ['Please provide a valid `newUser` object', null];
@@ -22,10 +22,17 @@ export async function saveNewUser(newUser) {
 
 export async function updateUserById(userId, updatedUser) {
   if (!userId || typeof userId !== 'string' || !userId.length) {
-    return ['Please provide a valid userId to fetch user', null];
+    return ['Please provide a valid userId to update user', null];
   }
-  console.log('updateUserById()', userId, updatedUser);
   const { error, data } = await updateData('users', userId, updatedUser);
+  return [error, data];
+}
+
+export async function deleteUserById(userId) {
+  if (!userId || typeof userId !== 'string' || !userId.length) {
+    return ['Please provide a valid userId to delete user', null];
+  }
+  const { error, data } = await deleteData('users', userId);
   return [error, data];
 }
 
