@@ -1,5 +1,5 @@
-import { FaPlus } from 'react-icons/fa'; // Importing a plus icon from react-icons
 import PropTypes from 'prop-types';
+import { FaPlus } from 'react-icons/fa';
 
 const AllTradesBtn = ({ onSeeAllTrades }) => {
   return (

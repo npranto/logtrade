@@ -133,13 +133,13 @@ Content.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const TradesSidebar = ({ date = '2024-12-21', trades = [], onClose }) => {
+const TradesByDateSidebar = ({ date = '2024-12-21', trades = [], onClose }) => {
   return createPortal(
     <TransitionOverlay onClose={onClose}>
       <Content date={date} trades={trades} />
     </TransitionOverlay>,
-    document.body, // Render modal into the body
+    document.body,
   );
 };
 
-export default TradesSidebar;
+export default TradesByDateSidebar;

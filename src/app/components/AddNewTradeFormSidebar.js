@@ -112,17 +112,17 @@ const Content = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => {
     <div>
       <button
         onClick={handleClose}
-        aria-label="Close modal"
+        aria-label="Close sidebar"
         className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none"
       >
         ✕
       </button>
       {!isSubmitted && (
         <>
-          <h2 id="add-trade-modal-title" className="text-2xl font-semibold mb-4 text-indigo-600">
+          <h2 id="add-trade-sidebar-title" className="text-2xl font-semibold mb-4 text-indigo-600">
             Add New Trade
           </h2>
-          <p id="add-trade-modal-description" className="text-sm text-gray-600 mb-6">
+          <p id="add-trade-sidebar-description" className="text-sm text-gray-600 mb-6">
             Fill out the form below to record your trade details.
           </p>
 
@@ -543,19 +543,19 @@ Content.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-const AddNewTradeFormModal = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => {
+const AddNewTradeFormSidebar = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => {
   return createPortal(
     <TransitionOverlay onClose={onClose}>
-      <Content tickers={tickers} onSubmit={onSubmit} onClose={onClose} />
+      <Content tickers={tickers} onSubmit={onSubmit} />
     </TransitionOverlay>,
     document.body,
   );
 };
 
-AddNewTradeFormModal.propTypes = {
+AddNewTradeFormSidebar.propTypes = {
   tickers: PropTypes.arrayOf(PropTypes.string),
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 
-export default AddNewTradeFormModal;
+export default AddNewTradeFormSidebar;

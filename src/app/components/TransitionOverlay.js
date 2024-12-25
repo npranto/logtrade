@@ -6,7 +6,6 @@ const TransitionOverlay = ({ onClose, children }) => {
   const entryTimerRef = useRef(null);
   const exitTimerRef = useRef(null);
 
-  // Trigger visibility state change after the component mounts
   useEffect(() => {
     entryTimerRef.current = setTimeout(() => {
       setIsVisible(true);
@@ -17,9 +16,8 @@ const TransitionOverlay = ({ onClose, children }) => {
         clearTimeout(entryTimerRef.current);
       }
     };
-  }, []); // This runs when the modal is first opened
+  }, []);
 
-  // Handling Scroll Locking (On Mount and Cleanup)
   useEffect(() => {
     document.body.classList.add('overflow-hidden');
     return () => {
@@ -27,18 +25,13 @@ const TransitionOverlay = ({ onClose, children }) => {
     };
   }, []);
 
-  // Handle the visibility transition (and call onClose after exit animation)
   const handleClose = () => {
-    // Trigger exit animation by setting visibility to false
     setIsVisible(false);
-
-    // After the exit animation ends (500ms), call onClose to remove the modal
     exitTimerRef.current = setTimeout(() => {
       onClose();
-    }, 150); // Duration should match the transition duration
+    }, 150);
   };
 
-  // Cleanup timeout when the modal is unmounted or handleClose is triggered again
   useEffect(() => {
     return () => {
       if (exitTimerRef.current) {
