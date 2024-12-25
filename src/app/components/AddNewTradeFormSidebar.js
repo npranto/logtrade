@@ -546,7 +546,7 @@ Content.propTypes = {
 const AddNewTradeFormSidebar = ({ tickers = MOCK_TICKERS, onSubmit, onClose }) => {
   return createPortal(
     <TransitionOverlay onClose={onClose}>
-      <Content tickers={tickers} onSubmit={onSubmit} onClose={onClose} />
+      <Content tickers={tickers} onSubmit={onSubmit} />
     </TransitionOverlay>,
     document.body,
   );

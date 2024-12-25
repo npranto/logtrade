@@ -55,7 +55,7 @@ export const useUserDetails = () => {
           setUserDetails(fetchedNewUser);
         }
       } catch (error) {
-        setError(error);
+        setError(error.message);
       } finally {
         setIsLoading(false);
       }

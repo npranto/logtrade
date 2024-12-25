@@ -31,3 +31,26 @@ export async function getData(collectionName, documentId) {
     };
   }
 }
+
+export async function updateData(collectionName, documentId, updatedData) {
+  try {
+    const docRef = doc(FIREBASE_DB, collectionName, documentId);
+    const docSnap = await getDoc(docRef);
+    const existingData = (docSnap.exists() && docSnap.data()) || {};
+    console.log('updateData() >>> existingData', existingData);
+
+    const mergedData = {
+      ...existingData,
+      ...updatedData,
+    };
+    console.log('updateData() >>> mergedData', mergedData);
+
+    await setDoc(docRef, mergedData);
+    return { data: mergedData };
+  } catch (error) {
+    console.error(`Error updating document in "${collectionName}/${documentId}":`, error);
+    return {
+      error: `Error updating document in "${collectionName}/${documentId}"`,
+    };
+  }
+}

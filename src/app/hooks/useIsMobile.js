@@ -1,4 +1,4 @@
-const { useState, useEffect } = require('react');
+import { useState, useEffect } from 'react';
 
 export const useIsMobile = (breakpoint = 768) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -12,7 +12,7 @@ export const useIsMobile = (breakpoint = 768) => {
     checkScreenSize();
 
     return () => {
-      window.removeEventListener(checkScreenSize);
+      window.removeEventListener('resize', checkScreenSize);
     };
   }, [breakpoint]);
   return isMobile;

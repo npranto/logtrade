@@ -9,18 +9,16 @@ import { MOCK_TRADE_SUBMISSION, MOCK_TRADES_SIMPLE } from '../data/mock-trades';
 import EditTradeBtn from '../components/EditTradeBtn';
 import EditTradeFormSidebar from '../components/EditTradeFormSidebar';
 import TradesByDateSidebar from '../components/TradesByDateSidebar';
-import { useUser } from '@clerk/nextjs';
 import { useUserDetails } from '../hooks/useUserDetails';
 import { useIsMobile } from '../hooks/useIsMobile';
 
 const DashboardPage = () => {
   const isMobile = useIsMobile(768);
-  const { user } = useUser() || {};
   const {
     userDetails,
     isLoading: isLoadingUserDetails,
     error: userDetailsError,
-  } = useUserDetails(user);
+  } = useUserDetails();
 
   const [isAddNewTradeFormSidebarOpen, setIsAddNewTradeFormSidebarOpen] = useState(false);
   const [isEditTradeFormSidebarOpen, setIsEditTradeFormSidebarOpen] = useState(false);
@@ -52,22 +50,35 @@ const DashboardPage = () => {
     setIsTradesSidebarOpen(true);
   };
 
+  const handleNewTradeSubmission = (formData) => {
+    const newTrade = {
+      ticker: formData?.ticker || '',
+      tradeType: formData?.tradeType || 'long',
+      tradeDate: (formData?.tradeDate && new Date(formData?.tradeDate).toISOString()) || '',
+      shares: formData?.shares || '',
+      priceOpened: formData?.priceOpened || '',
+      priceClosed: formData?.priceClosed || '',
+      stopLoss: formData?.stopLoss || '',
+      takeProfit: formData?.takeProfit || '',
+      notes: formData?.notes || '',
+    };
+    console.log({ newTrade });
+  };
+
+  console.log({ isLoadingUserDetails });
+
   if (isLoadingUserDetails) {
     return (
-      <main className="flex flex-col min-h-screen">
-        <div className="flex flex-col gap-8 flex-grow">
-          <p>Loading user details...</p>;
-        </div>
+      <main className="flex justify-center items-center min-h-screen bg-gray-100">
+        <p className="text-gray-500 text-lg">Loading your account details...</p>
       </main>
     );
   }
 
   if (userDetailsError) {
     return (
-      <main className="flex flex-col min-h-screen">
-        <div className="flex flex-col gap-8 flex-grow">
-          <p>{userDetailsError}</p>;
-        </div>
+      <main className="flex justify-center items-center min-h-screen bg-gray-100">
+        <p className="text-gray-500 text-lg">{userDetailsError}</p>
       </main>
     );
   }
@@ -95,7 +106,10 @@ const DashboardPage = () => {
       {isAddNewTradeFormSidebarOpen && (
         <AddNewTradeFormSidebar
           onClose={handleCloseAddNewTradeFormSidebar}
-          onSubmit={(formData) => console.log({ formData })}
+          onSubmit={(formData) => {
+            console.log({ formData });
+            handleNewTradeSubmission(formData);
+          }}
         />
       )}
 
